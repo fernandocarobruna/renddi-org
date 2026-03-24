@@ -97,22 +97,6 @@ export default function GrafoClient({ email }: { email: string }) {
                 >
                   🔑 Cambiar contraseña
                 </button>
-                <a
-                  href="/metamodelo"
-                  style={{
-                    background: "#1a1a2e",
-                    border: "1px solid #444",
-                    color: "#e0e0e0",
-                    padding: "10px 16px",
-                    borderRadius: 8,
-                    cursor: "pointer",
-                    fontSize: 13,
-                    textDecoration: "none",
-                    display: "block",
-                  }}
-                >
-                  📊 Ir al Metamodelo
-                </a>
                 <button
                   onClick={handleLogout}
                   style={{
