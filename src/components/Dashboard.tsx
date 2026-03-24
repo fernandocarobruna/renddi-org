@@ -197,7 +197,7 @@ export default function Dashboard({ email }: { email: string }) {
                 </p>
               </div>
               <a
-                href="/grafo-v8.html"
+                href="/api/assets/grafo-v8.html"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary"
@@ -220,7 +220,7 @@ export default function Dashboard({ email }: { email: string }) {
                 </p>
               </div>
               <a
-                href="/simulador-v8.html"
+                href="/api/assets/simulador-v8.html"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary"
@@ -272,7 +272,7 @@ export default function Dashboard({ email }: { email: string }) {
                 </p>
               </div>
               <a
-                href="/ecosistema-animacion.html"
+                href="/api/assets/ecosistema-animacion.html"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary"

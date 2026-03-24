@@ -13,7 +13,7 @@ export default async function GrafoPage() {
 
   return (
     <iframe
-      src="/grafo-v8.html"
+      src="/api/assets/grafo-v8.html"
       style={{
         width: "100vw",
         height: "100vh",
