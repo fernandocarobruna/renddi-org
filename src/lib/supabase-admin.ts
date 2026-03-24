@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-const ADMIN_EMAILS = ["fernando@renddi.org"];
+const ADMIN_EMAILS = ["fernando.caro.bruna@gmail.com"];
 
 export function createAdminClient() {
   return createClient(
