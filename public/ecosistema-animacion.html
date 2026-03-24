@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renddi.app — Ecosistema de Agentes & Grafo Causal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0e27;
+    color: #e0e0e0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  canvas#bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+    text-align: center;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  svg#diagram {
+    width: 100%;
+    max-width: 1200px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Agent nodes */
+  .agent-node {
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .agent-node:hover {
+    transform: scale(1.08);
+  }
+  .agent-node:hover .node-glow {
+    opacity: 0.6;
+  }
+
+  .node-glow {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  /* Pulse animation for MIYAGI */
+  @keyframes miyagiPulse {
+    0%, 100% { r: 68; opacity: 0.3; }
+    50% { r: 80; opacity: 0.15; }
+  }
+
+  @keyframes miyagiPulse2 {
+    0%, 100% { r: 80; opacity: 0.15; }
+    50% { r: 95; opacity: 0.08; }
+  }
+
+  /* Data flow animation */
+  @keyframes flowDot {
+    0% { offset-distance: 0%; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { offset-distance: 100%; opacity: 0; }
+  }
+
+  .flow-dot {
+    offset-distance: 0%;
+    animation: flowDot 3s linear infinite;
+  }
+
+  /* Glow filters */
+  .glow-blue { filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.5)); }
+  .glow-purple { filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.5)); }
+  .glow-green { filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.5)); }
+  .glow-amber { filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.5)); }
+  .glow-pink { filter: drop-shadow(0 0 6px rgba(244, 114, 182, 0.5)); }
+
+  /* Info panel */
+  .info-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    border-radius: 16px;
+    padding: 16px 24px;
+    max-width: 600px;
+    width: 90%;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.4s, transform 0.4s;
+    transform: translateX(-50%) translateY(20px);
+    pointer-events: none;
+  }
+  .info-panel.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+  .info-panel h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .info-panel p {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #94a3b8;
+  }
+  .info-panel .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  /* Legend */
+  .legend {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 11px;
+    z-index: 5;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+  .legend-item:last-child { margin-bottom: 0; }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* Phase labels */
+  .phase-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    fill: #475569;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="container">
+  <h1>Renddi.app — Ecosistema de Agentes</h1>
+  <div class="subtitle">Flujo de datos: Agentes Especialistas → Grafo Causal → MIYAGI | Click en cada agente para ver detalles</div>
+
+  <svg id="diagram" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <!-- Gradients -->
+      <radialGradient id="miyagiGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#f472b6"/>
+        <stop offset="100%" stop-color="#9333ea"/>
+      </radialGradient>
+      <radialGradient id="grafoGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#60a5fa"/>
+        <stop offset="100%" stop-color="#3b82f6"/>
+      </radialGradient>
+      <radialGradient id="ingenieroGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fbbf24"/>
+        <stop offset="100%" stop-color="#f59e0b"/>
+      </radialGradient>
+      <radialGradient id="senpaiGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#4ade80"/>
+        <stop offset="100%" stop-color="#22c55e"/>
+      </radialGradient>
+      <linearGradient id="flowGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#60a5fa" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#60a5fa" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="flowGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#fbbf24" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="flowGrad3" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#f472b6" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#f472b6" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#f472b6" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="flowGrad4" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#4ade80" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#4ade80" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#4ade80" stop-opacity="0"/>
+      </linearGradient>
+
+      <!-- Arrow marker -->
+      <marker id="arrowBlue" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" opacity="0.6"/>
+      </marker>
+      <marker id="arrowAmber" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b" opacity="0.6"/>
+      </marker>
+      <marker id="arrowPink" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#ec4899" opacity="0.6"/>
+      </marker>
+      <marker id="arrowGreen" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#22c55e" opacity="0.6"/>
+      </marker>
+
+      <!-- Flow paths for animation -->
+      <path id="flow-kaze" d="M 170 175 C 280 175, 340 300, 440 300" />
+      <path id="flow-compass" d="M 170 265 C 280 265, 340 300, 440 300" />
+      <path id="flow-kaizen" d="M 170 355 C 280 355, 340 300, 440 300" />
+      <path id="flow-dojo" d="M 170 445 C 280 445, 340 400, 440 350" />
+      <path id="flow-nakama" d="M 170 535 C 280 535, 340 430, 440 380" />
+      <path id="flow-koan" d="M 170 625 C 280 625, 340 460, 440 400" />
+      <path id="flow-ikigai" d="M 170 695 C 280 695, 340 490, 440 420" />
+
+      <path id="flow-grafo-ing" d="M 550 340 C 600 340, 620 470, 600 500" />
+      <path id="flow-ing-grafo" d="M 600 480 C 620 440, 600 370, 550 350" />
+      <path id="flow-grafo-miyagi" d="M 560 300 C 700 250, 800 250, 900 340" />
+      <path id="flow-senpai-miyagi" d="M 750 530 C 800 480, 850 420, 900 380" />
+      <path id="flow-senpai-agents" d="M 650 550 C 400 550, 250 500, 170 490" />
+
+      <!-- Backlog path -->
+      <path id="flow-backlog" d="M 1000 420 C 1050 500, 1100 550, 1100 600" />
+    </defs>
+
+    <!-- Phase labels -->
+    <text x="100" y="120" class="phase-label" text-anchor="middle">FASE 1</text>
+    <text x="100" y="133" class="phase-label" text-anchor="middle" style="font-size:8px;letter-spacing:1px;fill:#334155">Especialistas</text>
+
+    <text x="500" y="220" class="phase-label" text-anchor="middle">FASE 2</text>
+    <text x="500" y="233" class="phase-label" text-anchor="middle" style="font-size:8px;letter-spacing:1px;fill:#334155">Modelo</text>
+
+    <text x="950" y="245" class="phase-label" text-anchor="middle">FASE 3</text>
+    <text x="950" y="258" class="phase-label" text-anchor="middle" style="font-size:8px;letter-spacing:1px;fill:#334155">Coach</text>
+
+    <!-- ===== CONNECTION LINES ===== -->
+    <!-- Agents → Grafo -->
+    <use href="#flow-kaze" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.2" marker-end="url(#arrowBlue)"/>
+    <use href="#flow-compass" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.2" marker-end="url(#arrowBlue)"/>
+    <use href="#flow-kaizen" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.2" marker-end="url(#arrowBlue)"/>
+    <use href="#flow-dojo" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.2" marker-end="url(#arrowBlue)"/>
+    <use href="#flow-nakama" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.2" marker-end="url(#arrowBlue)"/>
+    <use href="#flow-koan" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.2" marker-end="url(#arrowBlue)"/>
+    <use href="#flow-ikigai" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.2" marker-end="url(#arrowBlue)"/>
+
+    <!-- Grafo ↔ Ingeniero -->
+    <use href="#flow-grafo-ing" stroke="#f59e0b" stroke-width="1.5" fill="none" opacity="0.25" marker-end="url(#arrowAmber)"/>
+    <use href="#flow-ing-grafo" stroke="#f59e0b" stroke-width="1.5" fill="none" opacity="0.25" stroke-dasharray="4,4" marker-end="url(#arrowAmber)"/>
+
+    <!-- Grafo → MIYAGI -->
+    <use href="#flow-grafo-miyagi" stroke="#ec4899" stroke-width="2" fill="none" opacity="0.25" marker-end="url(#arrowPink)"/>
+
+    <!-- SENPAI → MIYAGI -->
+    <use href="#flow-senpai-miyagi" stroke="#22c55e" stroke-width="1.5" fill="none" opacity="0.2" marker-end="url(#arrowGreen)"/>
+
+    <!-- SENPAI → Agents (feedback loop) -->
+    <use href="#flow-senpai-agents" stroke="#22c55e" stroke-width="1" fill="none" opacity="0.15" stroke-dasharray="3,5" marker-end="url(#arrowGreen)"/>
+
+    <!-- Backlog -->
+    <use href="#flow-backlog" stroke="#64748b" stroke-width="1" fill="none" opacity="0.2" stroke-dasharray="4,4"/>
+
+    <!-- ===== ANIMATED FLOW DOTS ===== -->
+    <!-- Agent data flowing to Grafo -->
+    <circle r="3" fill="#60a5fa" opacity="0.9">
+      <animateMotion dur="2.5s" repeatCount="indefinite" rotate="auto"><mpath href="#flow-kaze"/></animateMotion>
+    </circle>
+    <circle r="3" fill="#60a5fa" opacity="0.9">
+      <animateMotion dur="2.8s" repeatCount="indefinite" rotate="auto" begin="0.4s"><mpath href="#flow-compass"/></animateMotion>
+    </circle>
+    <circle r="3" fill="#60a5fa" opacity="0.9">
+      <animateMotion dur="3.0s" repeatCount="indefinite" rotate="auto" begin="0.8s"><mpath href="#flow-kaizen"/></animateMotion>
+    </circle>
+    <circle r="3" fill="#60a5fa" opacity="0.9">
+      <animateMotion dur="2.6s" repeatCount="indefinite" rotate="auto" begin="1.2s"><mpath href="#flow-dojo"/></animateMotion>
+    </circle>
+    <circle r="3" fill="#60a5fa" opacity="0.9">
+      <animateMotion dur="3.2s" repeatCount="indefinite" rotate="auto" begin="0.6s"><mpath href="#flow-nakama"/></animateMotion>
+    </circle>
+    <circle r="3" fill="#60a5fa" opacity="0.9">
+      <animateMotion dur="2.9s" repeatCount="indefinite" rotate="auto" begin="1.0s"><mpath href="#flow-koan"/></animateMotion>
+    </circle>
+    <circle r="3" fill="#60a5fa" opacity="0.9">
+      <animateMotion dur="3.1s" repeatCount="indefinite" rotate="auto" begin="1.4s"><mpath href="#flow-ikigai"/></animateMotion>
+    </circle>
+
+    <!-- Grafo ↔ Ingeniero bidirectional -->
+    <circle r="3" fill="#fbbf24" opacity="0.9">
+      <animateMotion dur="2s" repeatCount="indefinite" rotate="auto"><mpath href="#flow-grafo-ing"/></animateMotion>
+    </circle>
+    <circle r="3" fill="#fbbf24" opacity="0.9">
+      <animateMotion dur="2.2s" repeatCount="indefinite" rotate="auto" begin="1s"><mpath href="#flow-ing-grafo"/></animateMotion>
+    </circle>
+
+    <!-- Grafo → MIYAGI (main data) -->
+    <circle r="4" fill="#f472b6" opacity="0.9">
+      <animateMotion dur="3s" repeatCount="indefinite" rotate="auto"><mpath href="#flow-grafo-miyagi"/></animateMotion>
+    </circle>
+    <circle r="3" fill="#ec4899" opacity="0.7">
+      <animateMotion dur="3s" repeatCount="indefinite" rotate="auto" begin="1.5s"><mpath href="#flow-grafo-miyagi"/></animateMotion>
+    </circle>
+
+    <!-- SENPAI → MIYAGI -->
+    <circle r="3" fill="#4ade80" opacity="0.9">
+      <animateMotion dur="2.5s" repeatCount="indefinite" rotate="auto"><mpath href="#flow-senpai-miyagi"/></animateMotion>
+    </circle>
+
+    <!-- SENPAI feedback to agents -->
+    <circle r="2" fill="#4ade80" opacity="0.6">
+      <animateMotion dur="4s" repeatCount="indefinite" rotate="auto"><mpath href="#flow-senpai-agents"/></animateMotion>
+    </circle>
+
+    <!-- ===== AGENT NODES — Specialists (Left column) ===== -->
+    <!-- KAZE -->
+    <g class="agent-node" data-agent="kaze" onclick="showInfo('kaze')">
+      <circle class="node-glow" cx="100" cy="175" r="40" fill="#3b82f6" opacity="0"/>
+      <circle cx="100" cy="175" r="30" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+      <text x="100" y="170" text-anchor="middle" fill="#60a5fa" font-size="20">🌊</text>
+      <text x="100" y="190" text-anchor="middle" fill="#93c5fd" font-size="9" font-weight="600">KAZE</text>
+      <text x="100" y="220" text-anchor="middle" fill="#475569" font-size="8">Ansiedad</text>
+      <text x="100" y="230" text-anchor="middle" fill="#475569" font-size="8">& Estres</text>
+    </g>
+
+    <!-- COMPASS -->
+    <g class="agent-node" data-agent="compass" onclick="showInfo('compass')">
+      <circle class="node-glow" cx="100" cy="265" r="40" fill="#3b82f6" opacity="0"/>
+      <circle cx="100" cy="265" r="30" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+      <text x="100" y="260" text-anchor="middle" fill="#60a5fa" font-size="20">🧭</text>
+      <text x="100" y="280" text-anchor="middle" fill="#93c5fd" font-size="9" font-weight="600">COMPASS</text>
+      <text x="100" y="308" text-anchor="middle" fill="#475569" font-size="8">Motivacion</text>
+      <text x="100" y="318" text-anchor="middle" fill="#475569" font-size="8">& Metas</text>
+    </g>
+
+    <!-- KAIZEN -->
+    <g class="agent-node" data-agent="kaizen" onclick="showInfo('kaizen')">
+      <circle class="node-glow" cx="100" cy="355" r="40" fill="#3b82f6" opacity="0"/>
+      <circle cx="100" cy="355" r="30" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+      <text x="100" y="350" text-anchor="middle" fill="#60a5fa" font-size="20">📈</text>
+      <text x="100" y="370" text-anchor="middle" fill="#93c5fd" font-size="9" font-weight="600">KAIZEN</text>
+      <text x="100" y="398" text-anchor="middle" fill="#475569" font-size="8">Habitos</text>
+      <text x="100" y="408" text-anchor="middle" fill="#475569" font-size="8">& Rutinas</text>
+    </g>
+
+    <!-- DOJO -->
+    <g class="agent-node" data-agent="dojo" onclick="showInfo('dojo')">
+      <circle class="node-glow" cx="100" cy="445" r="40" fill="#3b82f6" opacity="0"/>
+      <circle cx="100" cy="445" r="30" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+      <text x="100" y="440" text-anchor="middle" fill="#60a5fa" font-size="20">🥋</text>
+      <text x="100" y="460" text-anchor="middle" fill="#93c5fd" font-size="9" font-weight="600">DOJO</text>
+      <text x="100" y="488" text-anchor="middle" fill="#475569" font-size="8">Practica</text>
+      <text x="100" y="498" text-anchor="middle" fill="#475569" font-size="8">& Ejercicios</text>
+    </g>
+
+    <!-- NAKAMA -->
+    <g class="agent-node" data-agent="nakama" onclick="showInfo('nakama')">
+      <circle class="node-glow" cx="100" cy="535" r="40" fill="#3b82f6" opacity="0"/>
+      <circle cx="100" cy="535" r="30" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+      <text x="100" y="530" text-anchor="middle" fill="#60a5fa" font-size="20">🤝</text>
+      <text x="100" y="550" text-anchor="middle" fill="#93c5fd" font-size="9" font-weight="600">NAKAMA</text>
+      <text x="100" y="578" text-anchor="middle" fill="#475569" font-size="8">Soporte</text>
+      <text x="100" y="588" text-anchor="middle" fill="#475569" font-size="8">Social</text>
+    </g>
+
+    <!-- KOAN -->
+    <g class="agent-node" data-agent="koan" onclick="showInfo('koan')">
+      <circle class="node-glow" cx="100" cy="625" r="40" fill="#3b82f6" opacity="0"/>
+      <circle cx="100" cy="625" r="30" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+      <text x="100" y="620" text-anchor="middle" fill="#60a5fa" font-size="20">🧘</text>
+      <text x="100" y="640" text-anchor="middle" fill="#93c5fd" font-size="9" font-weight="600">KOAN</text>
+      <text x="100" y="668" text-anchor="middle" fill="#475569" font-size="8">Metacogni-</text>
+      <text x="100" y="678" text-anchor="middle" fill="#475569" font-size="8">cion</text>
+    </g>
+
+    <!-- IKIGAI -->
+    <g class="agent-node" data-agent="ikigai" onclick="showInfo('ikigai')">
+      <circle class="node-glow" cx="100" cy="695" r="40" fill="#3b82f6" opacity="0"/>
+      <circle cx="100" cy="695" r="30" fill="#0f172a" stroke="#818cf8" stroke-width="2"/>
+      <text x="100" y="690" text-anchor="middle" fill="#a78bfa" font-size="20">🎯</text>
+      <text x="100" y="710" text-anchor="middle" fill="#c4b5fd" font-size="9" font-weight="600">IKIGAI</text>
+      <text x="40" y="695" text-anchor="middle" fill="#475569" font-size="8">Vocacion</text>
+    </g>
+
+    <!-- ===== GRAFO CAUSAL (Center) ===== -->
+    <g class="agent-node" onclick="showInfo('grafo')">
+      <circle class="node-glow" cx="500" cy="340" r="80" fill="#3b82f6" opacity="0"/>
+      <!-- Outer ring -->
+      <circle cx="500" cy="340" r="65" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.3" stroke-dasharray="3,3">
+        <animateTransform attributeName="transform" type="rotate" from="0 500 340" to="360 500 340" dur="30s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Main circle -->
+      <circle cx="500" cy="340" r="52" fill="#0c1338" stroke="url(#grafoGrad)" stroke-width="3"/>
+      <!-- Inner decoration -->
+      <circle cx="500" cy="340" r="40" fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.3"/>
+      <!-- Mini-nodes representing the 21 variables -->
+      <g opacity="0.5">
+        <circle cx="475" cy="310" r="3" fill="#60a5fa"/>
+        <circle cx="495" cy="305" r="3" fill="#60a5fa"/>
+        <circle cx="515" cy="308" r="3" fill="#60a5fa"/>
+        <circle cx="530" cy="320" r="3" fill="#60a5fa"/>
+        <circle cx="535" cy="340" r="3" fill="#60a5fa"/>
+        <circle cx="530" cy="358" r="3" fill="#60a5fa"/>
+        <circle cx="518" cy="370" r="3" fill="#60a5fa"/>
+        <circle cx="500" cy="375" r="3" fill="#60a5fa"/>
+        <circle cx="482" cy="370" r="3" fill="#60a5fa"/>
+        <circle cx="470" cy="358" r="3" fill="#60a5fa"/>
+        <circle cx="465" cy="340" r="3" fill="#60a5fa"/>
+        <circle cx="470" cy="322" r="3" fill="#60a5fa"/>
+        <!-- Inner ring -->
+        <circle cx="490" cy="325" r="2" fill="#93c5fd"/>
+        <circle cx="510" cy="325" r="2" fill="#93c5fd"/>
+        <circle cx="515" cy="345" r="2" fill="#93c5fd"/>
+        <circle cx="505" cy="358" r="2" fill="#93c5fd"/>
+        <circle cx="490" cy="355" r="2" fill="#93c5fd"/>
+        <circle cx="483" cy="340" r="2" fill="#93c5fd"/>
+        <!-- Mini edges -->
+        <line x1="475" y1="310" x2="495" y2="305" stroke="#3b82f6" stroke-width="0.5" opacity="0.4"/>
+        <line x1="495" y1="305" x2="515" y2="308" stroke="#3b82f6" stroke-width="0.5" opacity="0.4"/>
+        <line x1="515" y1="308" x2="530" y2="320" stroke="#3b82f6" stroke-width="0.5" opacity="0.4"/>
+        <line x1="490" y1="325" x2="510" y2="325" stroke="#3b82f6" stroke-width="0.5" opacity="0.4"/>
+        <line x1="510" y1="325" x2="515" y2="345" stroke="#3b82f6" stroke-width="0.5" opacity="0.4"/>
+        <line x1="483" y1="340" x2="490" y2="355" stroke="#3b82f6" stroke-width="0.5" opacity="0.4"/>
+        <line x1="470" y1="322" x2="490" y2="325" stroke="#3b82f6" stroke-width="0.5" opacity="0.4"/>
+        <line x1="505" y1="358" x2="518" y2="370" stroke="#3b82f6" stroke-width="0.5" opacity="0.4"/>
+      </g>
+      <text x="500" y="335" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700">GRAFO</text>
+      <text x="500" y="348" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700">CAUSAL</text>
+      <text x="500" y="395" text-anchor="middle" fill="#475569" font-size="9">21 vars · 30 aristas</text>
+    </g>
+
+    <!-- ===== INGENIERO MATEMATICO (Below Grafo) ===== -->
+    <g class="agent-node" onclick="showInfo('ingeniero')">
+      <circle class="node-glow" cx="600" cy="510" r="45" fill="#f59e0b" opacity="0"/>
+      <circle cx="600" cy="510" r="35" fill="#0f172a" stroke="url(#ingenieroGrad)" stroke-width="2.5"/>
+      <text x="600" y="505" text-anchor="middle" fill="#fbbf24" font-size="22">📐</text>
+      <text x="600" y="525" text-anchor="middle" fill="#fcd34d" font-size="9" font-weight="600">INGENIERO</text>
+      <text x="600" y="536" text-anchor="middle" fill="#fcd34d" font-size="9" font-weight="600">MATEMATICO</text>
+      <text x="600" y="560" text-anchor="middle" fill="#475569" font-size="8">Ajuste de pesos</text>
+      <text x="600" y="570" text-anchor="middle" fill="#475569" font-size="8">Wright · BKT · IRT</text>
+    </g>
+
+    <!-- ===== SENPAI (Below, between Grafo and MIYAGI) ===== -->
+    <g class="agent-node" onclick="showInfo('senpai')">
+      <circle class="node-glow" cx="700" cy="540" r="45" fill="#22c55e" opacity="0"/>
+      <circle cx="700" cy="540" r="35" fill="#0f172a" stroke="url(#senpaiGrad)" stroke-width="2.5"/>
+      <text x="700" y="533" text-anchor="middle" fill="#4ade80" font-size="22">👁️</text>
+      <text x="700" y="553" text-anchor="middle" fill="#86efac" font-size="9" font-weight="600">SENPAI</text>
+      <text x="700" y="580" text-anchor="middle" fill="#475569" font-size="8">Reunion diaria</text>
+      <text x="700" y="590" text-anchor="middle" fill="#475569" font-size="8">Recom vs Resultados</text>
+    </g>
+
+    <!-- ===== MIYAGI (Right — Main agent) ===== -->
+    <g class="agent-node" onclick="showInfo('miyagi')">
+      <!-- Pulse rings -->
+      <circle cx="950" cy="350" fill="none" stroke="#f472b6" stroke-width="1">
+        <animate attributeName="r" values="68;80;68" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.3;0.1;0.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="950" cy="350" fill="none" stroke="#a78bfa" stroke-width="0.5">
+        <animate attributeName="r" values="80;95;80" dur="3s" repeatCount="indefinite" begin="0.5s"/>
+        <animate attributeName="opacity" values="0.15;0.05;0.15" dur="3s" repeatCount="indefinite" begin="0.5s"/>
+      </circle>
+
+      <circle class="node-glow" cx="950" cy="350" r="65" fill="#9333ea" opacity="0"/>
+      <!-- Outer ring -->
+      <circle cx="950" cy="350" r="60" fill="none" stroke="#ec4899" stroke-width="1.5" opacity="0.3">
+        <animateTransform attributeName="transform" type="rotate" from="0 950 350" to="-360 950 350" dur="20s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Main -->
+      <circle cx="950" cy="350" r="50" fill="#0c1338" stroke="url(#miyagiGrad)" stroke-width="3"/>
+      <text x="950" y="340" text-anchor="middle" fill="#f9a8d4" font-size="28">🥷</text>
+      <text x="950" y="365" text-anchor="middle" fill="#f9a8d4" font-size="13" font-weight="800">MIYAGI</text>
+      <text x="950" y="415" text-anchor="middle" fill="#f472b6" font-size="10" font-weight="600">Coach Principal</text>
+      <text x="950" y="430" text-anchor="middle" fill="#475569" font-size="8">Habla con el estudiante</text>
+    </g>
+
+    <!-- ===== ESTUDIANTE (Far right) ===== -->
+    <g class="agent-node" onclick="showInfo('estudiante')">
+      <circle cx="1100" cy="350" r="35" fill="#0f172a" stroke="#64748b" stroke-width="2"/>
+      <text x="1100" y="345" text-anchor="middle" fill="#94a3b8" font-size="26">🎓</text>
+      <text x="1100" y="365" text-anchor="middle" fill="#94a3b8" font-size="9" font-weight="600">ALUMNO</text>
+      <text x="1100" y="395" text-anchor="middle" fill="#475569" font-size="8">Data & Feedback</text>
+    </g>
+    <!-- MIYAGI ↔ Estudiante -->
+    <line x1="1000" y1="350" x2="1062" y2="350" stroke="#f472b6" stroke-width="2" opacity="0.3" marker-end="url(#arrowPink)"/>
+    <line x1="1062" y1="360" x2="1000" y2="360" stroke="#64748b" stroke-width="1" opacity="0.2" stroke-dasharray="3,3"/>
+    <circle r="3" fill="#f472b6" opacity="0.8">
+      <animate attributeName="cx" values="1005;1058;1005" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="350;350;350" dur="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- ===== BACKLOG: Post-PAES ===== -->
+    <g class="agent-node" onclick="showInfo('backlog')">
+      <rect x="1030" y="580" width="140" height="55" rx="10" fill="#0f172a" stroke="#475569" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="1100" y="602" text-anchor="middle" fill="#64748b" font-size="9" font-weight="600">BACKLOG</text>
+      <text x="1100" y="616" text-anchor="middle" fill="#475569" font-size="8">Analisis Post-PAES</text>
+      <text x="1100" y="628" text-anchor="middle" fill="#475569" font-size="8">Caso a caso</text>
+    </g>
+
+    <!-- ===== TESIS (Foundation) ===== -->
+    <g class="agent-node" onclick="showInfo('tesis')">
+      <rect x="400" y="640" width="200" height="45" rx="8" fill="#0c1338" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="500" y="660" text-anchor="middle" fill="#475569" font-size="10" font-weight="700">📖 TESIS v2 — Base de Conocimiento</text>
+      <text x="500" y="675" text-anchor="middle" fill="#334155" font-size="8">21 variables · 150+ refs · 8 ciclos de revision</text>
+    </g>
+    <!-- Tesis → Grafo connection -->
+    <line x1="500" y1="640" x2="500" y2="395" stroke="#1e293b" stroke-width="1" opacity="0.3" stroke-dasharray="5,5"/>
+
+  </svg>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div><span>Agentes Especialistas (7)</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div><span>Ingeniero Matematico</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:#4ade80"></div><span>SENPAI (Revisor diario)</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div><span>MIYAGI (Coach principal)</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:#64748b"></div><span>Backlog / Pendiente</span></div>
+</div>
+
+<!-- Info Panel -->
+<div class="info-panel" id="infoPanel">
+  <button class="close-btn" onclick="hideInfo()">&times;</button>
+  <h3 id="infoTitle"></h3>
+  <p id="infoText"></p>
+</div>
+
+<!-- Background particles -->
+<script>
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const particles = Array.from({length: 60}, () => ({
+  x: Math.random() * window.innerWidth,
+  y: Math.random() * window.innerHeight,
+  vx: (Math.random() - 0.5) * 0.3,
+  vy: (Math.random() - 0.5) * 0.3,
+  r: Math.random() * 1.5 + 0.5,
+  alpha: Math.random() * 0.15 + 0.05
+}));
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = canvas.width;
+    if (p.x > canvas.width) p.x = 0;
+    if (p.y < 0) p.y = canvas.height;
+    if (p.y > canvas.height) p.y = 0;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(96, 165, 250, ${p.alpha})`;
+    ctx.fill();
+  });
+
+  // Draw connections between close particles
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(96, 165, 250, ${0.03 * (1 - dist / 120)})`;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Info panel data
+const agentInfo = {
+  kaze: {
+    title: '🌊 KAZE — Agente de Ansiedad & Estres',
+    text: 'Monitorea los niveles de ansiedad ante examenes y estres academico del estudiante. Interviene con tecnicas basadas en evidencia (escritura expresiva, respiracion, reencuadre cognitivo). Variables del grafo: anxiety, stress_level. Efecto total de stress_level: 0.255 (#1 predictor).',
+    color: '#60a5fa'
+  },
+  compass: {
+    title: '🧭 COMPASS — Agente de Motivacion & Metas',
+    text: 'Trabaja la motivacion intrinseca, el establecimiento de metas SMART y el growth mindset. Variables del grafo: motivation, goal_setting, growth_mindset. Basado en Deci & Ryan (SDT), Locke & Latham, Dweck.',
+    color: '#60a5fa'
+  },
+  kaizen: {
+    title: '📈 KAIZEN — Agente de Habitos & Rutinas',
+    text: 'Construye rutinas de estudio sostenibles, monitorea sueno y atencion. Variables del grafo: study_habits, sleep_quality, attention_focus. Efecto total sleep_quality: 0.199 (#2 predictor).',
+    color: '#60a5fa'
+  },
+  dojo: {
+    title: '🥋 DOJO — Agente de Practica',
+    text: 'Gestiona la practica deliberada con items IRT calibrados. Implementa spacing, interleaving y testing effect. Variables: practice_hours, content_mastery, prior_knowledge.',
+    color: '#60a5fa'
+  },
+  nakama: {
+    title: '🤝 NAKAMA — Agente de Soporte Social',
+    text: 'Facilita el apoyo social y familiar del estudiante. Variables: social_support, parental_support. Detecta aislamiento y activa estrategias de conexion.',
+    color: '#60a5fa'
+  },
+  koan: {
+    title: '🧘 KOAN — Agente de Metacognicion',
+    text: 'Desarrolla habilidades metacognitivas: automonitoreo, planificacion del estudio, autoevaluacion. Variables: metacognition, self_efficacy, locus_of_control. Basado en Zimmerman, Flavell, Bandura.',
+    color: '#60a5fa'
+  },
+  ikigai: {
+    title: '🎯 IKIGAI — Agente Vocacional',
+    text: 'Trabaja la orientacion vocacional y la claridad de proposito. Variables: vocational_clarity. Basado en Holland (RIASEC), Super, Lent (SCCT). Conecta el esfuerzo PAES con el proyecto de vida.',
+    color: '#818cf8'
+  },
+  grafo: {
+    title: '🔮 GRAFO CAUSAL — Motor de Rendimiento',
+    text: '21 variables, 30 aristas causales con evidencia clasificada (A/A*/B/C). 87% con soporte meta-analitico. Descomposicion de Wright para efectos directos e indirectos. Propagacion bayesiana con convergencia formalizada. Este grafo ES el cerebro del sistema — todos los agentes leen y alimentan sus pesos.',
+    color: '#3b82f6'
+  },
+  ingeniero: {
+    title: '📐 INGENIERO MATEMATICO',
+    text: 'Recopila los resultados de las recomendaciones de los agentes especialistas y la data de usuarios. Ajusta los pesos del grafo causal, valida la convergencia del algoritmo de propagacion, y mantiene la integridad matematica del modelo (Wright paths, BKT, IRT 2PL). Es el unico agente que modifica los pesos del grafo.',
+    color: '#fbbf24'
+  },
+  senpai: {
+    title: '👁️ SENPAI — Revisor Diario',
+    text: 'Los agentes redactores se reunen TODOS LOS DIAS para analizar sus recomendaciones versus los resultados simulados. SENPAI coordina esta reunion, detecta inconsistencias entre lo que los agentes recomiendan y el impacto observado, y envia feedback correctivo a los agentes especialistas.',
+    color: '#4ade80'
+  },
+  miyagi: {
+    title: '🥷 MIYAGI — Coach Principal',
+    text: 'El agente final que habla con el estudiante. Recibe el input consolidado de todos los agentes especialistas, validado por el Ingeniero Matematico y revisado por SENPAI. Sus decisiones estan fundamentadas por el grafo causal. Es la cara visible de Renddi.app — un coach personalizado, empatico y basado en evidencia.',
+    color: '#f472b6'
+  },
+  estudiante: {
+    title: '🎓 ALUMNO — Usuario Renddi',
+    text: 'El estudiante que rinde la PAES. Interactua con MIYAGI, recibe coaching personalizado, y genera data que alimenta el grafo. Su progreso se mide en las 21 variables del modelo. La brecha promedio de 180-197 puntos PAES entre tipos de establecimiento es lo que Renddi busca reducir.',
+    color: '#94a3b8'
+  },
+  backlog: {
+    title: '📋 BACKLOG — Analisis Post-PAES',
+    text: 'Cuando se rinda la PAES, se analizara caso a caso la evolucion de cada alumno y su rendimiento real. Se compararan las predicciones del modelo vs resultados reales para ajustar los pesos del grafo con evidencia empirica propia. Este es el cierre del ciclo cientifico.',
+    color: '#64748b'
+  },
+  tesis: {
+    title: '📖 TESIS v2 — Base de Conocimiento',
+    text: 'La tesis es el fundamento cientifico de TODO el sistema. Contiene el grafo causal de 21 variables, 30 aristas con niveles de evidencia, 150+ referencias APA 7, y 8 ciclos de revision. Toda decision de diseno de agentes debe referirse a este documento. Evaluacion externa: 8.5-9/10.',
+    color: '#475569'
+  }
+};
+
+function showInfo(agent) {
+  const info = agentInfo[agent];
+  const panel = document.getElementById('infoPanel');
+  const title = document.getElementById('infoTitle');
+  const text = document.getElementById('infoText');
+
+  title.textContent = info.title;
+  title.style.color = info.color;
+  text.textContent = info.text;
+  panel.style.borderColor = info.color + '40';
+  panel.classList.add('visible');
+}
+
+function hideInfo() {
+  document.getElementById('infoPanel').classList.remove('visible');
+}
+
+// Close on click outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.agent-node') && !e.target.closest('.info-panel')) {
+    hideInfo();
+  }
+});
+</script>
+
+</body>
+</html>

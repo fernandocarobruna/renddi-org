@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RENDDI — Motor de Simulacion Causal</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0D1B2A;--bg2:#1B2838;--bg3:#243447;--text:#e8e8e8;--text2:#a0b4c8;--accent:#F39C12;--success:#27AE60;--danger:#E74C3C;--card:#1B2838;--border:#2c3e50;--radius:10px;--shadow:0 4px 20px rgba(0,0,0,0.3)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.header{background:linear-gradient(135deg,#1B4F72,#2471A3);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.3);z-index:100}
+.header h1{font-size:1.3em;font-weight:700;color:#fff;letter-spacing:1px}
+.header h1 span{color:#F39C12}
+.header-right{display:flex;gap:8px;align-items:center}
+.btn{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:.82em;font-weight:600;transition:all .2s}
+.btn-primary{background:#F39C12;color:#fff}
+.btn-primary:hover{background:#e08e0b;transform:translateY(-1px)}
+.btn-sm{padding:5px 12px;font-size:.78em}
+.btn-outline{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+.btn-outline:hover{background:var(--accent);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-success{background:var(--success);color:#fff}
+.main-layout{display:flex;flex:1;overflow:hidden}
+.sidebar{width:280px;background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;padding:16px;display:flex;flex-direction:column;gap:14px}
+.sidebar h3{font-size:.88em;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+.sidebar label{font-size:.8em;color:var(--text2);display:block;margin-bottom:4px}
+.sidebar input[type="range"]{width:100%;accent-color:var(--accent)}
+.sidebar select{width:100%;padding:7px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:.85em}
+.range-val{float:right;color:var(--accent);font-weight:700;font-size:.85em}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.nav-tabs{display:flex;background:var(--bg2);border-bottom:2px solid var(--border);padding:0 12px;overflow-x:auto;gap:2px;flex-shrink:0}
+.nav-tab{padding:10px 16px;cursor:pointer;border:none;background:none;color:var(--text2);font-size:.82em;font-weight:500;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+.nav-tab:hover{color:var(--text);background:var(--bg3)}
+.nav-tab.active{color:#F39C12;border-bottom-color:#F39C12;font-weight:700}
+.tab-content{display:none;padding:20px;overflow-y:auto;flex:1}
+.tab-content.active{display:block}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:14px}
+.card h3{font-size:.95em;margin-bottom:10px;color:var(--accent);display:flex;align-items:center;gap:8px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.chart-wrap{position:relative;width:100%;height:350px}
+.chart-wrap canvas{width:100%!important;height:100%!important}
+table{width:100%;border-collapse:collapse;font-size:.82em}
+th{background:var(--bg3);padding:8px 10px;text-align:left;font-weight:600;color:var(--accent);border-bottom:2px solid var(--border);position:sticky;top:0}
+td{padding:7px 10px;border-bottom:1px solid var(--border)}
+tr:hover td{background:rgba(243,156,18,.05)}
+.progress-bar{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin:4px 0}
+.progress-bar .fill{height:100%;border-radius:4px;transition:width .6s ease}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.72em;font-weight:600}
+.badge-green{background:rgba(39,174,96,.2);color:#27AE60}
+.badge-red{background:rgba(231,76,60,.2);color:#E74C3C}
+.badge-yellow{background:rgba(243,156,18,.2);color:#F39C12}
+.delta-pos{color:#27AE60;font-weight:700}
+.delta-neg{color:#E74C3C;font-weight:700}
+.footer{background:var(--bg2);border-top:1px solid var(--border);padding:8px 24px;font-size:.75em;color:var(--text2);display:flex;justify-content:space-between;flex-shrink:0}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--text2);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;margin-right:6px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fade-in{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.tooltip-icon{cursor:help;color:var(--text2);font-size:.75em;border:1px solid var(--text2);border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;margin-left:4px}
+.tooltip-icon:hover{color:var(--accent);border-color:var(--accent)}
+.var-slider-row{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:.8em}
+.var-slider-row .vname{width:140px;color:var(--text2);flex-shrink:0;font-size:.78em}
+.var-slider-row input[type="range"]{flex:1;accent-color:var(--accent)}
+.var-slider-row .vval{width:40px;text-align:right;font-weight:600;color:var(--accent);font-size:.82em}
+.preset-btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.preset-btns .btn{font-size:.72em;padding:4px 10px}
+.heatmap-grid{display:grid;gap:2px;font-size:.7em}
+.heatmap-cell{display:flex;align-items:center;justify-content:center;padding:4px;border-radius:3px;font-weight:600;min-height:28px}
+.checkbox-row{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:.8em}
+.checkbox-row input[type="checkbox"]{accent-color:var(--accent)}
+.paes-big{font-size:2.2em;font-weight:800;color:var(--accent);line-height:1}
+.paes-label{font-size:.75em;color:var(--text2)}
+.stat-card{text-align:center;padding:16px}
+.stat-card .stat-val{font-size:1.8em;font-weight:800;color:var(--accent)}
+.stat-card .stat-label{font-size:.78em;color:var(--text2);margin-top:4px}
+.filter-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.filter-row input,.filter-row select{padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:.82em}
+.presentation-mode .sidebar,.presentation-mode .nav-tabs,.presentation-mode .footer{display:none}
+.presentation-mode .content{width:100%}
+@media(max-width:900px){.main-layout{flex-direction:column}.sidebar{width:100%;max-height:300px;border-right:none;border-bottom:1px solid var(--border)}.grid-2,.grid-3{grid-template-columns:1fr}}
+
+/* === CUSTOM TOOLTIP SYSTEM === */
+[data-tip]{position:relative}
+[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a1a2e;color:#e8e8e8;padding:10px 14px;border-radius:8px;font-size:.76em;font-weight:400;line-height:1.45;white-space:normal;width:max-content;max-width:340px;z-index:9999;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.5);border:1px solid var(--accent);animation:tipFade .15s ease}
+[data-tip]:hover::before{content:'';position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1a1a2e;z-index:9999;pointer-events:none}
+[data-tip-pos="right"]:hover::after{bottom:auto;left:calc(100% + 10px);top:50%;transform:translateY(-50%)}
+[data-tip-pos="right"]:hover::before{bottom:auto;left:calc(100% + 4px);top:50%;transform:translateY(-50%);border:6px solid transparent;border-right-color:#1a1a2e}
+[data-tip-pos="bottom"]:hover::after{bottom:auto;top:calc(100% + 8px);left:50%;transform:translateX(-50%)}
+[data-tip-pos="bottom"]:hover::before{bottom:auto;top:calc(100% + 3px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-bottom-color:#1a1a2e}
+@keyframes tipFade{from{opacity:0;transform:translateX(-50%) translateY(4px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.propagation-delta{font-size:.68em;margin-left:4px;font-weight:600;transition:all .3s}
+.caract-panel{background:var(--bg3);border-radius:8px;padding:14px;margin-top:12px;border:1px solid var(--border)}
+.caract-panel h4{font-size:.85em;color:var(--accent);margin-bottom:8px}
+.caract-item{display:flex;justify-content:space-between;padding:4px 0;font-size:.8em;border-bottom:1px solid rgba(44,62,80,.4)}
+.caract-item:last-child{border-bottom:none}
+.profile-actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.filter-group{background:var(--bg3);border-radius:8px;padding:10px;margin-bottom:8px}
+.filter-group-title{font-size:.78em;color:var(--accent);font-weight:600;margin-bottom:6px}
+.subgroup-stats{background:var(--bg3);border-radius:8px;padding:12px;margin-top:10px}
+.subgroup-stats .stat-row{display:flex;justify-content:space-between;padding:3px 0;font-size:.8em}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>RENDDI — <span>Motor de Simulacion Causal</span></h1>
+  <div class="header-right">
+    <button class="btn btn-outline btn-sm" onclick="togglePresentation()" title="Oculta sidebar, tabs y footer para presentaciones. Solo queda el contenido principal.">Presentacion</button>
+    <button class="btn btn-outline btn-sm" onclick="exportCSV()" title="Exporta todos los resultados de la ultima simulacion en formato CSV. Incluye las 21 variables finales de cada estudiante simulado.">Exportar CSV</button>
+    <button class="btn btn-outline btn-sm" onclick="shareConfig()" title="Copia al portapapeles una URL con la configuracion actual (sims, dias, escenario, arquetipo) para compartir o reproducir.">Compartir</button>
+  </div>
+</div>
+
+<div class="main-layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div>
+      <h3>Configuracion</h3>
+    </div>
+    <div data-tip="Numero de estudiantes simulados por arquetipo. Mas simulaciones = resultados mas estables estadisticamente. 100 es suficiente para tendencias, 500+ para intervalos de confianza precisos." data-tip-pos="right">
+      <label>Simulaciones <span class="range-val" id="nSimsVal">100</span></label>
+      <input type="range" id="nSims" min="10" max="1000" step="10" value="100" oninput="document.getElementById('nSimsVal').textContent=this.value" title="10-1000 simulaciones por arquetipo. Mas = mas lento pero mas preciso.">
+    </div>
+    <div data-tip="Periodo de simulacion en dias. 180 dias = ~6 meses (un semestre tipico de preparacion PAES). 365 = ano completo. Afecta cuantas semanas de intervencion se aplican." data-tip-pos="right">
+      <label>Duracion (dias) <span class="range-val" id="nDaysVal">180</span></label>
+      <input type="range" id="nDays" min="30" max="365" step="5" value="180" oninput="document.getElementById('nDaysVal').textContent=this.value" title="30-365 dias. 180 = semestre tipico PAES.">
+    </div>
+    <div data-tip="El escenario define que agentes de Renddi estan activos y en que condiciones. Cada escenario anade una capa distinta para medir su impacto incremental." data-tip-pos="right">
+      <label>Escenario</label>
+      <select id="escenario">
+        <option value="A" title="Sin intervencion de Renddi. El estudiante estudia por su cuenta. Linea base para medir impacto.">A - Baseline (sin Renddi)</option>
+        <option value="B" title="Solo ejercicios adaptativos (SENPAI/DOJO) sin coaching emocional ni comunicacion calibrada. Mide el valor del contenido academico puro.">B - Solo Ejercicios</option>
+        <option value="C" selected title="Renddi completo: ejercicios + coaching emocional (KAZE) + comunicacion (KOTODAMA) + habitos (KAIZEN). Todos los agentes activos.">C - Renddi Completo</option>
+        <option value="D" title="Renddi con adherencia maxima (80%+). Simula que pasa si logramos engagement optimo. Mide el techo teorico del sistema.">D - Alta Adherencia</option>
+        <option value="E" title="Renddi con eventos de crisis inyectados (semana examenes, conflicto familiar, burnout). Mide resiliencia del sistema ante adversidad.">E - Con Crisis</option>
+      </select>
+    </div>
+    <div data-tip="Selecciona un arquetipo especifico o 'Todos' para simular los 10 perfiles de la tesis. Cada arquetipo tiene un perfil de 21 variables, PAES inicial y adherencia distintos." data-tip-pos="right">
+      <label>Arquetipo</label>
+      <select id="arquetipo">
+        <option value="Todos">Todos</option>
+      </select>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+      <button class="btn btn-primary" onclick="runSimulation()" id="btnSimular" title="Ejecuta la simulacion con los parametros configurados. Genera N estudiantes por arquetipo y simula dia a dia la intervencion.">Simular</button>
+      <button class="btn btn-outline" onclick="runIndividual()" id="btnIndividual" title="Abre la tab Caso Individual con el primer arquetipo cargado. Permite ajustar las 21 variables con sliders.">Simular Caso Individual</button>
+    </div>
+    <div style="margin-top:auto;padding-top:12px;border-top:1px solid var(--border)">
+      <div style="font-size:.72em;color:var(--text2)">
+        <div data-tip="El grafo causal tiene 21 variables que representan dimensiones del estudiante (academicas, emocionales, conductuales, contextuales) y 30 aristas con pesos calibrados desde la literatura." data-tip-pos="right">21 variables, 30 aristas</div>
+        <div>Grafo causal SENSEI v2.0</div>
+        <div style="margin-top:4px;color:var(--accent)" data-tip="El motor propaga efectos causales por capas BFS con atenuacion gamma=0.7, evitando doble conteo. La funcion PAES usa solo mastery (sigmoid)." data-tip-pos="right">Motor corregido (sin doble conteo)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('tab-resumen')" data-tip="Vista general de resultados por arquetipo. Delta PAES, intervalos de confianza, tasa de rescate y distribucion." data-tip-pos="bottom">Resumen</button>
+      <button class="nav-tab" onclick="switchTab('tab-evolucion')" data-tip="Grafico temporal semana a semana de cualquier variable del grafo. Muestra como evoluciona cada variable a lo largo del tiempo para cada arquetipo." data-tip-pos="bottom">Evolucion</button>
+      <button class="nav-tab" onclick="switchTab('tab-individual')" data-tip="Simula UN estudiante con perfil personalizado. Ajusta las 21 variables con sliders, ve propagacion causal en tiempo real y el impacto de intervenciones especificas." data-tip-pos="bottom">Caso Individual</button>
+      <button class="nav-tab" onclick="switchTab('tab-comparador')" data-tip="Compara 2 escenarios lado a lado para ver diferencias en impacto. Util para cuantificar el valor incremental de cada capa de Renddi." data-tip-pos="bottom">Comparador</button>
+      <button class="nav-tab" onclick="switchTab('tab-sensibilidad')" data-tip="Analiza que variables tienen mas impacto en el resultado PAES. Mapa de calor de la propagacion causal entre variables." data-tip-pos="bottom">Sensibilidad</button>
+      <button class="nav-tab" onclick="switchTab('tab-filtro')" data-tip="Filtra casos por multiples criterios (PAES inicial/final, delta, arquetipo, variable > umbral). Combina filtros con AND/OR y ve estadisticas del subgrupo." data-tip-pos="bottom">Filtro</button>
+    </div>
+
+    <!-- TAB 1: RESUMEN -->
+    <div class="tab-content active" id="tab-resumen">
+      <div class="grid-3" id="statsCards" style="margin-bottom:14px">
+        <div class="card stat-card" data-tip="Promedio aritmetico de (PAES_final - PAES_inicial) sobre todas las simulaciones. Representa el efecto medio de la intervencion en puntos PAES." data-tip-pos="bottom">
+          <div class="stat-val" id="statDelta">--</div><div class="stat-label">Delta PAES promedio</div>
+        </div>
+        <div class="card stat-card" data-tip="Porcentaje de estudiantes que empezaron con PAES < 500 y terminaron con PAES >= 500. Mide la capacidad del sistema de sacar a estudiantes de la zona de riesgo." data-tip-pos="bottom">
+          <div class="stat-val" id="statRescate">--</div><div class="stat-label">Tasa rescate (&lt;500 &rarr; &gt;500)</div>
+        </div>
+        <div class="card stat-card" data-tip="Intervalo de confianza al 95% del delta PAES. Si repites la simulacion muchas veces, el 95% de los promedios caerian en este rango. Mas simulaciones = intervalo mas estrecho." data-tip-pos="bottom">
+          <div class="stat-val" id="statIC">--</div><div class="stat-label">IC 95%</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Delta PAES por Arquetipo</h3>
+        <table id="tblResumen">
+          <thead><tr>
+            <th data-tip="Nombre del arquetipo de la tesis. Cada uno representa un perfil tipico de estudiante chileno preparando la PAES." data-tip-pos="bottom">Arquetipo</th>
+            <th data-tip="Etiqueta descriptiva que resume la personalidad y situacion del arquetipo." data-tip-pos="bottom">Etiqueta</th>
+            <th data-tip="Puntaje PAES de entrada del arquetipo, antes de cualquier intervencion. Calculado via sigmoid sobre mastery inicial." data-tip-pos="bottom">PAES Ini</th>
+            <th data-tip="Cambio promedio en puntos PAES entre inicio y fin de la simulacion. Positivo = mejora, negativo = retroceso." data-tip-pos="bottom">Delta PAES</th>
+            <th data-tip="Intervalo de confianza al 95% del delta. Rango donde se espera que caiga el verdadero delta con 95% de probabilidad." data-tip-pos="bottom">IC 95%</th>
+            <th data-tip="Barra visual del delta. Verde = mejora significativa (>20 pts), amarillo = mejora moderada, rojo = retroceso." data-tip-pos="bottom">Progreso</th>
+          </tr></thead>
+          <tbody id="tblResumenBody"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Distribucion PAES Final</h3>
+        <div class="chart-wrap"><canvas id="chartDistribucion"></canvas></div>
+      </div>
+    </div>
+
+    <!-- TAB 2: EVOLUCION -->
+    <div class="tab-content" id="tab-evolucion">
+      <div class="card">
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+          <label style="font-size:.82em;color:var(--text2)" data-tip="Selecciona que variable del grafo causal visualizar a lo largo del tiempo. PAES Estimado muestra el puntaje; las demas variables van de 0 a 1.">Variable:</label>
+          <select id="varEvolucion" onchange="updateEvolucionChart()" style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:.82em"></select>
+        </div>
+        <div class="chart-wrap" style="height:400px"><canvas id="chartEvolucion"></canvas></div>
+      </div>
+    </div>
+
+    <!-- TAB 3: CASO INDIVIDUAL -->
+    <div class="tab-content" id="tab-individual">
+      <div class="grid-2">
+        <div class="card" style="max-height:80vh;overflow-y:auto">
+          <h3>Perfil del Estudiante</h3>
+          <div class="profile-actions">
+            <button class="btn btn-outline btn-sm" onclick="loadRandomProfile()" title="Genera un perfil aleatorio coherente: si anxiety es alta, confidence tiende a ser baja, etc.">Aleatorio</button>
+            <button class="btn btn-outline btn-sm" onclick="importProfile()" title="Pega un JSON con las 21 variables (valores 0-1) para cargar un perfil personalizado.">Importar JSON</button>
+            <button class="btn btn-outline btn-sm" onclick="exportProfile()" title="Exporta el perfil actual de los sliders como JSON. Puedes guardarlo y reimportarlo despues.">Exportar JSON</button>
+            <button class="btn btn-outline btn-sm" onclick="resetSliders()" title="Resetea todas las variables a 0.50 (perfil neutro).">Reset</button>
+          </div>
+          <div class="preset-btns" id="presetBtns"></div>
+          <div id="individualSliders"></div>
+          <h3 style="margin-top:14px">Intervenciones</h3>
+          <div id="interventionChecks"></div>
+          <button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="runIndividualCase()" title="Ejecuta la simulacion dia a dia para este perfil con las intervenciones seleccionadas.">Simular caso</button>
+        </div>
+        <div>
+          <div class="card">
+            <h3>PAES Estimado</h3>
+            <div style="display:flex;gap:20px;align-items:center">
+              <div data-tip="PAES calculado a partir del mastery inicial del perfil, usando la funcion sigmoid: PAES = 150 + 700 * sigmoid((mastery - 0.5) * 6). Rango: 150-850."><div class="paes-label">Inicial</div><div class="paes-big" id="indPaesIni">--</div></div>
+              <div style="font-size:1.5em;color:var(--text2)">&rarr;</div>
+              <div data-tip="PAES al final de la simulacion, tras aplicar todas las intervenciones durante el periodo configurado."><div class="paes-label">Final</div><div class="paes-big" id="indPaesFin">--</div></div>
+              <div data-tip="Diferencia entre PAES final e inicial. Positivo = mejora, negativo = retroceso."><div class="paes-label">Delta</div><div class="paes-big" id="indPaesDelta" style="font-size:1.4em">--</div></div>
+            </div>
+          </div>
+          <!-- CARACTERIZACION AUTOMATICA -->
+          <div class="card" id="caractPanel">
+            <h3>Caracterizacion Automatica</h3>
+            <div id="caractContent" style="font-size:.82em;color:var(--text2)">Ajusta los sliders o simula un caso para ver la caracterizacion.</div>
+          </div>
+          <div class="card">
+            <h3>Radar Antes / Despues</h3>
+            <div class="chart-wrap"><canvas id="chartRadar"></canvas></div>
+          </div>
+          <div class="card">
+            <h3>Evolucion Individual</h3>
+            <div class="chart-wrap"><canvas id="chartIndividual"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: COMPARADOR -->
+    <div class="tab-content" id="tab-comparador">
+      <div class="card">
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+          <label style="font-size:.82em;color:var(--text2)" data-tip="Primer escenario a comparar. Los resultados se simulan con la misma seed para cada arquetipo, haciendo la comparacion justa.">Escenario A:</label>
+          <select id="cmpEscA" style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:.82em">
+            <option value="A" title="Sin Renddi. Linea base.">Baseline</option><option value="B" title="Solo contenido academico adaptativo.">Solo Ejercicios</option><option value="C" selected title="Todos los agentes activos.">Renddi Completo</option><option value="D" title="Adherencia maxima (80%+).">Alta Adherencia</option><option value="E" title="Con crisis inyectadas.">Con Crisis</option>
+          </select>
+          <label style="font-size:.82em;color:var(--text2)" data-tip="Segundo escenario. Ambos se simulan con las mismas condiciones iniciales para aislar el efecto de la diferencia de escenarios.">vs Escenario B:</label>
+          <select id="cmpEscB" style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:.82em">
+            <option value="A" selected title="Sin Renddi. Linea base.">Baseline</option><option value="B" title="Solo contenido academico adaptativo.">Solo Ejercicios</option><option value="C" title="Todos los agentes activos.">Renddi Completo</option><option value="D" title="Adherencia maxima (80%+).">Alta Adherencia</option><option value="E" title="Con crisis inyectadas.">Con Crisis</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="runComparison()" title="Simula ambos escenarios y muestra la diferencia de delta PAES por arquetipo.">Comparar</button>
+        </div>
+        <div class="chart-wrap" style="height:400px"><canvas id="chartComparador"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Delta entre Escenarios</h3>
+        <table id="tblComparador">
+          <thead><tr>
+            <th data-tip="Arquetipo simulado.">Arquetipo</th>
+            <th data-tip="Delta PAES promedio del escenario A seleccionado.">Esc A Delta</th>
+            <th data-tip="Delta PAES promedio del escenario B seleccionado.">Esc B Delta</th>
+            <th data-tip="Diferencia entre Esc A y Esc B. Positivo = Esc A es mejor. Negativo = Esc B es mejor.">Diferencia</th>
+          </tr></thead>
+          <tbody id="tblComparadorBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 5: SENSIBILIDAD -->
+    <div class="tab-content" id="tab-sensibilidad">
+      <div class="card">
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+          <label style="font-size:.82em;color:var(--text2)" data-tip="Variable que vas a perturbar. El sistema propaga el cambio por el grafo causal y muestra el efecto en todas las demas variables.">Variable:</label>
+          <select id="sensVar" style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:.82em"></select>
+          <label style="font-size:.82em;color:var(--text2)" data-tip="Magnitud del cambio aplicado a la variable seleccionada. Valores de -0.30 a +0.30 (en unidades de la variable, escala 0-1).">Delta: <span id="sensDeltaVal" style="color:var(--accent)">0.00</span></label>
+          <input type="range" id="sensDelta" min="-30" max="30" value="0" step="1" style="width:200px;accent-color:var(--accent)" oninput="updateSensitivity()">
+        </div>
+        <h3>Impacto en otras variables</h3>
+        <div id="sensResults" style="margin-bottom:12px"></div>
+      </div>
+      <div class="card">
+        <h3 data-tip="Matriz que muestra el efecto de perturbar cada variable (filas) sobre todas las demas (columnas) con delta=+0.10. Verde = efecto positivo, rojo = efecto negativo. Diagonal = efecto directo.">Mapa de Calor - Matriz de Impacto</h3>
+        <div style="overflow-x:auto"><div id="heatmapContainer"></div></div>
+      </div>
+    </div>
+
+    <!-- TAB 6: FILTRO -->
+    <div class="tab-content" id="tab-filtro">
+      <div class="card">
+        <h3>Filtrar Simulaciones</h3>
+        <div class="filter-group">
+          <div class="filter-group-title">Rango PAES</div>
+          <div class="filter-row">
+            <label style="font-size:.82em;color:var(--text2)" data-tip="Filtrar por PAES inicial minimo del estudiante (antes de intervencion).">PAES ini min:</label>
+            <input type="number" id="filtPaesIniMin" value="100" style="width:75px" title="Minimo PAES inicial">
+            <label style="font-size:.82em;color:var(--text2)">max:</label>
+            <input type="number" id="filtPaesIniMax" value="1000" style="width:75px" title="Maximo PAES inicial">
+            <label style="font-size:.82em;color:var(--text2);margin-left:10px" data-tip="Filtrar por PAES final (despues de intervencion).">PAES fin min:</label>
+            <input type="number" id="filtPaesFinMin" value="100" style="width:75px" title="Minimo PAES final">
+            <label style="font-size:.82em;color:var(--text2)">max:</label>
+            <input type="number" id="filtPaesFinMax" value="1000" style="width:75px" title="Maximo PAES final">
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-group-title">Delta y Arquetipo</div>
+          <div class="filter-row">
+            <label style="font-size:.82em;color:var(--text2)" data-tip="Delta PAES minimo. Ej: poner 50 para ver solo quienes mejoraron 50+ puntos.">Delta min:</label>
+            <input type="number" id="filtDeltaMin" value="-999" style="width:75px">
+            <label style="font-size:.82em;color:var(--text2)">max:</label>
+            <input type="number" id="filtDeltaMax" value="999" style="width:75px">
+            <label style="font-size:.82em;color:var(--text2);margin-left:10px">Arquetipo:</label>
+            <select id="filtArq" style="width:120px"><option value="Todos">Todos</option></select>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-group-title" data-tip="Filtrar por una variable especifica del grafo causal. Ej: ver solo estudiantes con anxiety > 0.70 al final de la simulacion.">Filtro por Variable</div>
+          <div class="filter-row">
+            <select id="filtVarName" style="width:160px"></select>
+            <select id="filtVarOp" style="width:50px">
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+              <option value=">=">&gt;=</option>
+              <option value="<=">&lt;=</option>
+            </select>
+            <input type="number" id="filtVarVal" value="0.50" step="0.05" style="width:75px">
+            <label style="font-size:.78em;color:var(--text2)">(dejar 0.50 para ignorar)</label>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-group-title">Modo de combinacion</div>
+          <div class="filter-row">
+            <label style="font-size:.82em;color:var(--text2)" data-tip="AND = todos los filtros deben cumplirse. OR = basta con que uno se cumpla.">Combinar filtros:</label>
+            <select id="filtCombine" style="width:80px">
+              <option value="AND">AND</option>
+              <option value="OR">OR</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="applyFilter()" title="Aplica todos los filtros configurados y muestra los resultados.">Filtrar</button>
+            <button class="btn btn-outline btn-sm" onclick="resetFilters()" title="Resetea todos los filtros a valores por defecto.">Reset filtros</button>
+          </div>
+        </div>
+        <div style="font-size:.78em;color:var(--text2);margin-bottom:8px" id="filtCount">Ejecuta una simulacion primero</div>
+        <!-- Subgroup statistics -->
+        <div class="subgroup-stats" id="subgroupStats" style="display:none">
+          <div style="font-size:.82em;color:var(--accent);font-weight:600;margin-bottom:6px">Estadisticas del subgrupo filtrado</div>
+          <div id="subgroupContent"></div>
+        </div>
+        <div style="max-height:500px;overflow-y:auto">
+          <table>
+            <thead><tr>
+              <th data-tip="ID unico de la simulacion.">#</th>
+              <th data-tip="Arquetipo del estudiante simulado.">Arquetipo</th>
+              <th data-tip="PAES antes de la intervencion.">PAES Ini</th>
+              <th data-tip="PAES despues de la intervencion.">PAES Fin</th>
+              <th data-tip="Cambio en puntos PAES.">Delta</th>
+              <th data-tip="Nivel de dominio academico final (0-1).">Mastery</th>
+              <th>Accion</th>
+            </tr></thead>
+            <tbody id="tblFiltroBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span id="footerStats">Sin simulaciones ejecutadas</span>
+  <span>SENSEI v2.0 | Grafo causal 21v/30a</span>
+</div>
+
+<!-- Modal para importar JSON -->
+<div id="importModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:9999;display:none;align-items:center;justify-content:center">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;width:500px;max-width:90vw">
+    <h3 style="color:var(--accent);margin-bottom:12px">Importar Perfil JSON</h3>
+    <p style="font-size:.82em;color:var(--text2);margin-bottom:10px">Pega un JSON con las 21 variables (valores 0-1). Ejemplo: {"mastery": 0.50, "anxiety": 0.30, ...}</p>
+    <textarea id="importJsonText" style="width:100%;height:150px;background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px;font-family:monospace;font-size:.82em" placeholder='{"mastery": 0.50, "attention_span": 0.60, ...}'></textarea>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+      <button class="btn btn-outline btn-sm" onclick="closeImportModal()">Cancelar</button>
+      <button class="btn btn-primary btn-sm" onclick="doImportProfile()">Importar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// MOTOR DE SIMULACION CAUSAL — RENDDI (JavaScript)
+// Replica exacta del motor Python corregido
+// ============================================================
+
+// --- 1. VARIABLES (21) ---
+const VARIABLES = [
+  'mastery','attention_span','metacognition','cognitive_load','anxiety','confidence',
+  'emotional_state','self_efficacy','frustration_tolerance','stress_level','study_adherence',
+  'time_management','sleep_quality','screen_time','fatigue','physical_activity',
+  'social_support','parental_support','vocational_clarity','motivation','growth_mindset'
+];
+const VAR_IDX = {};
+VARIABLES.forEach((v,i) => VAR_IDX[v] = i);
+const N_VARS = VARIABLES.length;
+
+const VAR_LABELS = {
+  mastery:'Dominio',attention_span:'Atencion',metacognition:'Metacognicion',cognitive_load:'Carga Cognitiva',
+  anxiety:'Ansiedad',confidence:'Confianza',emotional_state:'Estado Emocional',self_efficacy:'Autoeficacia',
+  frustration_tolerance:'Tolerancia Frustracion',stress_level:'Estres',study_adherence:'Adherencia Estudio',
+  time_management:'Gestion Tiempo',sleep_quality:'Calidad Sueno',screen_time:'Tiempo Pantalla',
+  fatigue:'Fatiga',physical_activity:'Actividad Fisica',social_support:'Soporte Social',
+  parental_support:'Soporte Parental',vocational_clarity:'Claridad Vocacional',motivation:'Motivacion',
+  growth_mindset:'Mentalidad Crecimiento'
+};
+
+const VAR_TOOLTIPS = {
+  mastery:'Nivel de dominio academico general. Rango: 0-1. Es la variable que determina el PAES via sigmoid. Intervenida por SENPAI/DOJO (practica adaptativa). Importa porque es el output principal del sistema.',
+  attention_span:'Capacidad de mantener atencion sostenida en tareas. Rango: 0-1. Intervenida por DOJO (entrenamiento atencional). Afectada negativamente por fatiga y ansiedad. Impacta directamente mastery (+0.30).',
+  metacognition:'Capacidad de planificar, monitorear y evaluar su propio aprendizaje. Rango: 0-1. Intervenida por KOAN (preguntas metacognitivas). Variable exogena. Impacta study_adherence (+0.25).',
+  cognitive_load:'Carga mental percibida durante el estudio. Rango: 0-1 (mayor = peor). Variable INVERTIDA. Intervenida por SENPAI (ajuste instruccional). Exogena. Aumenta fatigue (+0.30).',
+  anxiety:'Nivel de ansiedad frente a evaluaciones. Rango: 0-1 (mayor = peor). Variable INVERTIDA. Intervenida por KAZE (reestructuracion cognitiva). Impacta mastery (-0.30) y attention_span (-0.30).',
+  confidence:'Confianza en sus capacidades academicas. Rango: 0-1. Intervenida por SENPAI (calibracion confianza). Impacta mastery (+0.20). Alimentada por self_efficacy (+0.35).',
+  emotional_state:'Bienestar emocional general. Rango: 0-1. Intervenida por KAZE (check-in emocional). Impacta motivation (+0.30). Afectada por social_support, physical_activity, parental_support.',
+  self_efficacy:'Creencia en su capacidad de lograr metas. Rango: 0-1. Intervenida por SENPAI (experiencias de exito). Impacta mastery (+0.30), confidence (+0.35), anxiety (-0.35). Variable clave del ciclo virtuoso.',
+  frustration_tolerance:'Capacidad de persistir ante dificultades. Rango: 0-1. Intervenida por DOJO (exposicion gradual). Impacta study_adherence (+0.20). Alimentada por growth_mindset (+0.25).',
+  stress_level:'Nivel de estres general. Rango: 0-1 (mayor = peor). Variable INVERTIDA. Intervenida por KAZE (regulacion estres). Impacta anxiety (+0.45), sleep_quality (-0.35), emotional_state (-0.35).',
+  study_adherence:'Consistencia en habitos de estudio. Rango: 0-1. Intervenida por KAIZEN (habitos y streaks). Impacta mastery (+0.30). Alimentada por motivation, metacognition, time_management, frustration_tolerance.',
+  time_management:'Capacidad de planificar y cumplir horarios. Rango: 0-1. Intervenida por KAIZEN (planificacion semanal). Variable exogena. Impacta study_adherence (+0.30).',
+  sleep_quality:'Calidad y cantidad de sueno. Rango: 0-1. Intervenida por KAIZEN (higiene del sueno). Impacta attention_span (+0.45) y fatigue (-0.50). Afectada por screen_time (-0.40) y stress_level (-0.35).',
+  screen_time:'Tiempo de pantalla recreativo. Rango: 0-1 (mayor = peor). Variable INVERTIDA. Intervenida por KAIZEN (screen curfew). Variable exogena. Impacta sleep_quality (-0.40).',
+  fatigue:'Nivel de cansancio acumulado. Rango: 0-1 (mayor = peor). Variable INVERTIDA. Intervenida por KAIZEN (gestion de descansos). Impacta attention_span (-0.40) y emotional_state (-0.25).',
+  physical_activity:'Nivel de actividad fisica regular. Rango: 0-1. Intervenida por KAIZEN (nudge actividad fisica). Variable exogena. Impacta sleep_quality (+0.25), emotional_state (+0.30), stress_level (-0.25).',
+  social_support:'Calidad del soporte de pares y amigos. Rango: 0-1. Intervenida por NAKAMA (estudio grupal). Variable exogena. Impacta emotional_state (+0.30).',
+  parental_support:'Calidad del soporte familiar. Rango: 0-1. Intervenida por NAKAMA (tips para padres). Variable exogena. Impacta emotional_state (+0.25).',
+  vocational_clarity:'Claridad sobre vocacion y metas futuras. Rango: 0-1. Intervenida por COMPASS (exploracion vocacional). Variable exogena. Impacta motivation (+0.30).',
+  motivation:'Motivacion intrinseca hacia el estudio. Rango: 0-1. Intervenida por IKIGAI (coaching motivacional). Impacta study_adherence (+0.35). Alimentada por emotional_state y vocational_clarity.',
+  growth_mindset:'Creencia en que las habilidades se desarrollan con esfuerzo. Rango: 0-1. Intervenida por IKIGAI (intervencion mindset). Variable exogena. Impacta frustration_tolerance (+0.25).'
+};
+
+const ARCHETYPE_TOOLTIPS = {
+  Valentina:'PAES 835. La alumna de excelencia: alta adherencia (0.85), alta motivacion, bajo estres. Su desafio es pasar de buena a excepcional. Relevante para validar que Renddi no perjudica a quienes ya van bien.',
+  Matias:'PAES 680. Estudia pero la ansiedad lo frena: anxiety 0.68, confidence 0.38. Adherencia media (0.60). Relevante porque es el perfil tipico donde KAZE (coaching emocional) deberia brillar.',
+  Camila:'PAES 590. Resiliente pero con poco soporte: frustration_tolerance alta (0.68), growth_mindset alto (0.62), pero bajo soporte parental y social. Relevante para medir impacto de NAKAMA.',
+  Benjamin:'PAES 500. El gamer: screen_time extremo (0.88), adherencia baja (0.35), mastery bajo. Relevante para medir si KAIZEN puede crear habitos desde casi cero.',
+  Isidora:'PAES 725. Alta presion parental y estres: stress 0.78, anxiety 0.72, adherencia alta forzada. Relevante para medir si KAZE puede proteger el bienestar sin sacrificar rendimiento.',
+  Diego:'PAES 455. Deportista con poco estudio: physical_activity 0.92 pero mastery 0.32 y adherencia 0.45. Relevante para medir transferencia de disciplina deportiva a academica.',
+  Francisca:'PAES 410. Perfil TDAH: attention_span 0.22, adherencia 0.35, cognitive_load alta. Relevante para medir si SENPAI (ajuste instruccional) puede compensar limitaciones atencionales.',
+  Tomas:'PAES 545. El social: social_support 0.88 pero bajo estudio individual. Relevante para medir si NAKAMA (estudio grupal) puede convertir capital social en rendimiento.',
+  Martina:'PAES 635. Burnout activo: fatigue 0.88, emotional_state 0.18, physical_activity 0.12. Relevante para medir si el sistema puede recuperar a alguien quemado antes de que colapse.',
+  Joaquin:'PAES 320. Inicio tardio con growth_mindset alto (0.78): todo bajo excepto mentalidad de crecimiento. Relevante para medir el techo de mejora maxima desde el nivel mas bajo.'
+};
+
+// --- 2. ARISTAS (30) con pesos exactos de la tesis ---
+const ARISTAS = [
+  ['anxiety','mastery',-0.30],
+  ['confidence','mastery',+0.20],
+  ['sleep_quality','attention_span',+0.45],
+  ['attention_span','mastery',+0.30],
+  ['motivation','study_adherence',+0.35],
+  ['study_adherence','mastery',+0.30],
+  ['stress_level','anxiety',+0.45],
+  ['cognitive_load','fatigue',+0.30],
+  ['fatigue','attention_span',-0.40],
+  ['screen_time','sleep_quality',-0.40],
+  ['physical_activity','sleep_quality',+0.25],
+  ['physical_activity','emotional_state',+0.30],
+  ['social_support','emotional_state',+0.30],
+  ['emotional_state','motivation',+0.30],
+  ['vocational_clarity','motivation',+0.30],
+  ['self_efficacy','confidence',+0.35],
+  ['mastery','self_efficacy',+0.30],
+  ['parental_support','emotional_state',+0.25],
+  ['metacognition','study_adherence',+0.25],
+  ['growth_mindset','frustration_tolerance',+0.25],
+  ['frustration_tolerance','study_adherence',+0.20],
+  ['time_management','study_adherence',+0.30],
+  ['fatigue','emotional_state',-0.25],
+  ['stress_level','sleep_quality',-0.35],
+  ['anxiety','attention_span',-0.30],
+  ['self_efficacy','mastery',+0.30],
+  ['stress_level','emotional_state',-0.35],
+  ['sleep_quality','fatigue',-0.50],
+  ['self_efficacy','anxiety',-0.35],
+  ['physical_activity','stress_level',-0.25]
+];
+
+const EXOGENAS = new Set([
+  'metacognition','cognitive_load','screen_time','physical_activity',
+  'social_support','parental_support','vocational_clarity','growth_mindset','time_management'
+]);
+
+const INVERTIDAS = new Set(['anxiety','stress_level','screen_time','cognitive_load','fatigue']);
+
+const EFECTO_TOTAL_MASTERY = {
+  stress_level:0.255,sleep_quality:0.199,physical_activity:0.122,motivation:0.105,
+  time_management:0.090,screen_time:0.078,metacognition:0.075,cognitive_load:0.036,
+  emotional_state:0.032,vocational_clarity:0.032,growth_mindset:0.015,anxiety:0.390,
+  self_efficacy:0.300,study_adherence:0.300,confidence:0.200,attention_span:0.300,
+  frustration_tolerance:0.060,fatigue:0.120,social_support:0.010,parental_support:0.008,mastery:1.000
+};
+
+const INTERVENIBILIDAD = {
+  physical_activity:0.90,sleep_quality:0.85,study_adherence:0.85,time_management:0.80,
+  screen_time:0.75,motivation:0.70,metacognition:0.70,growth_mindset:0.65,
+  frustration_tolerance:0.60,attention_span:0.55,confidence:0.55,self_efficacy:0.50,
+  stress_level:0.50,emotional_state:0.45,anxiety:0.45,fatigue:0.40,cognitive_load:0.40,
+  social_support:0.35,vocational_clarity:0.30,parental_support:0.25,mastery:0.20
+};
+
+// --- 3. ARQUETIPOS (10 perfiles) ---
+const ARQUETIPOS = {
+  Valentina:{nombre:'Valentina',paes_inicial:835,etiqueta:'La Aplicada',adherencia_base:0.85,
+    perfil:{mastery:.78,attention_span:.80,metacognition:.70,cognitive_load:.32,anxiety:.25,confidence:.75,emotional_state:.75,self_efficacy:.80,frustration_tolerance:.72,stress_level:.25,study_adherence:.88,time_management:.78,sleep_quality:.72,screen_time:.25,fatigue:.22,physical_activity:.55,social_support:.68,parental_support:.72,vocational_clarity:.82,motivation:.82,growth_mindset:.68}},
+  Matias:{nombre:'Matias',paes_inicial:680,etiqueta:'El Ansioso',adherencia_base:0.60,
+    perfil:{mastery:.58,attention_span:.52,metacognition:.52,cognitive_load:.58,anxiety:.68,confidence:.38,emotional_state:.42,self_efficacy:.42,frustration_tolerance:.38,stress_level:.62,study_adherence:.62,time_management:.52,sleep_quality:.48,screen_time:.42,fatigue:.52,physical_activity:.38,social_support:.52,parental_support:.58,vocational_clarity:.48,motivation:.52,growth_mindset:.48}},
+  Camila:{nombre:'Camila',paes_inicial:590,etiqueta:'La Resiliente',adherencia_base:0.55,
+    perfil:{mastery:.52,attention_span:.48,metacognition:.42,cognitive_load:.55,anxiety:.42,confidence:.52,emotional_state:.48,self_efficacy:.52,frustration_tolerance:.68,stress_level:.52,study_adherence:.52,time_management:.42,sleep_quality:.42,screen_time:.48,fatigue:.55,physical_activity:.32,social_support:.38,parental_support:.32,vocational_clarity:.38,motivation:.48,growth_mindset:.62}},
+  Benjamin:{nombre:'Benjamin',paes_inicial:500,etiqueta:'El Gamer',adherencia_base:0.35,
+    perfil:{mastery:.42,attention_span:.32,metacognition:.28,cognitive_load:.62,anxiety:.32,confidence:.48,emotional_state:.52,self_efficacy:.38,frustration_tolerance:.58,stress_level:.35,study_adherence:.22,time_management:.18,sleep_quality:.28,screen_time:.88,fatigue:.68,physical_activity:.18,social_support:.58,parental_support:.48,vocational_clarity:.28,motivation:.32,growth_mindset:.52}},
+  Isidora:{nombre:'Isidora',paes_inicial:725,etiqueta:'La Presionada',adherencia_base:0.70,
+    perfil:{mastery:.68,attention_span:.58,metacognition:.58,cognitive_load:.58,anxiety:.72,confidence:.42,emotional_state:.32,self_efficacy:.48,frustration_tolerance:.32,stress_level:.78,study_adherence:.72,time_management:.68,sleep_quality:.38,screen_time:.28,fatigue:.68,physical_activity:.28,social_support:.42,parental_support:.28,vocational_clarity:.52,motivation:.62,growth_mindset:.38}},
+  Diego:{nombre:'Diego',paes_inicial:455,etiqueta:'El Deportista',adherencia_base:0.45,
+    perfil:{mastery:.32,attention_span:.48,metacognition:.28,cognitive_load:.55,anxiety:.32,confidence:.58,emotional_state:.62,self_efficacy:.52,frustration_tolerance:.62,stress_level:.28,study_adherence:.38,time_management:.32,sleep_quality:.62,screen_time:.32,fatigue:.28,physical_activity:.92,social_support:.68,parental_support:.52,vocational_clarity:.32,motivation:.38,growth_mindset:.48}},
+  Francisca:{nombre:'Francisca',paes_inicial:410,etiqueta:'TDAH',adherencia_base:0.35,
+    perfil:{mastery:.28,attention_span:.22,metacognition:.22,cognitive_load:.72,anxiety:.52,confidence:.32,emotional_state:.38,self_efficacy:.28,frustration_tolerance:.28,stress_level:.55,study_adherence:.28,time_management:.18,sleep_quality:.38,screen_time:.68,fatigue:.62,physical_activity:.22,social_support:.42,parental_support:.52,vocational_clarity:.22,motivation:.32,growth_mindset:.42}},
+  Tomas:{nombre:'Tomas',paes_inicial:545,etiqueta:'El Social',adherencia_base:0.50,
+    perfil:{mastery:.42,attention_span:.42,metacognition:.38,cognitive_load:.48,anxiety:.32,confidence:.52,emotional_state:.62,self_efficacy:.48,frustration_tolerance:.48,stress_level:.28,study_adherence:.42,time_management:.38,sleep_quality:.48,screen_time:.55,fatigue:.42,physical_activity:.42,social_support:.88,parental_support:.62,vocational_clarity:.38,motivation:.48,growth_mindset:.52}},
+  Martina:{nombre:'Martina',paes_inicial:635,etiqueta:'La Quemada',adherencia_base:0.45,
+    perfil:{mastery:.58,attention_span:.38,metacognition:.48,cognitive_load:.68,anxiety:.62,confidence:.38,emotional_state:.18,self_efficacy:.32,frustration_tolerance:.22,stress_level:.72,study_adherence:.52,time_management:.48,sleep_quality:.28,screen_time:.38,fatigue:.88,physical_activity:.12,social_support:.32,parental_support:.42,vocational_clarity:.52,motivation:.38,growth_mindset:.28}},
+  Joaquin:{nombre:'Joaquin',paes_inicial:320,etiqueta:'El Tardio',adherencia_base:0.30,
+    perfil:{mastery:.22,attention_span:.32,metacognition:.18,cognitive_load:.58,anxiety:.42,confidence:.28,emotional_state:.38,self_efficacy:.22,frustration_tolerance:.38,stress_level:.45,study_adherence:.18,time_management:.12,sleep_quality:.38,screen_time:.62,fatigue:.52,physical_activity:.28,social_support:.32,parental_support:.28,vocational_clarity:.12,motivation:.22,growth_mindset:.78}}
+};
+
+// --- 4. INTERVENCIONES ---
+const INTERVENCIONES = {
+  stress_level:[-0.004,10,'Regulacion estres (KAZE)'],
+  sleep_quality:[+0.004,5,'Higiene del sueno (KAIZEN)'],
+  physical_activity:[+0.005,5,'Nudge actividad fisica (KAIZEN)'],
+  motivation:[+0.003,8,'Coaching motivacional (IKIGAI)'],
+  anxiety:[-0.003,10,'Reestructuracion cognitiva (KAZE)'],
+  self_efficacy:[+0.002,8,'Experiencias de exito (SENPAI)'],
+  study_adherence:[+0.004,5,'Habitos y streaks (KAIZEN)'],
+  emotional_state:[+0.003,8,'Check-in emocional (KAZE)'],
+  vocational_clarity:[+0.002,10,'Exploracion vocacional (COMPASS)'],
+  time_management:[+0.004,5,'Planificacion semanal (KAIZEN)'],
+  metacognition:[+0.002,8,'Preguntas metacognitivas (KOAN)'],
+  growth_mindset:[+0.002,5,'Intervencion mindset (IKIGAI)'],
+  screen_time:[-0.003,5,'Screen curfew (KAIZEN)'],
+  confidence:[+0.002,8,'Calibracion confianza (SENPAI)'],
+  frustration_tolerance:[+0.002,8,'Exposicion gradual (DOJO)'],
+  cognitive_load:[-0.002,5,'Ajuste instruccional (SENPAI)'],
+  fatigue:[-0.002,5,'Gestion de descansos (KAIZEN)'],
+  social_support:[+0.002,10,'Estudio grupal (NAKAMA)'],
+  parental_support:[+0.001,10,'Tips para padres (NAKAMA)'],
+  attention_span:[+0.002,8,'Entrenamiento atencional (DOJO)'],
+  mastery:[+0.003,15,'Practica adaptativa (SENPAI/DOJO)']
+};
+
+const UMBRALES_URGENCIA = {
+  stress_level:{alerta:0.65,critico:0.80,dir:'mayor_peor'},
+  anxiety:{alerta:0.65,critico:0.80,dir:'mayor_peor'},
+  screen_time:{alerta:0.70,critico:0.85,dir:'mayor_peor'},
+  sleep_quality:{alerta:0.35,critico:0.25,dir:'menor_peor'},
+  emotional_state:{alerta:0.30,critico:0.20,dir:'menor_peor'},
+  study_adherence:{alerta:0.20,critico:0.05,dir:'menor_peor'}
+};
+
+// --- 5. PRNG (xoshiro128**) ---
+class PRNG {
+  constructor(seed) {
+    this.s = new Uint32Array(4);
+    this.s[0] = seed >>> 0;
+    this.s[1] = (seed * 1664525 + 1013904223) >>> 0;
+    this.s[2] = (this.s[1] * 1664525 + 1013904223) >>> 0;
+    this.s[3] = (this.s[2] * 1664525 + 1013904223) >>> 0;
+    for (let i = 0; i < 20; i++) this.next();
+  }
+  next() {
+    const s = this.s;
+    const result = (s[1] * 5) >>> 0;
+    const t = s[1] << 9;
+    s[2] ^= s[0]; s[3] ^= s[1]; s[1] ^= s[2]; s[0] ^= s[3];
+    s[2] ^= t; s[3] = (s[3] << 11) | (s[3] >>> 21);
+    return (result >>> 0) / 4294967296;
+  }
+  normal(mu=0, sigma=1) {
+    let u, v, s;
+    do { u = this.next()*2-1; v = this.next()*2-1; s = u*u+v*v; } while (s >= 1 || s === 0);
+    const m = Math.sqrt(-2*Math.log(s)/s);
+    return mu + sigma * u * m;
+  }
+}
+
+// --- 6. PROPAGACION CAUSAL (BFS por capas, sin doble atenuacion) ---
+function propagarCausal(estado, deltaVar, varName, gamma=0.7) {
+  const nuevo = {...estado};
+  nuevo[varName] = Math.max(0, Math.min(1, nuevo[varName] + deltaVar));
+  let afectados = {}; afectados[varName] = deltaVar;
+  const visitados = new Set();
+  for (let capa = 0; capa < 4; capa++) {
+    const nuevosAfectados = {};
+    for (const [varOrig, deltaO] of Object.entries(afectados)) {
+      if (visitados.has(varOrig)) continue;
+      visitados.add(varOrig);
+      for (const [origen, destino, peso] of ARISTAS) {
+        if (origen === varOrig && !visitados.has(destino)) {
+          const dp = deltaO * peso * Math.pow(gamma, capa);
+          nuevosAfectados[destino] = (nuevosAfectados[destino] || 0) + dp;
+        }
+      }
+    }
+    for (const [v, d] of Object.entries(nuevosAfectados)) {
+      nuevo[v] = Math.max(0, Math.min(1, nuevo[v] + d));
+    }
+    afectados = nuevosAfectados;
+  }
+  return nuevo;
+}
+
+// --- 7. PAES (sigmoid, sin doble conteo anxiety/fatigue) ---
+function calcularPAES(masteryVal) {
+  const x = (masteryVal - 0.5) * 6;
+  const sigmoid = 1 / (1 + Math.exp(-x));
+  return Math.max(100, Math.min(1000, 150 + 700 * sigmoid));
+}
+
+// --- 8. PRIORIZACION (TAKUMI simplificado) ---
+function calcularUrgencia(valor, varName) {
+  if (!UMBRALES_URGENCIA[varName]) return 1.0;
+  const u = UMBRALES_URGENCIA[varName];
+  let v, alerta, critico;
+  if (u.dir === 'menor_peor') {
+    v = 1 - valor; alerta = 1 - u.alerta; critico = 1 - u.critico;
+  } else {
+    v = valor; alerta = u.alerta; critico = u.critico;
+  }
+  if (critico === alerta) return v >= alerta ? 1.5 : 1.0;
+  if (v < alerta) return 1.0;
+  if (v >= critico) return 1.5;
+  return 1.0 + 0.5 * Math.min(1, Math.max(0, (v - alerta) / (critico - alerta)));
+}
+
+function priorizarAcciones(estado, tiempoDisponible=30, escenario='C') {
+  if (escenario === 'A') return [];
+  let varsPermitidas;
+  if (escenario === 'B') {
+    varsPermitidas = new Set(['mastery','study_adherence','metacognition','cognitive_load','attention_span','confidence']);
+  } else {
+    varsPermitidas = new Set(VARIABLES);
+  }
+  const candidatas = [];
+  for (const v of varsPermitidas) {
+    if (!INTERVENCIONES[v]) continue;
+    const [delta, duracion] = INTERVENCIONES[v];
+    const gap = INVERTIDAS.has(v) ? estado[v] : (1.0 - estado[v]);
+    if (gap < 0.05) continue;
+    const efecto = EFECTO_TOTAL_MASTERY[v] || 0.01;
+    const interv = INTERVENIBILIDAD[v] || 0.5;
+    const urg = calcularUrgencia(estado[v], v);
+    const prioridad = efecto * gap * interv * urg;
+    candidatas.push({v, delta, duracion, prioridad});
+  }
+  candidatas.sort((a, b) => (b.prioridad / Math.max(b.duracion, 1)) - (a.prioridad / Math.max(a.duracion, 1)));
+  const seleccionadas = [];
+  const cubiertas = new Set();
+  let tiempoUsado = 0;
+  for (const c of candidatas) {
+    if (cubiertas.has(c.v)) continue;
+    if (tiempoUsado + c.duracion <= tiempoDisponible) {
+      seleccionadas.push({v: c.v, delta: c.delta});
+      cubiertas.add(c.v);
+      tiempoUsado += c.duracion;
+    }
+  }
+  return seleccionadas;
+}
+
+// --- 9. CRISIS (Escenario E) ---
+function generarCrisis(dia) {
+  const ev = {};
+  if (dia >= 60 && dia <= 67 || dia >= 120 && dia <= 127) {
+    ev.stress_level = 0.15; ev.anxiety = 0.10; ev.sleep_quality = -0.10; ev.cognitive_load = 0.10;
+  }
+  if (dia >= 90 && dia <= 100) {
+    ev.emotional_state = -0.12; ev.parental_support = -0.15; ev.stress_level = (ev.stress_level||0) + 0.10;
+  }
+  if (dia >= 140 && dia <= 155) {
+    ev.fatigue = 0.15; ev.motivation = -0.10; ev.emotional_state = (ev.emotional_state||0) - 0.08; ev.study_adherence = -0.10;
+  }
+  return Object.keys(ev).length > 0 ? ev : null;
+}
+
+// --- 10. SIMULACION DE UN ESTUDIANTE ---
+function simularEstudiante(arqName, escenario, rng, diasSim) {
+  const arq = ARQUETIPOS[arqName];
+  const estado = {...arq.perfil};
+  for (const v of VARIABLES) estado[v] = Math.max(0.01, Math.min(0.99, estado[v] + rng.normal(0, 0.08)));
+  let adherenciaBase = arq.adherencia_base;
+  if (escenario === 'D') adherenciaBase = Math.min(0.95, adherenciaBase + 0.25);
+
+  const registros = [];
+  const paesInicial = calcularPAES(estado.mastery);
+
+  for (let dia = 0; dia < diasSim; dia++) {
+    const diaSemana = dia % 7;
+    const factorDia = diaSemana < 5 ? 1.0 : 0.7;
+    const adherenciaEfectiva = adherenciaBase * (0.3 + 0.7 * Math.exp(-dia / 60));
+    const probUso = Math.min(0.98, adherenciaEfectiva * factorDia);
+    const usaApp = rng.next() < probUso;
+
+    if (usaApp && escenario !== 'A') {
+      let tiempo = Math.round(rng.normal(25, 8));
+      tiempo = Math.max(10, Math.min(45, tiempo));
+      const acciones = priorizarAcciones(estado, tiempo, escenario);
+      for (const {v, delta} of acciones) {
+        const nuevo = propagarCausal(estado, delta, v);
+        Object.assign(estado, nuevo);
+      }
+    }
+
+    if (escenario === 'E') {
+      const eventos = generarCrisis(dia);
+      if (eventos) {
+        for (const [v, d] of Object.entries(eventos)) {
+          estado[v] = Math.max(0, Math.min(1, estado[v] + d));
+        }
+      }
+    }
+
+    for (const v of VARIABLES) {
+      estado[v] = Math.max(0.01, Math.min(0.99, estado[v] + rng.normal(0, 0.02)));
+    }
+
+    const factorReg = usaApp ? 0.3 : 1.0;
+    for (const v of VARIABLES) {
+      if (!EXOGENAS.has(v) && v !== 'mastery') {
+        const regression = (0.5 - estado[v]) * 0.002 * factorReg;
+        estado[v] = Math.max(0.01, Math.min(0.99, estado[v] + regression));
+      }
+    }
+
+    if (dia % 7 === 0) {
+      const deltaSe = (estado.mastery - 0.5) * 0.30 * 0.05;
+      estado.self_efficacy = Math.max(0.01, Math.min(0.99, estado.self_efficacy + deltaSe));
+    }
+
+    if (dia % 7 === 6) {
+      const snap = {semana: Math.floor(dia / 7), paes: calcularPAES(estado.mastery)};
+      for (const v of VARIABLES) snap[v] = estado[v];
+      registros.push(snap);
+    }
+  }
+
+  const paesFinal = calcularPAES(estado.mastery);
+  return {
+    arquetipo: arqName,
+    paesInicial: Math.round(paesInicial * 10) / 10,
+    paesFinal: Math.round(paesFinal * 10) / 10,
+    deltaPaes: Math.round((paesFinal - paesInicial) * 10) / 10,
+    estadoFinal: {...estado},
+    registros
+  };
+}
+
+// ============================================================
+// ESTADO GLOBAL DE LA APLICACION
+// ============================================================
+let globalResults = [];
+let globalWeekly = [];
+let lastSimTime = 0;
+let totalSimsRun = 0;
+let charts = {};
+let propagationTimeout = null;
+
+// ============================================================
+// INICIALIZACION DE UI
+// ============================================================
+function init() {
+  const arqSelect = document.getElementById('arquetipo');
+  const filtArqSelect = document.getElementById('filtArq');
+  // Add special profile options
+  arqSelect.add(new Option('-- Perfil Personalizado --', '_custom'));
+  arqSelect.add(new Option('-- Perfil Aleatorio --', '_random'));
+  for (const name of Object.keys(ARQUETIPOS)) {
+    const opt = new Option(`${name} (${ARQUETIPOS[name].etiqueta})`, name);
+    opt.title = ARCHETYPE_TOOLTIPS[name] || '';
+    arqSelect.add(opt);
+    filtArqSelect.add(new Option(name, name));
+  }
+  // Variable dropdowns
+  const varEv = document.getElementById('varEvolucion');
+  const sensV = document.getElementById('sensVar');
+  const filtVarName = document.getElementById('filtVarName');
+  varEv.add(new Option('PAES Estimado', 'paes'));
+  filtVarName.add(new Option('-- Ninguna --', '_none'));
+  for (const v of VARIABLES) {
+    const optEv = new Option(VAR_LABELS[v] || v, v);
+    optEv.title = VAR_TOOLTIPS[v] || '';
+    varEv.add(optEv);
+    const optS = new Option(VAR_LABELS[v] || v, v);
+    optS.title = VAR_TOOLTIPS[v] || '';
+    sensV.add(optS);
+    filtVarName.add(new Option(VAR_LABELS[v] || v, v));
+  }
+  // Preset buttons for individual case
+  const presetDiv = document.getElementById('presetBtns');
+  // Add special buttons
+  const btnCustom = document.createElement('button');
+  btnCustom.className = 'btn btn-outline btn-sm';
+  btnCustom.textContent = 'Personalizado';
+  btnCustom.title = 'Resetea todo a 0.50 para crear un perfil desde cero';
+  btnCustom.style.borderColor = '#3498db';
+  btnCustom.style.color = '#3498db';
+  btnCustom.onclick = () => resetSliders();
+  presetDiv.appendChild(btnCustom);
+
+  const btnRandom = document.createElement('button');
+  btnRandom.className = 'btn btn-outline btn-sm';
+  btnRandom.textContent = 'Aleatorio';
+  btnRandom.title = 'Genera un perfil aleatorio con correlaciones coherentes';
+  btnRandom.style.borderColor = '#9B59B6';
+  btnRandom.style.color = '#9B59B6';
+  btnRandom.onclick = () => loadRandomProfile();
+  presetDiv.appendChild(btnRandom);
+
+  for (const [name, arq] of Object.entries(ARQUETIPOS)) {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-outline btn-sm';
+    btn.textContent = name;
+    btn.title = ARCHETYPE_TOOLTIPS[name] || `${arq.etiqueta} - PAES ${arq.paes_inicial}`;
+    btn.onclick = () => loadPreset(name);
+    presetDiv.appendChild(btn);
+  }
+  buildIndividualSliders();
+  buildInterventionChecks();
+  buildHeatmap();
+  loadURLParams();
+}
+
+function buildIndividualSliders() {
+  const div = document.getElementById('individualSliders');
+  div.innerHTML = '';
+  for (const v of VARIABLES) {
+    const row = document.createElement('div');
+    row.className = 'var-slider-row';
+    const invLabel = INVERTIDAS.has(v) ? ' [INV]' : '';
+    row.innerHTML = `<span class="vname" title="${VAR_TOOLTIPS[v] || ''}">${VAR_LABELS[v] || v}${invLabel}</span>
+      <input type="range" min="0" max="100" value="50" id="slider-${v}" oninput="onSliderChange('${v}', this.value)" title="${VAR_TOOLTIPS[v] || ''}">
+      <span class="vval" id="sval-${v}">0.50</span>
+      <span class="propagation-delta" id="pdelta-${v}"></span>`;
+    div.appendChild(row);
+  }
+}
+
+function onSliderChange(varName, rawVal) {
+  const val = (rawVal / 100).toFixed(2);
+  document.getElementById(`sval-${varName}`).textContent = val;
+  // Real-time causal propagation preview
+  if (propagationTimeout) clearTimeout(propagationTimeout);
+  propagationTimeout = setTimeout(() => showPropagationPreview(varName), 150);
+  // Update characterization
+  updateCharacterization();
+}
+
+function showPropagationPreview(changedVar) {
+  // Get current state from sliders
+  const estado = {};
+  for (const v of VARIABLES) estado[v] = parseInt(document.getElementById(`slider-${v}`).value) / 100;
+  // Propagate a small delta to see effects
+  const delta = 0.05; // preview with +5%
+  const nuevo = propagarCausal({...estado}, delta, changedVar);
+  // Show deltas on each variable
+  for (const v of VARIABLES) {
+    const el = document.getElementById(`pdelta-${v}`);
+    if (!el) continue;
+    const d = nuevo[v] - estado[v];
+    if (v === changedVar) {
+      el.textContent = '';
+      continue;
+    }
+    if (Math.abs(d) < 0.0005) {
+      el.textContent = '';
+      continue;
+    }
+    const color = (INVERTIDAS.has(v) ? (d < 0 ? '#27AE60' : '#E74C3C') : (d > 0 ? '#27AE60' : '#E74C3C'));
+    el.textContent = (d > 0 ? '+' : '') + d.toFixed(3);
+    el.style.color = color;
+  }
+  // Clear after 3 seconds
+  setTimeout(() => {
+    for (const v of VARIABLES) {
+      const el = document.getElementById(`pdelta-${v}`);
+      if (el) el.textContent = '';
+    }
+  }, 3000);
+}
+
+function buildInterventionChecks() {
+  const div = document.getElementById('interventionChecks');
+  div.innerHTML = '';
+  for (const [v, [delta, dur, desc]] of Object.entries(INTERVENCIONES)) {
+    const row = document.createElement('div');
+    row.className = 'checkbox-row';
+    const tooltipText = `${desc}. Delta diario: ${delta > 0 ? '+' : ''}${delta}/dia. Duracion: ${dur} min/sesion. Efecto total en mastery: ${(EFECTO_TOTAL_MASTERY[v] || 0).toFixed(3)}. Intervenibilidad: ${(INTERVENIBILIDAD[v] || 0).toFixed(2)}.`;
+    row.innerHTML = `<input type="checkbox" id="chk-${v}" checked>
+      <label for="chk-${v}" title="${tooltipText}">${VAR_LABELS[v] || v} <span style="color:var(--text2);font-size:.72em">(${delta > 0 ? '+' : ''}${delta})</span></label>`;
+    div.appendChild(row);
+  }
+}
+
+function loadPreset(name) {
+  const arq = ARQUETIPOS[name];
+  for (const v of VARIABLES) {
+    const slider = document.getElementById(`slider-${v}`);
+    const val = arq.perfil[v];
+    slider.value = Math.round(val * 100);
+    document.getElementById(`sval-${v}`).textContent = val.toFixed(2);
+    const pdelta = document.getElementById(`pdelta-${v}`);
+    if (pdelta) pdelta.textContent = '';
+  }
+  updateCharacterization();
+}
+
+function resetSliders() {
+  for (const v of VARIABLES) {
+    document.getElementById(`slider-${v}`).value = 50;
+    document.getElementById(`sval-${v}`).textContent = '0.50';
+    const pdelta = document.getElementById(`pdelta-${v}`);
+    if (pdelta) pdelta.textContent = '';
+  }
+  updateCharacterization();
+}
+
+function loadRandomProfile() {
+  const rng = new PRNG(Date.now() & 0xFFFFFF);
+  // Generate coherent random profile
+  const base = {};
+  // Core academic level
+  const acadLevel = 0.2 + rng.next() * 0.6; // 0.2-0.8
+  base.mastery = clamp(acadLevel + rng.normal(0, 0.08));
+  base.metacognition = clamp(acadLevel * 0.9 + rng.normal(0, 0.1));
+  base.attention_span = clamp(acadLevel * 0.85 + rng.normal(0, 0.1));
+  base.study_adherence = clamp(acadLevel * 0.9 + rng.normal(0, 0.12));
+  base.time_management = clamp(acadLevel * 0.85 + rng.normal(0, 0.12));
+  // Emotional cluster (correlated)
+  const emoLevel = 0.2 + rng.next() * 0.6;
+  base.emotional_state = clamp(emoLevel + rng.normal(0, 0.1));
+  base.confidence = clamp(emoLevel * 0.9 + rng.normal(0, 0.1));
+  base.self_efficacy = clamp(emoLevel * 0.95 + rng.normal(0, 0.08));
+  base.motivation = clamp(emoLevel * 0.85 + rng.normal(0, 0.1));
+  base.frustration_tolerance = clamp(emoLevel * 0.8 + rng.normal(0, 0.12));
+  base.growth_mindset = clamp(0.3 + rng.next() * 0.5 + rng.normal(0, 0.1));
+  // Inverse correlation: high emotional = low anxiety/stress
+  base.anxiety = clamp(1.0 - emoLevel * 0.9 + rng.normal(0, 0.12));
+  base.stress_level = clamp(1.0 - emoLevel * 0.85 + rng.normal(0, 0.1));
+  // Physical & context
+  base.physical_activity = clamp(0.15 + rng.next() * 0.6 + rng.normal(0, 0.1));
+  base.sleep_quality = clamp(0.3 + rng.next() * 0.5 + rng.normal(0, 0.1));
+  base.screen_time = clamp(0.8 - base.study_adherence * 0.5 + rng.normal(0, 0.15));
+  base.fatigue = clamp(0.7 - base.sleep_quality * 0.5 + rng.normal(0, 0.1));
+  base.cognitive_load = clamp(0.6 - base.metacognition * 0.3 + rng.normal(0, 0.1));
+  // Support
+  base.social_support = clamp(0.2 + rng.next() * 0.6 + rng.normal(0, 0.1));
+  base.parental_support = clamp(0.2 + rng.next() * 0.5 + rng.normal(0, 0.1));
+  base.vocational_clarity = clamp(0.1 + rng.next() * 0.6 + rng.normal(0, 0.1));
+
+  for (const v of VARIABLES) {
+    const val = base[v] !== undefined ? base[v] : clamp(0.3 + rng.next() * 0.4);
+    document.getElementById(`slider-${v}`).value = Math.round(val * 100);
+    document.getElementById(`sval-${v}`).textContent = val.toFixed(2);
+    const pdelta = document.getElementById(`pdelta-${v}`);
+    if (pdelta) pdelta.textContent = '';
+  }
+  updateCharacterization();
+}
+
+function clamp(val) {
+  return Math.max(0.01, Math.min(0.99, val));
+}
+
+function importProfile() {
+  const modal = document.getElementById('importModal');
+  modal.style.display = 'flex';
+}
+
+function closeImportModal() {
+  document.getElementById('importModal').style.display = 'none';
+}
+
+function doImportProfile() {
+  const text = document.getElementById('importJsonText').value.trim();
+  try {
+    const data = JSON.parse(text);
+    let loaded = 0;
+    for (const v of VARIABLES) {
+      if (data[v] !== undefined) {
+        const val = Math.max(0, Math.min(1, parseFloat(data[v])));
+        document.getElementById(`slider-${v}`).value = Math.round(val * 100);
+        document.getElementById(`sval-${v}`).textContent = val.toFixed(2);
+        loaded++;
+      }
+    }
+    closeImportModal();
+    updateCharacterization();
+    alert(`Perfil importado: ${loaded} variables cargadas de ${VARIABLES.length}.`);
+  } catch (e) {
+    alert('Error parseando JSON: ' + e.message);
+  }
+}
+
+function exportProfile() {
+  const profile = {};
+  for (const v of VARIABLES) {
+    profile[v] = parseFloat(document.getElementById(`sval-${v}`).textContent);
+  }
+  const name = prompt('Nombre del perfil (opcional):', 'perfil-custom');
+  const exportObj = { nombre: name || 'perfil-custom', perfil: profile, exportado: new Date().toISOString() };
+  const json = JSON.stringify(exportObj, null, 2);
+  // Copy to clipboard
+  navigator.clipboard.writeText(json).then(() => {
+    alert('Perfil exportado al portapapeles como JSON.');
+  }).catch(() => {
+    prompt('Copia este JSON:', json);
+  });
+}
+
+// ============================================================
+// CARACTERIZACION AUTOMATICA
+// ============================================================
+function updateCharacterization() {
+  const estado = {};
+  for (const v of VARIABLES) estado[v] = parseInt(document.getElementById(`slider-${v}`).value) / 100;
+
+  const panel = document.getElementById('caractContent');
+  let html = '';
+
+  // 1. Closest archetype
+  let bestArq = '', bestDist = Infinity;
+  const arqDistances = [];
+  for (const [name, arq] of Object.entries(ARQUETIPOS)) {
+    let dist = 0;
+    for (const v of VARIABLES) dist += (arq.perfil[v] - estado[v]) ** 2;
+    dist = Math.sqrt(dist);
+    arqDistances.push({name, dist, etiqueta: arq.etiqueta});
+    if (dist < bestDist) { bestDist = dist; bestArq = name; }
+  }
+  arqDistances.sort((a, b) => a.dist - b.dist);
+  const top3 = arqDistances.slice(0, 3);
+
+  html += '<div class="caract-panel"><h4>Arquetipo mas cercano</h4>';
+  for (const a of top3) {
+    const pct = Math.max(0, (1 - a.dist / 2) * 100).toFixed(0);
+    const isBest = a.name === bestArq;
+    html += `<div class="caract-item" style="${isBest ? 'color:var(--accent);font-weight:700' : ''}">
+      <span>${a.name} (${a.etiqueta})</span><span>dist: ${a.dist.toFixed(3)} | simil: ${pct}%</span>
+    </div>`;
+  }
+  html += '</div>';
+
+  // 2. 3 most critical variables (biggest gap from optimal)
+  const gaps = [];
+  for (const v of VARIABLES) {
+    const optimal = INVERTIDAS.has(v) ? 0.0 : 1.0;
+    const gap = Math.abs(optimal - estado[v]);
+    const efecto = EFECTO_TOTAL_MASTERY[v] || 0.01;
+    gaps.push({v, gap, efecto, weighted: gap * efecto, valor: estado[v]});
+  }
+  gaps.sort((a, b) => b.weighted - a.weighted);
+  const top3Gaps = gaps.slice(0, 3);
+
+  html += '<div class="caract-panel"><h4>3 variables mas criticas (mayor gap ponderado por impacto)</h4>';
+  for (const g of top3Gaps) {
+    const optLabel = INVERTIDAS.has(g.v) ? 'optimo: 0.00' : 'optimo: 1.00';
+    html += `<div class="caract-item">
+      <span>${VAR_LABELS[g.v]}: ${g.valor.toFixed(2)} (${optLabel})</span>
+      <span>gap*efecto: ${g.weighted.toFixed(3)}</span>
+    </div>`;
+  }
+  html += '</div>';
+
+  // 3. Top 3 TAKUMI actions
+  const acciones = priorizarAcciones(estado, 120, 'C'); // plenty of time to get ranking
+  const top3Actions = acciones.slice(0, 3);
+
+  html += '<div class="caract-panel"><h4>Top 3 acciones TAKUMI (mayor impacto estimado)</h4>';
+  if (top3Actions.length === 0) {
+    html += '<div class="caract-item"><span>Perfil cerca del optimo - sin acciones prioritarias</span></div>';
+  }
+  for (const a of top3Actions) {
+    const desc = INTERVENCIONES[a.v] ? INTERVENCIONES[a.v][2] : a.v;
+    html += `<div class="caract-item">
+      <span>${desc}</span>
+      <span>delta/dia: ${a.delta > 0 ? '+' : ''}${a.delta}</span>
+    </div>`;
+  }
+  html += '</div>';
+
+  // 4. PAES projections at 1, 3, 6 months
+  const projections = [30, 90, 180];
+  const projLabels = ['1 mes', '3 meses', '6 meses'];
+  html += '<div class="caract-panel"><h4>Proyeccion PAES (Escenario C)</h4>';
+  const paesActual = calcularPAES(estado.mastery);
+  html += `<div class="caract-item"><span>Actual</span><span style="color:var(--accent);font-weight:700">${Math.round(paesActual)}</span></div>`;
+
+  for (let pi = 0; pi < projections.length; pi++) {
+    const dias = projections[pi];
+    const rng = new PRNG(12345);
+    const estProj = {...estado};
+    // Find closest archetype for adherencia
+    let closestAdh = 0.50;
+    for (const [name, arq] of Object.entries(ARQUETIPOS)) {
+      let d = 0;
+      for (const v of VARIABLES) d += (arq.perfil[v] - estado[v]) ** 2;
+      if (Math.sqrt(d) === bestDist) closestAdh = arq.adherencia_base;
+    }
+    // Quick simulation
+    for (let dia = 0; dia < dias; dia++) {
+      const diaSemana = dia % 7;
+      const factorDia = diaSemana < 5 ? 1.0 : 0.7;
+      const adh = closestAdh * (0.3 + 0.7 * Math.exp(-dia / 60));
+      const prob = Math.min(0.98, adh * factorDia);
+      if (rng.next() < prob) {
+        const acts = priorizarAcciones(estProj, 25, 'C');
+        for (const {v, delta} of acts) Object.assign(estProj, propagarCausal(estProj, delta, v));
+      }
+      for (const v of VARIABLES) estProj[v] = clamp(estProj[v] + rng.normal(0, 0.02));
+      const fr = prob > 0.5 ? 0.3 : 1.0;
+      for (const v of VARIABLES) {
+        if (!EXOGENAS.has(v) && v !== 'mastery') estProj[v] = clamp(estProj[v] + (0.5 - estProj[v]) * 0.002 * fr);
+      }
+    }
+    const paesProj = calcularPAES(estProj.mastery);
+    const delta = paesProj - paesActual;
+    const deltaClass = delta >= 0 ? 'delta-pos' : 'delta-neg';
+    html += `<div class="caract-item"><span>${projLabels[pi]} (${dias} dias)</span>
+      <span><strong>${Math.round(paesProj)}</strong> <span class="${deltaClass}">(${delta >= 0 ? '+' : ''}${Math.round(delta)})</span></span></div>`;
+  }
+  html += '</div>';
+
+  panel.innerHTML = html;
+}
+
+// ============================================================
+// SIMULACION EN BLOQUE
+// ============================================================
+function runSimulation() {
+  const btn = document.getElementById('btnSimular');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Simulando...';
+
+  setTimeout(() => {
+    const nSims = parseInt(document.getElementById('nSims').value);
+    const nDays = parseInt(document.getElementById('nDays').value);
+    const esc = document.getElementById('escenario').value;
+    const arqFilter = document.getElementById('arquetipo').value;
+
+    const t0 = performance.now();
+    globalResults = [];
+    globalWeekly = [];
+
+    let arqNames;
+    if (arqFilter === '_custom' || arqFilter === '_random') {
+      // Use current slider profile as custom archetype
+      arqNames = ['_custom'];
+    } else {
+      arqNames = arqFilter === 'Todos' ? Object.keys(ARQUETIPOS) : [arqFilter];
+    }
+    const simsPerArq = arqFilter === 'Todos' ? Math.max(1, Math.round(nSims / arqNames.length)) : nSims;
+
+    let sid = 0;
+    for (const arqName of arqNames) {
+      if (arqName === '_custom') {
+        // Build a temporary archetype from sliders
+        const customPerfil = {};
+        for (const v of VARIABLES) customPerfil[v] = parseInt(document.getElementById(`slider-${v}`).value) / 100;
+        const customArq = {nombre:'Custom',paes_inicial: Math.round(calcularPAES(customPerfil.mastery)), etiqueta:'Personalizado', adherencia_base: 0.55, perfil: customPerfil};
+        ARQUETIPOS['_custom'] = customArq;
+        for (let i = 0; i < nSims; i++) {
+          sid++;
+          const rng = new PRNG(42 + sid * 7);
+          const result = simularEstudiante('_custom', esc, rng, nDays);
+          result.id = sid;
+          globalResults.push(result);
+          for (const r of result.registros) { r.arquetipo = '_custom'; r.id = sid; }
+          globalWeekly.push(...result.registros);
+        }
+        delete ARQUETIPOS['_custom'];
+      } else {
+        for (let i = 0; i < simsPerArq; i++) {
+          sid++;
+          const rng = new PRNG(42 + sid * 7 + arqNames.indexOf(arqName) * 10000);
+          const result = simularEstudiante(arqName, esc, rng, nDays);
+          result.id = sid;
+          globalResults.push(result);
+          for (const r of result.registros) { r.arquetipo = arqName; r.id = sid; }
+          globalWeekly.push(...result.registros);
+        }
+      }
+    }
+
+    const elapsed = performance.now() - t0;
+    lastSimTime = elapsed;
+    totalSimsRun += globalResults.length;
+
+    renderResumen();
+    renderEvolucion();
+    updateFooter();
+
+    btn.disabled = false;
+    btn.textContent = 'Simular';
+  }, 50);
+}
+
+// ============================================================
+// TAB 1: RESUMEN
+// ============================================================
+function renderResumen() {
+  if (globalResults.length === 0) return;
+  const byArq = {};
+  for (const r of globalResults) {
+    if (!byArq[r.arquetipo]) byArq[r.arquetipo] = [];
+    byArq[r.arquetipo].push(r);
+  }
+
+  const allDeltas = globalResults.map(r => r.deltaPaes);
+  const mean = allDeltas.reduce((a, b) => a + b, 0) / allDeltas.length;
+  const std = Math.sqrt(allDeltas.map(x => (x - mean) ** 2).reduce((a, b) => a + b, 0) / allDeltas.length);
+  const ic95l = mean - 1.96 * std / Math.sqrt(allDeltas.length);
+  const ic95u = mean + 1.96 * std / Math.sqrt(allDeltas.length);
+
+  document.getElementById('statDelta').textContent = (mean >= 0 ? '+' : '') + mean.toFixed(1);
+  document.getElementById('statDelta').className = 'stat-val ' + (mean >= 0 ? 'delta-pos' : 'delta-neg');
+
+  const enRiesgo = globalResults.filter(r => r.paesInicial < 500);
+  const rescatados = enRiesgo.filter(r => r.paesFinal >= 500);
+  const tasaRescate = enRiesgo.length > 0 ? (rescatados.length / enRiesgo.length * 100).toFixed(1) : '--';
+  document.getElementById('statRescate').textContent = tasaRescate + '%';
+
+  document.getElementById('statIC').textContent = `[${ic95l.toFixed(1)}, ${ic95u.toFixed(1)}]`;
+
+  const tbody = document.getElementById('tblResumenBody');
+  tbody.innerHTML = '';
+  for (const [arqName, results] of Object.entries(byArq)) {
+    const arq = ARQUETIPOS[arqName] || {etiqueta: arqName, paes_inicial: '--'};
+    const deltas = results.map(r => r.deltaPaes);
+    const m = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+    const s = Math.sqrt(deltas.map(x => (x - m) ** 2).reduce((a, b) => a + b, 0) / deltas.length);
+    const icl = m - 1.96 * s / Math.sqrt(deltas.length);
+    const icu = m + 1.96 * s / Math.sqrt(deltas.length);
+    const pct = Math.max(0, Math.min(100, (m + 100) / 2));
+    const color = m > 20 ? '#27AE60' : m > 0 ? '#F39C12' : '#E74C3C';
+    const tooltip = ARCHETYPE_TOOLTIPS[arqName] || '';
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td title="${tooltip}"><strong>${arqName}</strong></td>
+      <td><span class="badge badge-yellow">${arq.etiqueta}</span></td>
+      <td>${arq.paes_inicial}</td>
+      <td class="${m >= 0 ? 'delta-pos' : 'delta-neg'}">${m >= 0 ? '+' : ''}${m.toFixed(1)}</td>
+      <td style="font-size:.78em;color:var(--text2)">[${icl.toFixed(1)}, ${icu.toFixed(1)}]</td>
+      <td style="width:150px"><div class="progress-bar"><div class="fill" style="width:${pct}%;background:${color}"></div></div></td>`;
+    tbody.appendChild(tr);
+  }
+
+  renderDistribucionChart();
+}
+
+function renderDistribucionChart() {
+  if (charts.distribucion) charts.distribucion.destroy();
+  const bins = [100,200,300,400,500,600,700,800,900,1000];
+  const hist = new Array(bins.length - 1).fill(0);
+  for (const r of globalResults) {
+    for (let i = 0; i < bins.length - 1; i++) {
+      if (r.paesFinal >= bins[i] && r.paesFinal < bins[i + 1]) { hist[i]++; break; }
+    }
+  }
+  const labels = bins.slice(0, -1).map((b, i) => `${b}-${bins[i + 1]}`);
+  const ctx = document.getElementById('chartDistribucion').getContext('2d');
+  charts.distribucion = new Chart(ctx, {
+    type: 'bar',
+    data: {labels, datasets: [{label: 'Estudiantes', data: hist, backgroundColor: 'rgba(243,156,18,0.6)', borderColor: '#F39C12', borderWidth: 1}]},
+    options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}},
+      scales: {x: {ticks: {color: '#a0b4c8'}, grid: {color: 'rgba(44,62,80,0.3)'}}, y: {ticks: {color: '#a0b4c8'}, grid: {color: 'rgba(44,62,80,0.3)'}}}}
+  });
+}
+
+// ============================================================
+// TAB 2: EVOLUCION
+// ============================================================
+function renderEvolucion() {
+  updateEvolucionChart();
+}
+
+function updateEvolucionChart() {
+  if (globalWeekly.length === 0) return;
+  if (charts.evolucion) charts.evolucion.destroy();
+
+  const varSel = document.getElementById('varEvolucion').value;
+  const byArq = {};
+  for (const r of globalWeekly) {
+    if (!byArq[r.arquetipo]) byArq[r.arquetipo] = {};
+    if (!byArq[r.arquetipo][r.semana]) byArq[r.arquetipo][r.semana] = [];
+    byArq[r.arquetipo][r.semana].push(varSel === 'paes' ? r.paes : r[varSel]);
+  }
+
+  const colors = ['#F39C12','#3498db','#27AE60','#E74C3C','#9B59B6','#1ABC9C','#E67E22','#2ECC71','#e84393','#fd79a8'];
+  const datasets = [];
+  let ci = 0;
+  for (const [arqName, weeks] of Object.entries(byArq)) {
+    const semanas = Object.keys(weeks).map(Number).sort((a, b) => a - b);
+    const means = semanas.map(s => {
+      const vals = weeks[s];
+      return vals.reduce((a, b) => a + b, 0) / vals.length;
+    });
+    const color = colors[ci % colors.length];
+    datasets.push({
+      label: arqName,
+      data: semanas.map((s, i) => ({x: s, y: means[i]})),
+      borderColor: color,
+      backgroundColor: color + '33',
+      fill: false,
+      tension: 0.3,
+      pointRadius: 2,
+      borderWidth: 2
+    });
+    ci++;
+  }
+
+  const ctx = document.getElementById('chartEvolucion').getContext('2d');
+  charts.evolucion = new Chart(ctx, {
+    type: 'line',
+    data: {datasets},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {labels: {color: '#a0b4c8', font: {size: 11}}}},
+      scales: {
+        x: {type: 'linear', title: {display: true, text: 'Semana', color: '#a0b4c8'}, ticks: {color: '#a0b4c8'}, grid: {color: 'rgba(44,62,80,0.3)'}},
+        y: {title: {display: true, text: varSel === 'paes' ? 'PAES' : VAR_LABELS[varSel], color: '#a0b4c8'}, ticks: {color: '#a0b4c8'}, grid: {color: 'rgba(44,62,80,0.3)'}}
+      }
+    }
+  });
+}
+
+// ============================================================
+// TAB 3: CASO INDIVIDUAL
+// ============================================================
+function runIndividual() {
+  switchTab('tab-individual');
+  loadPreset(Object.keys(ARQUETIPOS)[0]);
+}
+
+function runIndividualCase() {
+  const estado = {};
+  for (const v of VARIABLES) estado[v] = parseInt(document.getElementById(`slider-${v}`).value) / 100;
+
+  const nDays = parseInt(document.getElementById('nDays').value);
+  const escenario = document.getElementById('escenario').value;
+
+  const enabledInterventions = new Set();
+  for (const v of Object.keys(INTERVENCIONES)) {
+    if (document.getElementById(`chk-${v}`).checked) enabledInterventions.add(v);
+  }
+
+  const rng = new PRNG(Date.now() & 0xFFFF);
+  const estadoInicial = {...estado};
+  const registros = [];
+  const paesInicial = calcularPAES(estado.mastery);
+
+  let bestArq = 'Camila', bestDist = Infinity;
+  for (const [name, arq] of Object.entries(ARQUETIPOS)) {
+    let dist = 0;
+    for (const v of VARIABLES) dist += (arq.perfil[v] - estado[v]) ** 2;
+    if (dist < bestDist) { bestDist = dist; bestArq = name; }
+  }
+  let adherenciaBase = ARQUETIPOS[bestArq].adherencia_base;
+  if (escenario === 'D') adherenciaBase = Math.min(0.95, adherenciaBase + 0.25);
+
+  for (let dia = 0; dia < nDays; dia++) {
+    const diaSemana = dia % 7;
+    const factorDia = diaSemana < 5 ? 1.0 : 0.7;
+    const adherenciaEfectiva = adherenciaBase * (0.3 + 0.7 * Math.exp(-dia / 60));
+    const probUso = Math.min(0.98, adherenciaEfectiva * factorDia);
+    const usaApp = rng.next() < probUso;
+
+    if (usaApp && escenario !== 'A') {
+      let tiempo = Math.round(rng.normal(25, 8));
+      tiempo = Math.max(10, Math.min(45, tiempo));
+      const acciones = priorizarAcciones(estado, tiempo, escenario)
+        .filter(a => enabledInterventions.has(a.v));
+      for (const {v, delta} of acciones) {
+        Object.assign(estado, propagarCausal(estado, delta, v));
+      }
+    }
+
+    if (escenario === 'E') {
+      const eventos = generarCrisis(dia);
+      if (eventos) for (const [v, d] of Object.entries(eventos)) estado[v] = Math.max(0, Math.min(1, estado[v] + d));
+    }
+
+    for (const v of VARIABLES) estado[v] = Math.max(0.01, Math.min(0.99, estado[v] + rng.normal(0, 0.02)));
+    const factorReg = usaApp ? 0.3 : 1.0;
+    for (const v of VARIABLES) {
+      if (!EXOGENAS.has(v) && v !== 'mastery') {
+        estado[v] = Math.max(0.01, Math.min(0.99, estado[v] + (0.5 - estado[v]) * 0.002 * factorReg));
+      }
+    }
+    if (dia % 7 === 0) {
+      estado.self_efficacy = Math.max(0.01, Math.min(0.99, estado.self_efficacy + (estado.mastery - 0.5) * 0.30 * 0.05));
+    }
+    if (dia % 7 === 6) {
+      const snap = {semana: Math.floor(dia / 7), paes: calcularPAES(estado.mastery)};
+      for (const v of VARIABLES) snap[v] = estado[v];
+      registros.push(snap);
+    }
+  }
+
+  const paesFinal = calcularPAES(estado.mastery);
+
+  document.getElementById('indPaesIni').textContent = Math.round(paesInicial);
+  document.getElementById('indPaesFin').textContent = Math.round(paesFinal);
+  const delta = paesFinal - paesInicial;
+  document.getElementById('indPaesDelta').textContent = (delta >= 0 ? '+' : '') + Math.round(delta);
+  document.getElementById('indPaesDelta').className = 'paes-big ' + (delta >= 0 ? 'delta-pos' : 'delta-neg');
+  document.getElementById('indPaesDelta').style.fontSize = '1.4em';
+
+  renderRadarChart(estadoInicial, estado);
+  renderIndividualTimeline(registros);
+  updateCharacterization();
+}
+
+function renderRadarChart(antes, despues) {
+  if (charts.radar) charts.radar.destroy();
+  const varsRadar = ['mastery','attention_span','metacognition','confidence','self_efficacy','motivation','study_adherence','emotional_state','sleep_quality','physical_activity'];
+  const ctx = document.getElementById('chartRadar').getContext('2d');
+  charts.radar = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: varsRadar.map(v => VAR_LABELS[v] || v),
+      datasets: [
+        {label: 'Antes', data: varsRadar.map(v => antes[v]), borderColor: '#E74C3C', backgroundColor: 'rgba(231,76,60,0.1)', pointRadius: 3},
+        {label: 'Despues', data: varsRadar.map(v => despues[v]), borderColor: '#27AE60', backgroundColor: 'rgba(39,174,96,0.1)', pointRadius: 3}
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {labels: {color: '#a0b4c8', font: {size: 10}}}},
+      scales: {r: {
+        min: 0, max: 1,
+        ticks: {color: '#a0b4c8', backdropColor: 'transparent', stepSize: 0.2},
+        grid: {color: 'rgba(44,62,80,0.4)'},
+        pointLabels: {color: '#a0b4c8', font: {size: 9}}
+      }}
+    }
+  });
+}
+
+function renderIndividualTimeline(registros) {
+  if (charts.individual) charts.individual.destroy();
+  const ctx = document.getElementById('chartIndividual').getContext('2d');
+  charts.individual = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: registros.map(r => `S${r.semana}`),
+      datasets: [
+        {label: 'PAES', data: registros.map(r => r.paes), borderColor: '#F39C12', backgroundColor: 'rgba(243,156,18,0.1)', fill: true, tension: 0.3, yAxisID: 'y'},
+        {label: 'Mastery', data: registros.map(r => r.mastery), borderColor: '#3498db', tension: 0.3, yAxisID: 'y1'}
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {labels: {color: '#a0b4c8', font: {size: 10}}}},
+      scales: {
+        x: {ticks: {color: '#a0b4c8'}, grid: {color: 'rgba(44,62,80,0.3)'}},
+        y: {position: 'left', title: {display: true, text: 'PAES', color: '#a0b4c8'}, ticks: {color: '#a0b4c8'}, grid: {color: 'rgba(44,62,80,0.3)'}},
+        y1: {position: 'right', min: 0, max: 1, title: {display: true, text: 'Mastery', color: '#a0b4c8'}, ticks: {color: '#a0b4c8'}, grid: {drawOnChartArea: false}}
+      }
+    }
+  });
+}
+
+// ============================================================
+// TAB 4: COMPARADOR
+// ============================================================
+function runComparison() {
+  const escA = document.getElementById('cmpEscA').value;
+  const escB = document.getElementById('cmpEscB').value;
+  const nSims = parseInt(document.getElementById('nSims').value);
+  const nDays = parseInt(document.getElementById('nDays').value);
+  const arqNames = Object.keys(ARQUETIPOS);
+  const simsPerArq = Math.max(1, Math.round(nSims / arqNames.length));
+
+  const resultsA = {}, resultsB = {};
+  for (const arqName of arqNames) {
+    resultsA[arqName] = [];
+    resultsB[arqName] = [];
+    for (let i = 0; i < simsPerArq; i++) {
+      const seed = 42 + i * 7 + arqNames.indexOf(arqName) * 10000;
+      const rngA = new PRNG(seed);
+      const rngB = new PRNG(seed);
+      resultsA[arqName].push(simularEstudiante(arqName, escA, rngA, nDays));
+      resultsB[arqName].push(simularEstudiante(arqName, escB, rngB, nDays));
+    }
+  }
+
+  if (charts.comparador) charts.comparador.destroy();
+  const labelsArr = arqNames;
+  const deltasA = arqNames.map(a => resultsA[a].reduce((s, r) => s + r.deltaPaes, 0) / resultsA[a].length);
+  const deltasB = arqNames.map(a => resultsB[a].reduce((s, r) => s + r.deltaPaes, 0) / resultsB[a].length);
+
+  const escNames = {A:'Baseline',B:'Solo Ejercicios',C:'Renddi Completo',D:'Alta Adherencia',E:'Con Crisis'};
+  const ctx = document.getElementById('chartComparador').getContext('2d');
+  charts.comparador = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labelsArr,
+      datasets: [
+        {label: escNames[escA], data: deltasA, backgroundColor: 'rgba(52,152,219,0.7)', borderColor: '#3498db', borderWidth: 1},
+        {label: escNames[escB], data: deltasB, backgroundColor: 'rgba(243,156,18,0.7)', borderColor: '#F39C12', borderWidth: 1}
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {labels: {color: '#a0b4c8'}}},
+      scales: {x: {ticks: {color: '#a0b4c8'}, grid: {color: 'rgba(44,62,80,0.3)'}}, y: {ticks: {color: '#a0b4c8'}, grid: {color: 'rgba(44,62,80,0.3)'}}}
+    }
+  });
+
+  const tbody = document.getElementById('tblComparadorBody');
+  tbody.innerHTML = '';
+  for (let i = 0; i < arqNames.length; i++) {
+    const diff = deltasA[i] - deltasB[i];
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td title="${ARCHETYPE_TOOLTIPS[arqNames[i]] || ''}"><strong>${arqNames[i]}</strong></td>
+      <td class="${deltasA[i] >= 0 ? 'delta-pos' : 'delta-neg'}">${deltasA[i] >= 0 ? '+' : ''}${deltasA[i].toFixed(1)}</td>
+      <td class="${deltasB[i] >= 0 ? 'delta-pos' : 'delta-neg'}">${deltasB[i] >= 0 ? '+' : ''}${deltasB[i].toFixed(1)}</td>
+      <td class="${diff >= 0 ? 'delta-pos' : 'delta-neg'}">${diff >= 0 ? '+' : ''}${diff.toFixed(1)}</td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+// ============================================================
+// TAB 5: SENSIBILIDAD
+// ============================================================
+function updateSensitivity() {
+  const varName = document.getElementById('sensVar').value;
+  const deltaRaw = parseInt(document.getElementById('sensDelta').value);
+  const delta = deltaRaw / 100;
+  document.getElementById('sensDeltaVal').textContent = delta.toFixed(2);
+
+  const estado = {};
+  for (const v of VARIABLES) estado[v] = 0.5;
+
+  const nuevo = propagarCausal(estado, delta, varName);
+
+  const div = document.getElementById('sensResults');
+  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">';
+  for (const v of VARIABLES) {
+    const d = nuevo[v] - estado[v];
+    if (Math.abs(d) < 0.0001 && v !== varName) continue;
+    const color = d > 0.01 ? '#27AE60' : d < -0.01 ? '#E74C3C' : '#a0b4c8';
+    const isInv = INVERTIDAS.has(v);
+    const effectColor = (isInv ? (d < 0 ? '#27AE60' : '#E74C3C') : (d > 0 ? '#27AE60' : '#E74C3C'));
+    html += `<div style="padding:6px 10px;background:var(--bg3);border-radius:6px;border-left:3px solid ${effectColor}" title="${VAR_TOOLTIPS[v] || ''}">
+      <div style="font-size:.78em;color:var(--text2)">${VAR_LABELS[v]}${isInv ? ' [INV]' : ''}</div>
+      <div style="font-size:.95em;font-weight:700;color:${color}">${d >= 0 ? '+' : ''}${d.toFixed(4)}</div>
+    </div>`;
+  }
+  html += '</div>';
+  div.innerHTML = html;
+}
+
+function buildHeatmap() {
+  const container = document.getElementById('heatmapContainer');
+  const varsDisplay = VARIABLES.slice(0, 12);
+  const matrix = [];
+  for (const src of varsDisplay) {
+    const row = [];
+    const estado = {};
+    for (const v of VARIABLES) estado[v] = 0.5;
+    const nuevo = propagarCausal(estado, 0.10, src);
+    for (const dst of varsDisplay) {
+      row.push(nuevo[dst] - estado[dst]);
+    }
+    matrix.push(row);
+  }
+
+  let html = `<div style="display:grid;grid-template-columns:100px repeat(${varsDisplay.length},1fr);gap:2px;font-size:.7em;min-width:${varsDisplay.length * 55 + 100}px">`;
+  html += '<div></div>';
+  for (const v of varsDisplay) html += `<div style="text-align:center;color:var(--accent);padding:4px;font-weight:600;writing-mode:vertical-rl;transform:rotate(180deg);height:80px" title="${VAR_TOOLTIPS[v] || ''}">${VAR_LABELS[v]}</div>`;
+
+  for (let i = 0; i < varsDisplay.length; i++) {
+    html += `<div style="display:flex;align-items:center;padding:4px;color:var(--text2);font-weight:600" title="${VAR_TOOLTIPS[varsDisplay[i]] || ''}">${VAR_LABELS[varsDisplay[i]]}</div>`;
+    for (let j = 0; j < varsDisplay.length; j++) {
+      const val = matrix[i][j];
+      const absVal = Math.abs(val);
+      let bg;
+      if (i === j) bg = 'rgba(243,156,18,0.4)';
+      else if (val > 0.001) bg = `rgba(39,174,96,${Math.min(0.8, absVal * 8)})`;
+      else if (val < -0.001) bg = `rgba(231,76,60,${Math.min(0.8, absVal * 8)})`;
+      else bg = 'rgba(160,180,200,0.05)';
+      html += `<div class="heatmap-cell" style="background:${bg}" title="Efecto de ${VAR_LABELS[varsDisplay[i]]} sobre ${VAR_LABELS[varsDisplay[j]]}: ${val.toFixed(4)}">${val !== 0 ? (val > 0 ? '+' : '') + val.toFixed(3) : ''}</div>`;
+    }
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// TAB 6: FILTRO (MEJORADO)
+// ============================================================
+function resetFilters() {
+  document.getElementById('filtPaesIniMin').value = 100;
+  document.getElementById('filtPaesIniMax').value = 1000;
+  document.getElementById('filtPaesFinMin').value = 100;
+  document.getElementById('filtPaesFinMax').value = 1000;
+  document.getElementById('filtDeltaMin').value = -999;
+  document.getElementById('filtDeltaMax').value = 999;
+  document.getElementById('filtArq').value = 'Todos';
+  document.getElementById('filtVarName').value = '_none';
+  document.getElementById('filtVarVal').value = 0.50;
+  document.getElementById('filtCombine').value = 'AND';
+  document.getElementById('subgroupStats').style.display = 'none';
+}
+
+function applyFilter() {
+  if (globalResults.length === 0) { alert('Ejecuta una simulacion primero'); return; }
+
+  const paesIniMin = parseFloat(document.getElementById('filtPaesIniMin').value) || 0;
+  const paesIniMax = parseFloat(document.getElementById('filtPaesIniMax').value) || 9999;
+  const paesFinMin = parseFloat(document.getElementById('filtPaesFinMin').value) || 0;
+  const paesFinMax = parseFloat(document.getElementById('filtPaesFinMax').value) || 9999;
+  const deltaMin = parseFloat(document.getElementById('filtDeltaMin').value);
+  const deltaMax = parseFloat(document.getElementById('filtDeltaMax').value);
+  const arqFilt = document.getElementById('filtArq').value;
+  const varName = document.getElementById('filtVarName').value;
+  const varOp = document.getElementById('filtVarOp').value;
+  const varVal = parseFloat(document.getElementById('filtVarVal').value);
+  const combineMode = document.getElementById('filtCombine').value;
+
+  const filters = [];
+
+  // PAES ini range
+  filters.push(r => r.paesInicial >= paesIniMin && r.paesInicial <= paesIniMax);
+  // PAES fin range
+  filters.push(r => r.paesFinal >= paesFinMin && r.paesFinal <= paesFinMax);
+  // Delta range
+  if (!isNaN(deltaMin)) filters.push(r => r.deltaPaes >= deltaMin);
+  if (!isNaN(deltaMax)) filters.push(r => r.deltaPaes <= deltaMax);
+  // Archetype
+  if (arqFilt !== 'Todos') filters.push(r => r.arquetipo === arqFilt);
+  // Variable threshold
+  if (varName !== '_none' && !isNaN(varVal)) {
+    filters.push(r => {
+      const val = r.estadoFinal[varName];
+      if (val === undefined) return true;
+      switch (varOp) {
+        case '>': return val > varVal;
+        case '<': return val < varVal;
+        case '>=': return val >= varVal;
+        case '<=': return val <= varVal;
+        default: return true;
+      }
+    });
+  }
+
+  let filtered;
+  if (combineMode === 'AND') {
+    filtered = globalResults.filter(r => filters.every(f => f(r)));
+  } else {
+    // OR: at least one filter passes (but archetype filter always applies if set)
+    const arqFilter = arqFilt !== 'Todos' ? (r => r.arquetipo === arqFilt) : null;
+    const otherFilters = arqFilter ? filters.filter(f => f !== filters[filters.length - 1]) : filters;
+    filtered = globalResults.filter(r => {
+      if (arqFilter && !arqFilter(r)) return false;
+      return otherFilters.length === 0 || otherFilters.some(f => f(r));
+    });
+  }
+
+  document.getElementById('filtCount').textContent = `${filtered.length} de ${globalResults.length} simulaciones coinciden`;
+
+  // Subgroup statistics
+  if (filtered.length > 0) {
+    const deltas = filtered.map(r => r.deltaPaes);
+    const mean = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+    const std = Math.sqrt(deltas.map(x => (x - mean) ** 2).reduce((a, b) => a + b, 0) / deltas.length);
+    const ic95l = mean - 1.96 * std / Math.sqrt(deltas.length);
+    const ic95u = mean + 1.96 * std / Math.sqrt(deltas.length);
+    const paesFinMean = filtered.reduce((s, r) => s + r.paesFinal, 0) / filtered.length;
+    const paesIniMean = filtered.reduce((s, r) => s + r.paesInicial, 0) / filtered.length;
+    const enRiesgo = filtered.filter(r => r.paesInicial < 500);
+    const rescatados = enRiesgo.filter(r => r.paesFinal >= 500);
+    const tasaRescate = enRiesgo.length > 0 ? (rescatados.length / enRiesgo.length * 100).toFixed(1) + '%' : 'N/A';
+    const maxDelta = Math.max(...deltas);
+    const minDelta = Math.min(...deltas);
+
+    document.getElementById('subgroupStats').style.display = 'block';
+    document.getElementById('subgroupContent').innerHTML = `
+      <div class="stat-row"><span>N</span><span style="font-weight:700;color:var(--accent)">${filtered.length}</span></div>
+      <div class="stat-row"><span>PAES inicial promedio</span><span>${paesIniMean.toFixed(1)}</span></div>
+      <div class="stat-row"><span>PAES final promedio</span><span>${paesFinMean.toFixed(1)}</span></div>
+      <div class="stat-row"><span>Delta PAES promedio</span><span class="${mean >= 0 ? 'delta-pos' : 'delta-neg'}">${mean >= 0 ? '+' : ''}${mean.toFixed(1)}</span></div>
+      <div class="stat-row"><span>IC 95%</span><span>[${ic95l.toFixed(1)}, ${ic95u.toFixed(1)}]</span></div>
+      <div class="stat-row"><span>Desv. estandar</span><span>${std.toFixed(1)}</span></div>
+      <div class="stat-row"><span>Rango delta</span><span>${minDelta.toFixed(1)} a ${maxDelta.toFixed(1)}</span></div>
+      <div class="stat-row"><span>Tasa rescate (<500 -> >=500)</span><span>${tasaRescate}</span></div>
+    `;
+  } else {
+    document.getElementById('subgroupStats').style.display = 'none';
+  }
+
+  const tbody = document.getElementById('tblFiltroBody');
+  tbody.innerHTML = '';
+  const toShow = filtered.slice(0, 200);
+  for (const r of toShow) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.id}</td>
+      <td title="${ARCHETYPE_TOOLTIPS[r.arquetipo] || ''}">${r.arquetipo}</td>
+      <td>${Math.round(r.paesInicial)}</td>
+      <td>${Math.round(r.paesFinal)}</td>
+      <td class="${r.deltaPaes >= 0 ? 'delta-pos' : 'delta-neg'}">${r.deltaPaes >= 0 ? '+' : ''}${r.deltaPaes.toFixed(1)}</td>
+      <td>${r.estadoFinal.mastery.toFixed(3)}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="viewCase(${r.id})" title="Carga este caso en la tab Caso Individual para ver su perfil detallado, radar y evolucion.">Ver</button></td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+function viewCase(id) {
+  const r = globalResults.find(x => x.id === id);
+  if (!r) return;
+  switchTab('tab-individual');
+  const arq = ARQUETIPOS[r.arquetipo];
+  if (arq) {
+    for (const v of VARIABLES) {
+      const slider = document.getElementById(`slider-${v}`);
+      slider.value = Math.round(arq.perfil[v] * 100);
+      document.getElementById(`sval-${v}`).textContent = arq.perfil[v].toFixed(2);
+    }
+  }
+  document.getElementById('indPaesIni').textContent = Math.round(r.paesInicial);
+  document.getElementById('indPaesFin').textContent = Math.round(r.paesFinal);
+  const delta = r.deltaPaes;
+  document.getElementById('indPaesDelta').textContent = (delta >= 0 ? '+' : '') + Math.round(delta);
+  document.getElementById('indPaesDelta').className = 'paes-big ' + (delta >= 0 ? 'delta-pos' : 'delta-neg');
+  document.getElementById('indPaesDelta').style.fontSize = '1.4em';
+  if (arq) renderRadarChart(arq.perfil, r.estadoFinal);
+  if (r.registros && r.registros.length > 0) renderIndividualTimeline(r.registros);
+  updateCharacterization();
+}
+
+// ============================================================
+// UTILIDADES
+// ============================================================
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  const tabs = document.querySelectorAll('.nav-tab');
+  const tabMap = {'tab-resumen':0,'tab-evolucion':1,'tab-individual':2,'tab-comparador':3,'tab-sensibilidad':4,'tab-filtro':5};
+  if (tabMap[tabId] !== undefined) tabs[tabMap[tabId]].classList.add('active');
+}
+
+function updateFooter() {
+  document.getElementById('footerStats').textContent =
+    `${globalResults.length} simulaciones ejecutadas en ${lastSimTime.toFixed(0)} ms | Total sesion: ${totalSimsRun}`;
+}
+
+function exportCSV() {
+  if (globalResults.length === 0) { alert('Ejecuta una simulacion primero'); return; }
+  let csv = 'id,arquetipo,paes_inicial,paes_final,delta_paes,' + VARIABLES.join(',') + '\n';
+  for (const r of globalResults) {
+    csv += `${r.id},${r.arquetipo},${r.paesInicial},${r.paesFinal},${r.deltaPaes}`;
+    for (const v of VARIABLES) csv += `,${r.estadoFinal[v].toFixed(4)}`;
+    csv += '\n';
+  }
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `renddi-simulacion-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+}
+
+function shareConfig() {
+  const params = new URLSearchParams();
+  params.set('n', document.getElementById('nSims').value);
+  params.set('d', document.getElementById('nDays').value);
+  params.set('e', document.getElementById('escenario').value);
+  params.set('a', document.getElementById('arquetipo').value);
+  const url = window.location.origin + window.location.pathname + '?' + params.toString();
+  navigator.clipboard.writeText(url).then(() => {
+    alert('URL copiada al portapapeles:\n' + url);
+  }).catch(() => {
+    prompt('Copia esta URL:', url);
+  });
+}
+
+function loadURLParams() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('n')) { document.getElementById('nSims').value = params.get('n'); document.getElementById('nSimsVal').textContent = params.get('n'); }
+  if (params.has('d')) { document.getElementById('nDays').value = params.get('d'); document.getElementById('nDaysVal').textContent = params.get('d'); }
+  if (params.has('e')) document.getElementById('escenario').value = params.get('e');
+  if (params.has('a')) document.getElementById('arquetipo').value = params.get('a');
+  if (params.has('auto')) setTimeout(runSimulation, 500);
+}
+
+function togglePresentation() {
+  document.body.classList.toggle('presentation-mode');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

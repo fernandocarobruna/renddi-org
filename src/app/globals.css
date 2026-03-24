@@ -1,0 +1,301 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0a0f;
+  --card: #141419;
+  --border: #2a2a35;
+  --text: #e8e8ed;
+  --muted: #8b8b9e;
+  --accent: #F39C12;
+  --accent2: #e67e22;
+  --accentLight: rgba(243, 156, 18, 0.1);
+  --success: #10b981;
+  --danger: #ef4444;
+  --warn: #f59e0b;
+  --info: #3b82f6;
+  --navy: #0d0d14;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ─── HEADER ─── */
+.header {
+  background: var(--navy);
+  color: #fff;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent);
+}
+.header .sub {
+  font-size: 11px;
+  opacity: 0.5;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
+.header .badge {
+  background: var(--accent);
+  color: #000;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.header .badge-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+/* ─── CONTAINER ─── */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 24px 40px;
+}
+
+/* ─── TABS ─── */
+.tabs {
+  display: flex;
+  gap: 2px;
+  background: var(--card);
+  border-radius: 8px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.tab {
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  border: none;
+  background: none;
+  transition: all .2s;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+}
+.tab.active {
+  background: var(--accent);
+  color: #000;
+}
+.tab:hover:not(.active) {
+  background: rgba(243, 156, 18, 0.08);
+  color: var(--accent);
+}
+
+/* ─── GRID ─── */
+.grid { display: grid; gap: 12px; }
+.g2 { grid-template-columns: 1fr 1fr; }
+.g3 { grid-template-columns: 1fr 1fr 1fr; }
+
+/* ─── CARD ─── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+.card h3 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ─── STAT CARDS ─── */
+.stat-card {
+  text-align: center;
+  padding: 24px 16px;
+}
+.stat-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+  letter-spacing: 0.3px;
+}
+
+/* ─── NOTE ─── */
+.note {
+  background: rgba(243, 156, 18, 0.06);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 12px;
+  border-radius: 0 6px 6px 0;
+}
+
+/* ─── TAGS ─── */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.tag-green { background: rgba(16,185,129,0.15); color: #10b981; }
+.tag-red { background: rgba(239,68,68,0.15); color: #ef4444; }
+.tag-purple { background: rgba(124,58,237,0.15); color: #a78bfa; }
+
+/* ─── FASE ROWS ─── */
+.fase-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.fase-row:last-child { border-bottom: none; }
+.fase-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(243, 156, 18, 0.12);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ─── EMBED HEADER ─── */
+.embed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+/* ─── BUTTONS ─── */
+.btn-secondary {
+  display: inline-block;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  font-family: inherit;
+  transition: all .2s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-secondary:hover {
+  background: rgba(243, 156, 18, 0.1);
+}
+
+/* ─── DOCUMENT LIST ─── */
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.doc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color .2s;
+}
+.doc-row:hover {
+  border-color: rgba(243, 156, 18, 0.3);
+}
+.doc-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+.doc-type {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 28px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+.doc-type-pdf { background: rgba(239,68,68,0.15); color: #ef4444; }
+.doc-type-md { background: rgba(59,130,246,0.15); color: #3b82f6; }
+.doc-type-docx { background: rgba(16,185,129,0.15); color: #10b981; }
+.doc-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.doc-desc {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.doc-meta {
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+.doc-size {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── SPINNER ─── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.hidden { display: none; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .g2, .g3 { grid-template-columns: 1fr; }
+  .header { flex-direction: column; gap: 8px; text-align: center; }
+  .embed-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+}
+
+@media (max-width: 640px) {
+  .tabs { flex-direction: column; }
+  .doc-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .doc-meta { margin-left: 0; }
+}
