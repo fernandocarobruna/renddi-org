@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RENDDI | Grafo Estudiantil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F6F8FA;
+  --bg-white: #FFFFFF;
+  --sidebar-bg: #0A2540;
+  --sidebar-hover: rgba(255,255,255,0.08);
+  --sidebar-active: rgba(255,255,255,0.12);
+  --sidebar-text: rgba(255,255,255,0.6);
+  --sidebar-text-active: #FFFFFF;
+  --border: #E3E8EE;
+  --border-focus: #635BFF;
+  --accent: #635BFF;
+  --accent-soft: rgba(99,91,255,0.08);
+  --success: #3ECF8E;
+  --success-soft: rgba(62,207,142,0.1);
+  --warning: #F5A623;
+  --warning-soft: rgba(245,166,35,0.1);
+  --danger: #ED5F74;
+  --danger-soft: rgba(237,95,116,0.1);
+  --text: #0A2540;
+  --text-secondary: #697386;
+  --text-tertiary: #8792A2;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --radius: 8px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; font-size: 13px; -webkit-font-smoothing: antialiased; }
+
+/* Sidebar */
+.sidebar { width: 248px; min-height: 100vh; background: var(--sidebar-bg); display: flex; flex-direction: column; flex-shrink: 0; }
+.sidebar-logo { padding: 22px 24px 28px; display: flex; align-items: center; gap: 10px; }
+.sidebar-logo svg { width: 26px; height: 26px; color: var(--accent); }
+.sidebar-logo span { font-weight: 700; font-size: 16px; letter-spacing: -0.4px; color: #fff; }
+.sidebar-logo .version { font-size: 10px; color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 4px; margin-left: auto; font-weight: 500; }
+.sidebar-section { padding: 0 12px; margin-bottom: 4px; }
+.sidebar-section-title { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.3); padding: 8px 12px 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: var(--radius); cursor: pointer; color: var(--sidebar-text); font-size: 13px; font-weight: 500; transition: all 0.15s ease; margin-bottom: 1px; }
+.sidebar-item:hover { background: var(--sidebar-hover); color: rgba(255,255,255,0.85); }
+.sidebar-item.active { background: var(--sidebar-active); color: var(--sidebar-text-active); }
+.sidebar-item svg { width: 16px; height: 16px; opacity: 0.5; flex-shrink: 0; }
+.sidebar-item.active svg { opacity: 1; }
+.sidebar-spacer { flex: 1; }
+.sidebar-user { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 10px; }
+.sidebar-user .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #9C8AFF); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+.sidebar-user .uname { font-size: 13px; font-weight: 600; color: #fff; }
+.sidebar-user .urole { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { height: 56px; background: var(--bg-white); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 28px; gap: 16px; box-shadow: 0 1px 0 rgba(0,0,0,0.04); }
+.topbar-title { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+.topbar-sep { width: 1px; height: 20px; background: var(--border); }
+.student-selector-bar { display: flex; align-items: center; gap: 4px; overflow-x: auto; }
+.student-pill { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; border: 1px solid transparent; white-space: nowrap; }
+.student-pill:hover { background: var(--accent-soft); color: var(--accent); }
+.student-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.student-pill .paes-mini { font-size: 10px; opacity: 0.7; margin-left: 3px; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.topbar-btn { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius); padding: 7px 14px; color: var(--text-secondary); font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.15s; font-family: inherit; font-weight: 500; box-shadow: var(--shadow-sm); }
+.topbar-btn:hover { border-color: var(--accent); color: var(--accent); }
+.topbar-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.topbar-btn.primary:hover { background: #4B47E0; }
+
+/* Content */
+.content { flex: 1; overflow-y: auto; padding: 28px; }
+.content-section { display: none; }
+.content-section.active { display: block; }
+
+/* Stat Cards */
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+.stat-card { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow-sm); transition: box-shadow 0.15s, border-color 0.15s; }
+.stat-card:hover { box-shadow: var(--shadow-md); border-color: #D0D5DD; }
+.stat-label { font-size: 11px; color: var(--text-tertiary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+.stat-value { font-size: 30px; font-weight: 700; letter-spacing: -1.2px; line-height: 1; }
+.stat-value.accent { color: var(--accent); }
+.stat-value.success { color: #0E8345; }
+.stat-value.warning { color: #C87A0A; }
+.stat-value.danger { color: #C4384B; }
+.stat-delta { font-size: 12px; margin-top: 8px; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+.stat-delta.pos { color: #0E8345; }
+.stat-delta.neg { color: #C4384B; }
+.stat-delta svg { width: 14px; height: 14px; }
+
+/* Two Column */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+.panel { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
+.panel-header { padding: 16px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.panel-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.panel-badge { font-size: 11px; background: var(--accent-soft); color: var(--accent); padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 10px 22px; font-size: 11px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.4px; background: #FAFBFC; border-bottom: 1px solid var(--border); }
+td { padding: 12px 22px; font-size: 13px; border-bottom: 1px solid var(--border); color: var(--text); }
+tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.1s; }
+tbody tr:hover { background: #FAFBFC; }
+
+.badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.badge-active { background: var(--success-soft); color: #0E8345; }
+.badge-recommended { background: var(--warning-soft); color: #946800; }
+.badge-inactive { background: #F1F3F5; color: var(--text-tertiary); }
+.badge-high { background: var(--accent-soft); color: var(--accent); }
+.badge-medium { background: var(--warning-soft); color: #946800; }
+.badge-low { background: #F1F3F5; color: var(--text-tertiary); }
+
+/* Progress Bars */
+.var-list { padding: 20px 22px; }
+.var-row { display: flex; align-items: center; gap: 14px; padding: 7px 0; }
+.var-name { width: 140px; font-size: 12px; color: var(--text-secondary); flex-shrink: 0; font-weight: 500; }
+.var-bar { flex: 1; height: 6px; background: #EEF0F3; border-radius: 3px; overflow: hidden; }
+.var-bar .fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+.var-val { width: 40px; text-align: right; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text); }
+
+.full-panel { margin-bottom: 28px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D0D5DD; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #B0B8C4; }
+
+.fade-in { animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+    <span>RENDDI</span>
+    <span class="version">v2.1</span>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Analisis</div>
+    <div class="sidebar-item active" data-tab="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="sidebar-item" data-tab="variables">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg>
+      Variables
+    </div>
+    <div class="sidebar-item" data-tab="fad">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      Acciones FAD
+    </div>
+    <div class="sidebar-item" data-tab="grafo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M8.5 7.5L15.5 16.5M8.5 6H15"/></svg>
+      Grafo Causal
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Motor</div>
+    <div class="sidebar-item" data-tab="simulador">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="6"/></svg>
+      Simulador
+    </div>
+    <div class="sidebar-item" data-tab="recetas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      Recetas
+    </div>
+    <div class="sidebar-item" data-tab="agentes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+      Agentes
+    </div>
+    <div class="sidebar-item" data-tab="predictor">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      Predictor PAES
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Contenido</div>
+    <div class="sidebar-item" data-tab="carreras">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg>
+      Carreras
+    </div>
+    <div class="sidebar-item" data-tab="mitos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
+      Mitos PAES
+    </div>
+    <div class="sidebar-item" data-tab="heatmap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+      Heatmap
+    </div>
+    <div class="sidebar-item" data-tab="flow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Flujo Sensei
+    </div>
+  </div>
+
+  <div class="sidebar-spacer"></div>
+  <div class="sidebar-user">
+    <div class="avatar">F</div>
+    <div>
+      <div class="uname">Fernando R.</div>
+      <div class="urole">Administrador</div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <span class="topbar-title" id="topTitle">Dashboard</span>
+    <span class="topbar-sep"></span>
+    <div class="student-selector-bar" id="studentBar"></div>
+    <div class="topbar-right">
+      <button class="topbar-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        Buscar
+      </button>
+      <button class="topbar-btn primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Exportar
+      </button>
+    </div>
+  </div>
+
+  <div class="content" id="contentArea">
+    <!-- Dashboard -->
+    <div class="content-section active fade-in" id="sec-dashboard">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">PAES Estimado</div>
+          <div class="stat-value accent" id="stat-paes">687</div>
+          <div class="stat-delta pos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+            +23 vs. diagnostico
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Dominio Global</div>
+          <div class="stat-value success" id="stat-dominio">72%</div>
+          <div class="stat-delta pos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+            +8% esta semana
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Ansiedad</div>
+          <div class="stat-value warning" id="stat-ansiedad">0.45</div>
+          <div class="stat-delta neg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 9l-6 6-6-6"/></svg>
+            Moderada — requiere atencion
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Motivacion</div>
+          <div class="stat-value accent" id="stat-motivacion">0.78</div>
+          <div class="stat-delta pos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+            Alta — en zona optima
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Acciones FAD</span>
+            <span class="panel-badge">5 acciones</span>
+          </div>
+          <table>
+            <thead><tr><th>Accion</th><th>Agente</th><th>Estado</th><th>Prioridad</th></tr></thead>
+            <tbody>
+              <tr><td>Repaso de algebra con ejercicios adaptativos</td><td>Tutor</td><td><span class="badge badge-active">Activa</span></td><td><span class="badge badge-high">Alta</span></td></tr>
+              <tr><td>Sesion de respiracion pre-ensayo</td><td>Coach</td><td><span class="badge badge-active">Activa</span></td><td><span class="badge badge-high">Alta</span></td></tr>
+              <tr><td>Refuerzo en comprension lectora</td><td>Tutor</td><td><span class="badge badge-recommended">Sugerida</span></td><td><span class="badge badge-medium">Media</span></td></tr>
+              <tr><td>Desafio de geometria con pares</td><td>Social</td><td><span class="badge badge-recommended">Sugerida</span></td><td><span class="badge badge-medium">Media</span></td></tr>
+              <tr><td>Recordatorio de meta semanal</td><td>Motivador</td><td><span class="badge badge-inactive">Pendiente</span></td><td><span class="badge badge-low">Baja</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Variables del Estudiante</span>
+            <span class="panel-badge">12 variables</span>
+          </div>
+          <div class="var-list">
+            <div class="var-row"><span class="var-name">Dominio Algebra</span><div class="var-bar"><div class="fill" style="width:78%;background:var(--success)"></div></div><span class="var-val">0.78</span></div>
+            <div class="var-row"><span class="var-name">Dominio Geometria</span><div class="var-bar"><div class="fill" style="width:62%;background:var(--warning)"></div></div><span class="var-val">0.62</span></div>
+            <div class="var-row"><span class="var-name">Dominio Lectura</span><div class="var-bar"><div class="fill" style="width:55%;background:var(--warning)"></div></div><span class="var-val">0.55</span></div>
+            <div class="var-row"><span class="var-name">Ansiedad Evaluativa</span><div class="var-bar"><div class="fill" style="width:45%;background:var(--danger)"></div></div><span class="var-val">0.45</span></div>
+            <div class="var-row"><span class="var-name">Motivacion Intrinseca</span><div class="var-bar"><div class="fill" style="width:78%;background:var(--accent)"></div></div><span class="var-val">0.78</span></div>
+            <div class="var-row"><span class="var-name">Habitos de Estudio</span><div class="var-bar"><div class="fill" style="width:70%;background:var(--success)"></div></div><span class="var-val">0.70</span></div>
+            <div class="var-row"><span class="var-name">Autoeficacia</span><div class="var-bar"><div class="fill" style="width:65%;background:var(--warning)"></div></div><span class="var-val">0.65</span></div>
+            <div class="var-row"><span class="var-name">Comp. Datos</span><div class="var-bar"><div class="fill" style="width:80%;background:var(--success)"></div></div><span class="var-val">0.80</span></div>
+            <div class="var-row"><span class="var-name">Probabilidad</span><div class="var-bar"><div class="fill" style="width:48%;background:var(--danger)"></div></div><span class="var-val">0.48</span></div>
+            <div class="var-row"><span class="var-name">Velocidad Resp.</span><div class="var-bar"><div class="fill" style="width:72%;background:var(--success)"></div></div><span class="var-val">0.72</span></div>
+            <div class="var-row"><span class="var-name">Consistencia</span><div class="var-bar"><div class="fill" style="width:60%;background:var(--warning)"></div></div><span class="var-val">0.60</span></div>
+            <div class="var-row"><span class="var-name">Resiliencia</span><div class="var-bar"><div class="fill" style="width:68%;background:var(--success)"></div></div><span class="var-val">0.68</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Variables Tab -->
+    <div class="content-section" id="sec-variables">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Variables Trackeadas</div><div class="stat-value accent">12</div></div>
+        <div class="stat-card"><div class="stat-label">En zona optima</div><div class="stat-value success">7</div></div>
+        <div class="stat-card"><div class="stat-label">Requieren atencion</div><div class="stat-value warning">3</div></div>
+        <div class="stat-card"><div class="stat-label">Criticas</div><div class="stat-value danger">2</div></div>
+      </div>
+      <div class="panel full-panel">
+        <div class="panel-header"><span class="panel-title">Detalle de Variables</span></div>
+        <table>
+          <thead><tr><th>Variable</th><th>Valor</th><th>Tendencia</th><th>Zona</th><th>Actualizado</th></tr></thead>
+          <tbody>
+            <tr><td>Dominio Algebra</td><td>0.78</td><td style="color:#0E8345">+0.05</td><td><span class="badge badge-active">Optima</span></td><td>Hace 2h</td></tr>
+            <tr><td>Dominio Geometria</td><td>0.62</td><td style="color:#0E8345">+0.03</td><td><span class="badge badge-recommended">Atencion</span></td><td>Hace 3h</td></tr>
+            <tr><td>Dominio Lectura</td><td>0.55</td><td style="color:#C4384B">-0.02</td><td><span class="badge badge-recommended">Atencion</span></td><td>Hace 1h</td></tr>
+            <tr><td>Ansiedad Evaluativa</td><td>0.45</td><td style="color:#C4384B">+0.08</td><td><span class="badge badge-recommended">Atencion</span></td><td>Hace 1h</td></tr>
+            <tr><td>Motivacion Intrinseca</td><td>0.78</td><td style="color:#0E8345">+0.02</td><td><span class="badge badge-active">Optima</span></td><td>Hace 4h</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FAD Tab -->
+    <div class="content-section" id="sec-fad">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Acciones Activas</div><div class="stat-value success">2</div></div>
+        <div class="stat-card"><div class="stat-label">Sugeridas</div><div class="stat-value warning">2</div></div>
+        <div class="stat-card"><div class="stat-label">Pendientes</div><div class="stat-value" style="color:var(--text-tertiary)">1</div></div>
+        <div class="stat-card"><div class="stat-label">Completadas hoy</div><div class="stat-value accent">3</div></div>
+      </div>
+      <div class="panel full-panel">
+        <div class="panel-header"><span class="panel-title">Historial de Acciones FAD</span><span class="panel-badge">Ultimo ciclo</span></div>
+        <table>
+          <thead><tr><th>Accion</th><th>Agente</th><th>Variable target</th><th>Estado</th><th>Impacto</th></tr></thead>
+          <tbody>
+            <tr><td>Repaso de algebra con ejercicios adaptativos</td><td>Tutor</td><td>dominio_algebra</td><td><span class="badge badge-active">Activa</span></td><td style="color:#0E8345">+0.05</td></tr>
+            <tr><td>Sesion de respiracion pre-ensayo</td><td>Coach</td><td>ansiedad_evaluativa</td><td><span class="badge badge-active">Activa</span></td><td style="color:#0E8345">-0.08</td></tr>
+            <tr><td>Refuerzo en comprension lectora</td><td>Tutor</td><td>dominio_lectura</td><td><span class="badge badge-recommended">Sugerida</span></td><td>--</td></tr>
+            <tr><td>Desafio de geometria con pares</td><td>Social</td><td>dominio_geometria</td><td><span class="badge badge-recommended">Sugerida</span></td><td>--</td></tr>
+            <tr><td>Recordatorio de meta semanal</td><td>Motivador</td><td>motivacion_intrinseca</td><td><span class="badge badge-inactive">Pendiente</span></td><td>--</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Placeholder tabs -->
+    <div class="content-section" id="sec-grafo"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Grafo Causal</span></div><div style="padding:60px 22px;text-align:center;color:var(--text-tertiary)">Visualizacion interactiva del grafo causal del estudiante</div></div></div>
+    <div class="content-section" id="sec-simulador"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Simulador de Escenarios</span></div><div style="padding:60px 22px;text-align:center;color:var(--text-tertiary)">Motor de simulacion what-if para variables del estudiante</div></div></div>
+    <div class="content-section" id="sec-recetas"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Recetas de Intervencion</span></div><div style="padding:60px 22px;text-align:center;color:var(--text-tertiary)">Biblioteca de recetas pedagogicas por arquetipo</div></div></div>
+    <div class="content-section" id="sec-agentes"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Panel de Agentes</span></div><div style="padding:60px 22px;text-align:center;color:var(--text-tertiary)">Estado y actividad de los 4 agentes del sistema</div></div></div>
+    <div class="content-section" id="sec-predictor"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Predictor PAES</span></div><div style="padding:60px 22px;text-align:center;color:var(--text-tertiary)">Modelo predictivo de puntaje PAES</div></div></div>
+    <div class="content-section" id="sec-carreras"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Explorador de Carreras</span></div><div style="padding:60px 22px;text-align:center;color:var(--text-tertiary)">Match de carreras universitarias por perfil</div></div></div>
+    <div class="content-section" id="sec-mitos"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Mitos PAES</span></div><div style="padding:60px 22px;text-align:center;color:var(--text-tertiary)">Desmitificacion basada en datos</div></div></div>
+    <div class="content-section" id="sec-heatmap"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Heatmap de Dominio</span></div><div style="padding:60px 22px;text-align:center;color:var(--text-tertiary)">Mapa de calor por eje tematico</div></div></div>
+    <div class="content-section" id="sec-flow"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Flujo Sensei</span></div><div style="padding:60px 22px;text-align:center;color:var(--text-tertiary)">Pipeline diagnostico a intervencion</div></div></div>
+  </div>
+</main>
+
+<script>
+const students = [
+  { id: 'sofia', name: 'Sofia M.', paes: 687, dominio: 72, ansiedad: 0.45, motivacion: 0.78 },
+  { id: 'mateo', name: 'Mateo R.', paes: 542, dominio: 48, ansiedad: 0.72, motivacion: 0.35 },
+  { id: 'valentina', name: 'Valentina L.', paes: 725, dominio: 81, ansiedad: 0.22, motivacion: 0.88 },
+  { id: 'benjamin', name: 'Benjamin C.', paes: 610, dominio: 60, ansiedad: 0.55, motivacion: 0.62 },
+  { id: 'isidora', name: 'Isidora P.', paes: 498, dominio: 38, ansiedad: 0.80, motivacion: 0.25 },
+  { id: 'tomas', name: 'Tomas A.', paes: 658, dominio: 67, ansiedad: 0.38, motivacion: 0.72 },
+  { id: 'antonia', name: 'Antonia V.', paes: 750, dominio: 85, ansiedad: 0.18, motivacion: 0.92 },
+  { id: 'lucas', name: 'Lucas F.', paes: 580, dominio: 55, ansiedad: 0.60, motivacion: 0.50 },
+  { id: 'catalina', name: 'Catalina G.', paes: 695, dominio: 74, ansiedad: 0.30, motivacion: 0.82 },
+  { id: 'nicolas', name: 'Nicolas H.', paes: 520, dominio: 42, ansiedad: 0.68, motivacion: 0.40 },
+  { id: 'florencia', name: 'Florencia S.', paes: 670, dominio: 70, ansiedad: 0.35, motivacion: 0.75 },
+  { id: 'joaquin', name: 'Joaquin D.', paes: 600, dominio: 58, ansiedad: 0.50, motivacion: 0.58 },
+];
+
+let currentStudent = 0;
+
+function renderStudentBar() {
+  const bar = document.getElementById('studentBar');
+  bar.innerHTML = students.map((s, i) =>
+    `<div class="student-pill ${i === currentStudent ? 'active' : ''}" data-idx="${i}">${s.name}<span class="paes-mini">${s.paes}</span></div>`
+  ).join('');
+}
+
+function updateDashboard(idx) {
+  const s = students[idx];
+  document.getElementById('stat-paes').textContent = s.paes;
+  document.getElementById('stat-dominio').textContent = s.dominio + '%';
+  document.getElementById('stat-ansiedad').textContent = s.ansiedad.toFixed(2);
+  document.getElementById('stat-motivacion').textContent = s.motivacion.toFixed(2);
+}
+
+document.querySelectorAll('.sidebar-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    const tab = item.dataset.tab;
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+    const sec = document.getElementById('sec-' + tab);
+    if (sec) { sec.classList.add('active'); sec.classList.add('fade-in'); }
+    document.getElementById('topTitle').textContent = item.textContent.trim();
+  });
+});
+
+document.getElementById('studentBar').addEventListener('click', e => {
+  const pill = e.target.closest('.student-pill');
+  if (!pill) return;
+  currentStudent = parseInt(pill.dataset.idx);
+  renderStudentBar();
+  updateDashboard(currentStudent);
+});
+
+renderStudentBar();
+</script>
+</body>
+</html>

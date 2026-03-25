@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SENSEI | GRAFO v2 — Motor de Rendimiento Estudiantil</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>if(typeof Chart==='undefined'){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"><\/script>')}</script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+<script>if(typeof d3==='undefined'){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"><\/script>')}</script>
 <style>
 :root{--bg:#0f1923;--bg2:#1a2733;--bg3:#243447;--text:#e8e8e8;--text2:#a0b4c8;--primary:#1B4F72;--accent:#F39C12;--success:#27AE60;--danger:#E74C3C;--warning:#F39C12;--card:#1a2733;--border:#2c3e50;--radius:10px;--shadow:0 4px 20px rgba(0,0,0,0.3)}
 [data-theme="light"]{--bg:#f0f2f5;--bg2:#ffffff;--bg3:#e8ecf1;--text:#1a1a2e;--text2:#555;--card:#fff;--border:#ddd;--shadow:0 4px 20px rgba(0,0,0,0.08)}
@@ -270,8 +272,8 @@ const STU=[
 {id:7,name:'Tomas',alias:'El Social',perfil:'Aprendizaje Social',comuna:'Stgo Centro',gse:'Medio',mastery:.50,anxiety:.35,confidence:.55,motivation:.50,sleep_quality:.60,attention_span:.50,study_adherence:.45,emotional_state:.80,social_support:.90,vocational_clarity:.40,self_efficacy:.50,cognitive_load:.40,fatigue:.35,frustration_tolerance:.60,metacognition:.45,time_management:.30,growth_mindset:.55,parental_support:.55,screen_time:.70,physical_activity:.45,stress_level:.30},
 {id:8,name:'Martina',alias:'La Quemada',perfil:'Recuperaci\u00f3n Acad\u00e9mica',comuna:'Vina del Mar',gse:'Medio-alto',mastery:.60,anxiety:.70,confidence:.35,motivation:.25,sleep_quality:.30,attention_span:.35,study_adherence:.35,emotional_state:.20,social_support:.40,vocational_clarity:.50,self_efficacy:.30,cognitive_load:.85,fatigue:.90,frustration_tolerance:.25,metacognition:.50,time_management:.55,growth_mindset:.35,parental_support:.50,screen_time:.75,physical_activity:.10,stress_level:.85},
 {id:9,name:'Joaquin',alias:'El Tardio',perfil:'Activaci\u00f3n Tard\u00eda',comuna:'Temuco',gse:'Medio-bajo',mastery:.25,anxiety:.40,confidence:.40,motivation:.70,sleep_quality:.70,attention_span:.60,study_adherence:.60,emotional_state:.60,social_support:.50,vocational_clarity:.85,self_efficacy:.45,cognitive_load:.40,fatigue:.30,frustration_tolerance:.65,metacognition:.40,time_management:.50,growth_mindset:.80,parental_support:.40,screen_time:.35,physical_activity:.55,stress_level:.35},
-{id:10,name:'Andres',alias:'El Trabajador',perfil:'Doble Jornada',comuna:'Puente Alto',gse:'Medio-bajo',mastery:.35,anxiety:.45,confidence:.40,motivation:.55,sleep_quality:.35,attention_span:.38,study_adherence:.30,emotional_state:.42,social_support:.45,vocational_clarity:.45,self_efficacy:.35,cognitive_load:.62,fatigue:.72,frustration_tolerance:.48,metacognition:.30,time_management:.25,growth_mindset:.55,parental_support:.50,screen_time:.40,physical_activity:.45,stress_level:.65},
-{id:11,name:'Javiera',alias:'La Rural',perfil:'Contexto Rural',comuna:'Cauquenes',gse:'Medio-bajo',mastery:.30,anxiety:.50,confidence:.38,motivation:.60,sleep_quality:.55,attention_span:.42,study_adherence:.45,emotional_state:.50,social_support:.55,vocational_clarity:.20,self_efficacy:.35,cognitive_load:.55,fatigue:.55,frustration_tolerance:.50,metacognition:.28,time_management:.35,growth_mindset:.58,parental_support:.60,screen_time:.35,physical_activity:.58,stress_level:.52}
+{id:10,name:'Andres',alias:'El Trabajador',perfil:'Doble Jornada',comuna:'Puente Alto',gse:'Medio-bajo',mastery:.356,anxiety:.45,confidence:.40,motivation:.55,sleep_quality:.35,attention_span:.38,study_adherence:.30,emotional_state:.42,social_support:.45,vocational_clarity:.45,self_efficacy:.35,cognitive_load:.62,fatigue:.72,frustration_tolerance:.48,metacognition:.30,time_management:.25,growth_mindset:.55,parental_support:.50,screen_time:.40,physical_activity:.45,stress_level:.65},
+{id:11,name:'Javiera',alias:'La Rural',perfil:'Contexto Rural',comuna:'Cauquenes',gse:'Medio-bajo',mastery:.311,anxiety:.50,confidence:.38,motivation:.60,sleep_quality:.55,attention_span:.42,study_adherence:.45,emotional_state:.50,social_support:.55,vocational_clarity:.20,self_efficacy:.35,cognitive_load:.55,fatigue:.55,frustration_tolerance:.50,metacognition:.28,time_management:.35,growth_mindset:.58,parental_support:.60,screen_time:.35,physical_activity:.58,stress_level:.52}
 ];
 const CAREERS=[
 {name:'Ingenieria Civil',paesMin:700,paesAvg:725,empleab:85,sueldo:'$1.200.000',dur:'6 anos',area:'Ingenieria'},
@@ -481,7 +483,7 @@ shukan:{name:'SHUKAN',role:'Habitos',color:'#e67e22',icon:'SH',topics:[
 ]},
 kagami:{name:'KAGAMI',role:'Perfilador',color:'#1abc9c',icon:'KG',topics:[
 {kw:['perfil','diagnostico','onboarding','medir','evaluar'],resp:'Onboarding en 6 pasos, 8-10 min total. Principios: no invasivo, entretenido, sin etiquetas, progresivo. Step 1: datos basicos (2min). Step 2: quick quiz 8-10 preguntas (3min). Step 3: habitos de estudio (1.5min). Step 4: estilo emocional (1min). Step 5: desafio adaptativo (1min). Step 6: resultado radar 6D.',refs:'UDL (CAST), principios de assessment no-invasivo'},
-{kw:['arquetipo','tipo estudiante','clasificar','segmentar'],resp:'7 arquetipos: El Ansioso (emocional bajo, academico medio-alto -> KAZE++), El Desganado (conductual bajo, vocacional bajo -> SHUKAN+COMPASS), El Perdido (vocacional muy bajo -> COMPASS++), El Intenso (conductual alto, emocional bajo -> KAZE frenar), El Social (social alto -> NAKAMA), El Silencioso (social bajo -> KOKORO), El Equilibrado (todas estables -> SENSEI).',refs:'Clustering perfiles educativos, K-means sobre 6 dimensiones'}
+{kw:['arquetipo','tipo estudiante','clasificar','segmentar'],resp:'12 arquetipos: Gestion Emocional (emocional bajo, academico medio-alto -> KAZE++), Engagement Digital (conductual bajo, vocacional bajo -> SHUKAN+COMPASS), Activacion Tardia (vocacional muy bajo -> COMPASS++), Prevencion de Sobrecarga (conductual alto, emocional bajo -> KAZE frenar), Aprendizaje Social (social alto -> NAKAMA), Funcion Ejecutiva (atencion baja -> KOKORO), Alto Rendimiento (todas estables -> SENSEI), Primera Generacion, Integracion Deportiva, Recuperacion Academica, Doble Jornada, Contexto Rural.',refs:'Clustering perfiles educativos, K-means sobre 6 dimensiones'}
 ]},
 compass:{name:'COMPASS',role:'Vocacional',color:'#2ecc71',icon:'CO',topics:[
 {kw:['carrera','vocacion','que estudiar','universidad','elegir'],resp:'Solo 30% de estudiantes de 4to medio tiene clara su vocacion. 15-20% cambia de carrera en primeros 2 anos (costo $2-8M + 1-2 anos). Feature "Explorador de Carreras": cards con empleabilidad 1er ano, sueldo 4to ano, puntaje minimo. Datos de MiFuturo.cl. Desmitificar: carreras tecnicas, cambio de carrera, primera generacion.',refs:'MiFuturo.cl, SIES, DEMRE'},
@@ -504,7 +506,7 @@ grafoAgent:{name:'GRAFO',role:'Meta',color:'#607d8b',icon:'G',topics:[
 miyagiAgent:{name:'MIYAGI',role:'Orquestador',color:'#F39C12',icon:'M',topics:[
 {kw:['miyagi','orquestador','coordinar','prioridad','conflicto'],resp:'MIYAGI es la unica voz que el estudiante escucha. Jerarquia de prioridad: 1) KOKORO alerta riesgo -> todo se detiene. 2) KAZE detecta burnout -> reducir intensidad. 3) SHUKAN detecta desercion 3+ dias -> re-engagement. 4) SENSEI reporta brechas -> ajustar plan. 5) Operacion normal. Resuelve conflictos entre agentes.',refs:'Arquitectura SENSEI 9 agentes'},
 {kw:['feature','funcionalidad','implementar','mvp','prioridad producto'],resp:'Fases: MVP (MIYAGI+SENSEI+SHUKAN basico, Abril 2026), P1 (+KAZE+KAGAMI+GRAFO, Mayo), P2 (+COMPASS+NAKAMA, Julio), P3 (+KOKORO, Sept). Para validar features: 1) Tiene respaldo en literatura? 2) Que agente la opera? 3) Impacta que nodo del grafo? 4) Es free o premium? 5) Cual es el effect size esperado?',refs:'Roadmap SENSEI'},
-{kw:['predecir','prediccion','trayectoria','futuro','proyectar'],resp:'3 escenarios: sin intervencion (PAES plano/baja), plan actual (mejora moderada), plan optimo (mejora maxima). Identificar punto de quiebre: el nodo con mayor multiplicador causal. Ejemplo: para El Ansioso, reducir ansiedad tiene el mayor ROI causal. Trend breaking: romper espirales negativas atacando el nodo upstream.',refs:'Modelo predictivo GRAFO'}
+{kw:['predecir','prediccion','trayectoria','futuro','proyectar'],resp:'3 escenarios: sin intervencion (PAES plano/baja), plan actual (mejora moderada), plan optimo (mejora maxima). Identificar punto de quiebre: el nodo con mayor multiplicador causal. Ejemplo: para Matias (Gestion Emocional), reducir ansiedad tiene el mayor ROI causal. Trend breaking: romper espirales negativas atacando el nodo upstream.',refs:'Modelo predictivo GRAFO'}
 ]}
 };
 let chatHistory=[];
@@ -685,18 +687,18 @@ const interv=FAD_INTERV[vid]||0.5;const urg=calcUrgency(vid,val);const conf=1.0;
 return{wright,gap:parseFloat(gap.toFixed(3)),interv,urg:parseFloat(urg.toFixed(2)),conf,priority:parseFloat((wright*gap*interv*urg*conf).toFixed(4))};
 }
 const ARCHETYPOS=[
-{name:'Valentina',alias:'La Aplicada',paes:835,persona:'Catalina',dur:'15-25 min',freq:'6-7 dias',riesgo:'Bajo-medio',vars:{mastery:.78,anxiety:.32,confidence:.75,motivation:.85,sleep_quality:.70,attention_span:.80,study_adherence:.85,emotional_state:.70,social_support:.65,vocational_clarity:.82,self_efficacy:.80,cognitive_load:.45,fatigue:.35,frustration_tolerance:.70,metacognition:.75,time_management:.85,growth_mindset:.70,parental_support:.85,screen_time:.30,physical_activity:.40,stress_level:.40}},
-{name:'Matias',alias:'El Ansioso',paes:680,persona:'Tomas',dur:'10-15 min',freq:'4-5 dias',riesgo:'Alto',vars:{mastery:.58,anxiety:.68,confidence:.38,motivation:.60,sleep_quality:.48,attention_span:.50,study_adherence:.55,emotional_state:.38,social_support:.45,vocational_clarity:.30,self_efficacy:.30,cognitive_load:.65,fatigue:.55,frustration_tolerance:.30,metacognition:.45,time_management:.50,growth_mindset:.40,parental_support:.70,screen_time:.50,physical_activity:.25,stress_level:.62}},
-{name:'Camila',alias:'La Resiliente',paes:590,persona:'Catalina',dur:'10-15 min',freq:'5-6 dias',riesgo:'Medio',vars:{mastery:.50,anxiety:.42,confidence:.55,motivation:.70,sleep_quality:.60,attention_span:.58,study_adherence:.55,emotional_state:.62,social_support:.38,vocational_clarity:.38,self_efficacy:.52,cognitive_load:.48,fatigue:.42,frustration_tolerance:.78,metacognition:.52,time_management:.55,growth_mindset:.82,parental_support:.32,screen_time:.42,physical_activity:.50,stress_level:.45}},
-{name:'Benjamin',alias:'El Gamer',paes:500,persona:'Martin',dur:'3-5 min',freq:'5-7 dias',riesgo:'Alto',vars:{mastery:.42,anxiety:.25,confidence:.48,motivation:.32,sleep_quality:.28,attention_span:.30,study_adherence:.22,emotional_state:.55,social_support:.60,vocational_clarity:.20,self_efficacy:.38,cognitive_load:.35,fatigue:.68,frustration_tolerance:.55,metacognition:.28,time_management:.20,growth_mindset:.45,parental_support:.55,screen_time:.88,physical_activity:.15,stress_level:.30}},
-{name:'Isidora',alias:'La Presionada',paes:725,persona:'Tomas',dur:'10-15 min',freq:'5-6 dias',riesgo:'Medio-alto',vars:{mastery:.68,anxiety:.72,confidence:.40,motivation:.50,sleep_quality:.48,attention_span:.55,study_adherence:.65,emotional_state:.32,social_support:.40,vocational_clarity:.15,self_efficacy:.35,cognitive_load:.65,fatigue:.55,frustration_tolerance:.38,metacognition:.52,time_management:.58,growth_mindset:.42,parental_support:.28,screen_time:.42,physical_activity:.28,stress_level:.78}},
-{name:'Diego',alias:'El Deportista',paes:455,persona:'Martin',dur:'5-8 min',freq:'5-6 dias',riesgo:'Medio',vars:{mastery:.32,anxiety:.28,confidence:.62,motivation:.28,sleep_quality:.78,attention_span:.55,study_adherence:.40,emotional_state:.75,social_support:.80,vocational_clarity:.18,self_efficacy:.52,cognitive_load:.30,fatigue:.22,frustration_tolerance:.70,metacognition:.32,time_management:.22,growth_mindset:.62,parental_support:.60,screen_time:.30,physical_activity:.92,stress_level:.22}},
-{name:'Francisca',alias:'TDAH',paes:410,persona:'Martin',dur:'3-5 min',freq:'5-7 dias',riesgo:'Alto',vars:{mastery:.32,anxiety:.48,confidence:.30,motivation:.58,sleep_quality:.52,attention_span:.22,study_adherence:.30,emotional_state:.45,social_support:.50,vocational_clarity:.32,self_efficacy:.28,cognitive_load:.78,fatigue:.62,frustration_tolerance:.35,metacognition:.18,time_management:.18,growth_mindset:.55,parental_support:.45,screen_time:.62,physical_activity:.30,stress_level:.52}},
-{name:'Tomas',alias:'El Social',paes:545,persona:'Martin',dur:'8-12 min',freq:'4-5 dias',riesgo:'Medio',vars:{mastery:.42,anxiety:.32,confidence:.52,motivation:.48,sleep_quality:.58,attention_span:.48,study_adherence:.38,emotional_state:.78,social_support:.88,vocational_clarity:.38,self_efficacy:.48,cognitive_load:.42,fatigue:.35,frustration_tolerance:.58,metacognition:.38,time_management:.28,growth_mindset:.55,parental_support:.55,screen_time:.68,physical_activity:.42,stress_level:.28}},
-{name:'Martina',alias:'La Quemada',paes:635,persona:'Tomas',dur:'Max 10 min',freq:'3-4 dias',riesgo:'Alto',vars:{mastery:.58,anxiety:.68,confidence:.35,motivation:.25,sleep_quality:.30,attention_span:.35,study_adherence:.35,emotional_state:.18,social_support:.38,vocational_clarity:.48,self_efficacy:.28,cognitive_load:.82,fatigue:.88,frustration_tolerance:.25,metacognition:.48,time_management:.52,growth_mindset:.35,parental_support:.48,screen_time:.75,physical_activity:.10,stress_level:.82}},
-{name:'Joaquin',alias:'El Tardio',paes:320,persona:'Tomas',dur:'3-5 min',freq:'3-5 dias',riesgo:'Muy alto',vars:{mastery:.22,anxiety:.38,confidence:.38,motivation:.22,sleep_quality:.68,attention_span:.58,study_adherence:.28,emotional_state:.58,social_support:.48,vocational_clarity:.12,self_efficacy:.42,cognitive_load:.42,fatigue:.30,frustration_tolerance:.62,metacognition:.38,time_management:.48,growth_mindset:.78,parental_support:.38,screen_time:.35,physical_activity:.52,stress_level:.32}},
-{name:'Andres',alias:'El Trabajador',paes:480,persona:'Catalina',dur:'3-5 min',freq:'5-7 dias',riesgo:'Alto',vars:{mastery:.32,anxiety:.42,confidence:.38,motivation:.52,sleep_quality:.35,attention_span:.38,study_adherence:.30,emotional_state:.42,social_support:.45,vocational_clarity:.42,self_efficacy:.35,cognitive_load:.62,fatigue:.65,frustration_tolerance:.48,metacognition:.30,time_management:.35,growth_mindset:.55,parental_support:.50,screen_time:.40,physical_activity:.45,stress_level:.62}},
-{name:'Javiera',alias:'La Rural',paes:450,persona:'Tomas',dur:'10-15 min',freq:'4-5 dias',riesgo:'Alto',vars:{mastery:.28,anxiety:.48,confidence:.35,motivation:.58,sleep_quality:.52,attention_span:.40,study_adherence:.42,emotional_state:.48,social_support:.35,vocational_clarity:.28,self_efficacy:.32,cognitive_load:.55,fatigue:.55,frustration_tolerance:.48,metacognition:.25,time_management:.32,growth_mindset:.55,parental_support:.58,screen_time:.35,physical_activity:.55,stress_level:.50}}
+{name:'Valentina',alias:'La Aplicada',perfil:'Alto Rendimiento',paes:838,persona:'Catalina',dur:'15-25 min',freq:'6-7 dias',riesgo:'Bajo-medio',vars:{mastery:.78,anxiety:.32,confidence:.75,motivation:.85,sleep_quality:.70,attention_span:.80,study_adherence:.85,emotional_state:.70,social_support:.65,vocational_clarity:.82,self_efficacy:.80,cognitive_load:.45,fatigue:.35,frustration_tolerance:.70,metacognition:.75,time_management:.85,growth_mindset:.70,parental_support:.85,screen_time:.30,physical_activity:.40,stress_level:.40}},
+{name:'Matias',alias:'El Ansioso',perfil:'Gesti\u00f3n Emocional',paes:685,persona:'Tomas',dur:'10-15 min',freq:'4-5 dias',riesgo:'Alto',vars:{mastery:.58,anxiety:.68,confidence:.38,motivation:.60,sleep_quality:.48,attention_span:.50,study_adherence:.55,emotional_state:.38,social_support:.45,vocational_clarity:.30,self_efficacy:.30,cognitive_load:.65,fatigue:.55,frustration_tolerance:.30,metacognition:.45,time_management:.50,growth_mindset:.40,parental_support:.70,screen_time:.50,physical_activity:.25,stress_level:.62}},
+{name:'Camila',alias:'La Resiliente',perfil:'Primera Generaci\u00f3n',paes:595,persona:'Catalina',dur:'10-15 min',freq:'5-6 dias',riesgo:'Medio',vars:{mastery:.50,anxiety:.42,confidence:.55,motivation:.70,sleep_quality:.60,attention_span:.58,study_adherence:.55,emotional_state:.62,social_support:.38,vocational_clarity:.38,self_efficacy:.52,cognitive_load:.48,fatigue:.42,frustration_tolerance:.78,metacognition:.52,time_management:.55,growth_mindset:.82,parental_support:.32,screen_time:.42,physical_activity:.50,stress_level:.45}},
+{name:'Benjamin',alias:'El Gamer',perfil:'Engagement Digital',paes:505,persona:'Martin',dur:'3-5 min',freq:'5-7 dias',riesgo:'Alto',vars:{mastery:.42,anxiety:.25,confidence:.48,motivation:.32,sleep_quality:.28,attention_span:.30,study_adherence:.22,emotional_state:.55,social_support:.60,vocational_clarity:.20,self_efficacy:.38,cognitive_load:.35,fatigue:.68,frustration_tolerance:.55,metacognition:.28,time_management:.20,growth_mindset:.45,parental_support:.55,screen_time:.88,physical_activity:.15,stress_level:.30}},
+{name:'Isidora',alias:'La Presionada',perfil:'Prevenci\u00f3n de Sobrecarga',paes:730,persona:'Tomas',dur:'10-15 min',freq:'5-6 dias',riesgo:'Medio-alto',vars:{mastery:.68,anxiety:.72,confidence:.40,motivation:.50,sleep_quality:.48,attention_span:.55,study_adherence:.65,emotional_state:.32,social_support:.40,vocational_clarity:.15,self_efficacy:.35,cognitive_load:.65,fatigue:.55,frustration_tolerance:.38,metacognition:.52,time_management:.58,growth_mindset:.42,parental_support:.28,screen_time:.42,physical_activity:.28,stress_level:.78}},
+{name:'Diego',alias:'El Deportista',perfil:'Integraci\u00f3n Deportiva',paes:460,persona:'Martin',dur:'5-8 min',freq:'5-6 dias',riesgo:'Medio',vars:{mastery:.32,anxiety:.28,confidence:.62,motivation:.28,sleep_quality:.78,attention_span:.55,study_adherence:.40,emotional_state:.75,social_support:.80,vocational_clarity:.18,self_efficacy:.52,cognitive_load:.30,fatigue:.22,frustration_tolerance:.70,metacognition:.32,time_management:.22,growth_mindset:.62,parental_support:.60,screen_time:.30,physical_activity:.92,stress_level:.22}},
+{name:'Francisca',alias:'TDAH',perfil:'Funci\u00f3n Ejecutiva',paes:415,persona:'Martin',dur:'3-5 min',freq:'5-7 dias',riesgo:'Alto',vars:{mastery:.32,anxiety:.48,confidence:.30,motivation:.58,sleep_quality:.52,attention_span:.22,study_adherence:.30,emotional_state:.45,social_support:.50,vocational_clarity:.32,self_efficacy:.28,cognitive_load:.78,fatigue:.62,frustration_tolerance:.35,metacognition:.18,time_management:.18,growth_mindset:.55,parental_support:.45,screen_time:.62,physical_activity:.30,stress_level:.52}},
+{name:'Tomas',alias:'El Social',perfil:'Aprendizaje Social',paes:550,persona:'Martin',dur:'8-12 min',freq:'4-5 dias',riesgo:'Medio',vars:{mastery:.42,anxiety:.32,confidence:.52,motivation:.48,sleep_quality:.58,attention_span:.48,study_adherence:.38,emotional_state:.78,social_support:.88,vocational_clarity:.38,self_efficacy:.48,cognitive_load:.42,fatigue:.35,frustration_tolerance:.58,metacognition:.38,time_management:.28,growth_mindset:.55,parental_support:.55,screen_time:.68,physical_activity:.42,stress_level:.28}},
+{name:'Martina',alias:'La Quemada',perfil:'Recuperaci\u00f3n Acad\u00e9mica',paes:640,persona:'Tomas',dur:'Max 10 min',freq:'3-4 dias',riesgo:'Alto',vars:{mastery:.58,anxiety:.68,confidence:.35,motivation:.25,sleep_quality:.30,attention_span:.35,study_adherence:.35,emotional_state:.18,social_support:.38,vocational_clarity:.48,self_efficacy:.28,cognitive_load:.82,fatigue:.88,frustration_tolerance:.25,metacognition:.48,time_management:.52,growth_mindset:.35,parental_support:.48,screen_time:.75,physical_activity:.10,stress_level:.82}},
+{name:'Joaquin',alias:'El Tardio',perfil:'Activaci\u00f3n Tard\u00eda',paes:325,persona:'Tomas',dur:'3-5 min',freq:'3-5 dias',riesgo:'Muy alto',vars:{mastery:.22,anxiety:.38,confidence:.38,motivation:.22,sleep_quality:.68,attention_span:.58,study_adherence:.28,emotional_state:.58,social_support:.48,vocational_clarity:.12,self_efficacy:.42,cognitive_load:.42,fatigue:.30,frustration_tolerance:.62,metacognition:.38,time_management:.48,growth_mindset:.78,parental_support:.38,screen_time:.35,physical_activity:.52,stress_level:.32}},
+{name:'Andres',alias:'El Trabajador',perfil:'Doble Jornada',paes:420,persona:'Catalina',dur:'3-5 min',freq:'5-7 dias',riesgo:'Alto',vars:{mastery:.32,anxiety:.42,confidence:.38,motivation:.52,sleep_quality:.35,attention_span:.38,study_adherence:.30,emotional_state:.42,social_support:.45,vocational_clarity:.42,self_efficacy:.35,cognitive_load:.62,fatigue:.65,frustration_tolerance:.48,metacognition:.30,time_management:.35,growth_mindset:.55,parental_support:.50,screen_time:.40,physical_activity:.45,stress_level:.62}},
+{name:'Javiera',alias:'La Rural',perfil:'Contexto Rural',paes:380,persona:'Tomas',dur:'10-15 min',freq:'4-5 dias',riesgo:'Alto',vars:{mastery:.28,anxiety:.48,confidence:.35,motivation:.58,sleep_quality:.52,attention_span:.40,study_adherence:.42,emotional_state:.48,social_support:.35,vocational_clarity:.28,self_efficacy:.32,cognitive_load:.55,fatigue:.55,frustration_tolerance:.48,metacognition:.25,time_management:.32,growth_mindset:.55,parental_support:.58,screen_time:.35,physical_activity:.55,stress_level:.50}}
 ];
 const FAD_ACTIONS_DETAILED={
 stress_level:{
@@ -1068,7 +1070,7 @@ VARS.forEach(v=>{const w=FAD_WRIGHT[v.id]||0.01;const d=profile[v.id]-a.vars[v.i
 if(dist<bestDist){bestDist=dist;bestIdx=idx}});
 const distances=ARCHETYPOS.map((a,idx)=>{let dist=0;
 VARS.forEach(v=>{const w=FAD_WRIGHT[v.id]||0.01;const d=profile[v.id]-a.vars[v.id];dist+=w*d*d});
-return{idx,name:a.name,alias:a.alias,dist:Math.sqrt(dist).toFixed(3)}});
+return{idx,name:a.name,perfil:a.perfil||a.alias,dist:Math.sqrt(dist).toFixed(3)}});
 distances.sort((a,b)=>a.dist-b.dist);
 return{best:bestIdx,distances};
 }
@@ -1621,7 +1623,7 @@ h+=`<div class="card" style="margin-bottom:16px"><h3>Distancia a los 12 Arquetip
 archR2.distances.forEach((d,i)=>{
 const a=ARCHETYPOS[d.idx];
 h+=`<tr style="${i===0?'background:rgba(243,156,18,.1)':''}">
-<td>${i+1}</td><td><strong>${d.name}</strong> <span style="color:var(--text2);font-size:.85em">${d.alias}</span></td>
+<td>${i+1}</td><td><strong>${d.perfil}</strong> <span style="color:var(--text2);font-size:.85em">${d.name}</span></td>
 <td style="font-weight:700;color:${i===0?'var(--accent)':'var(--text)'}">${d.dist}</td>
 <td>${a.paes}</td><td>${a.persona}</td>
 <td><span class="badge ${a.riesgo.includes('Alto')||a.riesgo.includes('Muy')?'badge-red':a.riesgo.includes('Medio')?'badge-yellow':'badge-green'}">${a.riesgo}</span></td></tr>`;
@@ -2620,7 +2622,7 @@ simStop.addEventListener('click',resetSim);
 // TAB: ARQUETIPOS — 12 arquetipos del sistema SENSEI
 // ============================================================
 const ARCHETYPES=[
-{id:0,name:'Valentina',alias:'La Aplicada',perfil:'Alto Rendimiento',emoji:'\u{1F3AF}',paes:802,riesgo:'Estable',riesgoClass:'badge-green',prevalencia:'5-7%',
+{id:0,name:'Valentina',alias:'La Aplicada',perfil:'Alto Rendimiento',emoji:'\u{1F3AF}',paes:838,riesgo:'Estable',riesgoClass:'badge-green',prevalencia:'5-7%',
 persona:'Catalina',personaJust:'emotional_state alto, anxiety bajo. Ruta central ELM: responde a datos concretos y estadisticas.',
 agentes:['SENPAI','DOJO','COMPASS'],
 agentJust:'SENPAI optimiza KCs residuales, DOJO ofrece ensayos simulados realistas, COMPASS confirma meta vocacional.',
@@ -2634,7 +2636,7 @@ acciones:['SENPAI: Sesiones adaptativas en KCs residuales (percentil 80+)','DOJO
 transiciones:{positivas:['Mantiene perfil estable — ya es el arquetipo objetivo'],negativas:['Valentina → Isidora: si presion por nota maxima genera ansiedad cronica']},
 vars:{mastery:.78,anxiety:.25,confidence:.75,motivation:.82,sleep_quality:.72,attention_span:.80,study_adherence:.88,emotional_state:.75,social_support:.68,vocational_clarity:.82,self_efficacy:.80,cognitive_load:.32,fatigue:.22,frustration_tolerance:.72,metacognition:.70,time_management:.78,growth_mindset:.68,parental_support:.72,screen_time:.25,physical_activity:.55,stress_level:.25}},
 
-{id:1,name:'Matias',alias:'El Ansioso',perfil:'Gesti\u00f3n Emocional',emoji:'\u{1F9D8}',paes:622,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'12-15%',
+{id:1,name:'Matias',alias:'El Ansioso',perfil:'Gesti\u00f3n Emocional',emoji:'\u{1F9D8}',paes:685,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'12-15%',
 persona:'Tomas',personaJust:'anxiety alto (0.68), emotional_state bajo (0.42). Ruta periferica ELM: los datos agravan su ansiedad. Necesita validacion y calma.',
 agentes:['KAZE','SENPAI','KOAN'],
 agentJust:'KAZE reduce ansiedad con respiracion/defusion, SENPAI calibra al 70%+ exito para construir confianza, KOAN mejora metacognicion.',
@@ -2648,7 +2650,7 @@ acciones:['KAZE: Respiracion de caja pre-sesion (d=0.40-0.60)','KAZE: Defusion c
 transiciones:{positivas:['Matias → Camila: si anxiety baja < 0.40 y confidence sube > 0.55 sostenido 4 semanas'],negativas:['Matias → Martina: si estres cronico produce burnout (fatigue > 0.80)']},
 vars:{mastery:.58,anxiety:.68,confidence:.38,motivation:.52,sleep_quality:.48,attention_span:.52,study_adherence:.62,emotional_state:.42,social_support:.52,vocational_clarity:.48,self_efficacy:.42,cognitive_load:.58,fatigue:.52,frustration_tolerance:.38,metacognition:.52,time_management:.52,growth_mindset:.48,parental_support:.58,screen_time:.42,physical_activity:.38,stress_level:.62}},
 
-{id:2,name:'Camila',alias:'La Resiliente',perfil:'Primera Generaci\u00f3n',emoji:'\u{1F331}',paes:568,riesgo:'Medio',riesgoClass:'badge-yellow',prevalencia:'10-12%',
+{id:2,name:'Camila',alias:'La Resiliente',perfil:'Primera Generaci\u00f3n',emoji:'\u{1F331}',paes:595,riesgo:'Medio',riesgoClass:'badge-yellow',prevalencia:'10-12%',
 persona:'Catalina',personaJust:'Resiliente y pragmatica: responde a datos de progreso concretos. Transicion a Tomas si social_support cae < 0.30.',
 agentes:['KAIZEN','NAKAMA','COMPASS'],
 agentJust:'KAIZEN construye habitos desde cero, NAKAMA compensa bajo apoyo social, COMPASS activa motivacion vocacional.',
@@ -2662,7 +2664,7 @@ acciones:['KAIZEN: Construccion de habitos desde cero (micro-habito 2-5 min/dia)
 transiciones:{positivas:['Camila → Valentina: si mastery sube > 0.70 y adherencia se consolida > 0.80'],negativas:['Camila → Joaquin: si apoyo social y parental caen simultaneamente < 0.25']},
 vars:{mastery:.52,anxiety:.42,confidence:.52,motivation:.48,sleep_quality:.42,attention_span:.48,study_adherence:.52,emotional_state:.48,social_support:.38,vocational_clarity:.38,self_efficacy:.52,cognitive_load:.55,fatigue:.55,frustration_tolerance:.68,metacognition:.42,time_management:.42,growth_mindset:.62,parental_support:.32,screen_time:.48,physical_activity:.32,stress_level:.52}},
 
-{id:3,name:'Benjamin',alias:'El Gamer',perfil:'Engagement Digital',emoji:'\u{1F3AE}',paes:478,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'8-10%',
+{id:3,name:'Benjamin',alias:'El Gamer',perfil:'Engagement Digital',emoji:'\u{1F3AE}',paes:505,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'8-10%',
 persona:'Martin',personaJust:'anxiety bajo, perfil conductual como barrera. Responde a desafios, XP, competencia. Los datos lo aburren, la empatia la percibe como innecesaria.',
 agentes:['KAIZEN','COMPASS','DOJO'],
 agentJust:'KAIZEN introduce screen curfew gradual, COMPASS conecta gaming con carreras TI, DOJO gamifica ensayos.',
@@ -2676,7 +2678,7 @@ acciones:['KAIZEN: Screen curfew gradual ("Cierra pantallas a las 23:00 por 5 di
 transiciones:{positivas:['Benjamin → Tomas: si se engancha socialmente via NAKAMA y study_adherence > 0.45'],negativas:['Benjamin → Joaquin: si motivation colapsa y screen_time se mantiene > 0.85']},
 vars:{mastery:.42,anxiety:.32,confidence:.48,motivation:.32,sleep_quality:.28,attention_span:.32,study_adherence:.22,emotional_state:.52,social_support:.58,vocational_clarity:.28,self_efficacy:.38,cognitive_load:.62,fatigue:.68,frustration_tolerance:.58,metacognition:.28,time_management:.18,growth_mindset:.52,parental_support:.48,screen_time:.88,physical_activity:.18,stress_level:.35}},
 
-{id:4,name:'Isidora',alias:'La Presionada',perfil:'Prevenci\u00f3n de Sobrecarga',emoji:'\u{1F6E1}\u{FE0F}',paes:712,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'6-8%',
+{id:4,name:'Isidora',alias:'La Presionada',perfil:'Prevenci\u00f3n de Sobrecarga',emoji:'\u{1F6E1}\u{FE0F}',paes:730,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'6-8%',
 persona:'Tomas',personaJust:'anxiety altisimo (0.72), stress extremo (0.78), emotional_state bajo (0.32). Los datos de rendimiento amplifican su presion.',
 agentes:['KAZE','KAIZEN','MIYAGI'],
 agentJust:'KAZE reduce estres/ansiedad con tecnicas de respiracion, KAIZEN mejora sueno, MIYAGI activa protocolo de proteccion.',
@@ -2690,7 +2692,7 @@ acciones:['KAZE: Reestructuracion cognitiva + respiracion de caja diaria','KAIZE
 transiciones:{positivas:['Isidora → Valentina: si estres baja < 0.45 y emotional_state sube > 0.55'],negativas:['Isidora → Martina: si fatigue > 0.80 y emotional_state < 0.25 (burnout)']},
 vars:{mastery:.68,anxiety:.72,confidence:.42,motivation:.62,sleep_quality:.38,attention_span:.58,study_adherence:.72,emotional_state:.32,social_support:.42,vocational_clarity:.52,self_efficacy:.48,cognitive_load:.58,fatigue:.68,frustration_tolerance:.32,metacognition:.58,time_management:.68,growth_mindset:.38,parental_support:.28,screen_time:.28,physical_activity:.28,stress_level:.78}},
 
-{id:5,name:'Diego',alias:'El Deportista',perfil:'Integraci\u00f3n Deportiva',emoji:'\u{26A1}',paes:388,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'4-5%',
+{id:5,name:'Diego',alias:'El Deportista',perfil:'Integraci\u00f3n Deportiva',emoji:'\u{26A1}',paes:460,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'4-5%',
 persona:'Martin',personaJust:'anxiety bajo, emotional_state alto. Mentalidad deportiva: responde a desafios, competencia y metas concretas. Formato empatico lo aburre.',
 agentes:['COMPASS','KAIZEN','SENPAI'],
 agentJust:'COMPASS conecta deporte con carrera (kinesiologia, ed. fisica), KAIZEN integra estudio en rutina deportiva, SENPAI adapta contenido.',
@@ -2704,7 +2706,7 @@ acciones:['COMPASS: Conexion deporte-carrera (kinesiologia, ed. fisica, nutricio
 transiciones:{positivas:['Diego → Camila: si COMPASS activa vocacion y motivation sube > 0.55'],negativas:['Diego → Joaquin: si lesion deportiva elimina identidad atletica y motivation cae']},
 vars:{mastery:.32,anxiety:.32,confidence:.58,motivation:.38,sleep_quality:.62,attention_span:.48,study_adherence:.38,emotional_state:.62,social_support:.68,vocational_clarity:.32,self_efficacy:.52,cognitive_load:.55,fatigue:.28,frustration_tolerance:.62,metacognition:.28,time_management:.32,growth_mindset:.48,parental_support:.52,screen_time:.32,physical_activity:.92,stress_level:.28}},
 
-{id:6,name:'Francisca',alias:'TDAH',perfil:'Funci\u00f3n Ejecutiva',emoji:'\u{1F9E9}',paes:352,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'5-7%',
+{id:6,name:'Francisca',alias:'TDAH',perfil:'Funci\u00f3n Ejecutiva',emoji:'\u{1F9E9}',paes:415,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'5-7%',
 persona:'Martin',personaJust:'Necesita novedad constante y engagement inmediato. Desafios rapidos y variados se alinean con su necesidad de estimulacion. Mensajes ultra-breves.',
 agentes:['KOAN','KAIZEN','SENPAI'],
 agentJust:'KOAN compensa deficit metacognitivo, KAIZEN construye micro-habitos de 2-3 min, SENPAI calibra para exitos frecuentes.',
@@ -2718,7 +2720,7 @@ acciones:['KOAN: Estrategias metacognitivas compensatorias (auto-monitoreo pre/p
 transiciones:{positivas:['Francisca → Tomas: si NAKAMA canaliza su sociabilidad natural hacia estudio colaborativo'],negativas:['Francisca → Martina: si sobrecarga cognitiva sostenida produce agotamiento']},
 vars:{mastery:.28,anxiety:.52,confidence:.32,motivation:.32,sleep_quality:.38,attention_span:.22,study_adherence:.28,emotional_state:.38,social_support:.42,vocational_clarity:.22,self_efficacy:.28,cognitive_load:.72,fatigue:.62,frustration_tolerance:.28,metacognition:.22,time_management:.18,growth_mindset:.42,parental_support:.52,screen_time:.68,physical_activity:.22,stress_level:.55}},
 
-{id:7,name:'Tomas',alias:'El Social',perfil:'Aprendizaje Social',emoji:'\u{1F465}',paes:478,riesgo:'Medio',riesgoClass:'badge-yellow',prevalencia:'8-10%',
+{id:7,name:'Tomas',alias:'El Social',perfil:'Aprendizaje Social',emoji:'\u{1F465}',paes:550,riesgo:'Medio',riesgoClass:'badge-yellow',prevalencia:'8-10%',
 persona:'Martin',personaJust:'anxiety bajo, emotional_state alto, motivacion social. Responde a desafios entre amigos, competencia grupal y rankings.',
 agentes:['NAKAMA','COMPASS','KAIZEN'],
 agentJust:'NAKAMA canaliza capital social hacia estudio, COMPASS explora vocacion, KAIZEN construye habitos basicos.',
@@ -2732,7 +2734,7 @@ acciones:['NAKAMA: Study buddy matching + grupos de estudio (4-8 personas)','NAK
 transiciones:{positivas:['Tomas → Camila: si COMPASS genera claridad vocacional y adherencia individual sube > 0.55'],negativas:['Tomas → Benjamin: si red social se desintegra y busca engagement en pantallas']},
 vars:{mastery:.42,anxiety:.32,confidence:.52,motivation:.48,sleep_quality:.48,attention_span:.42,study_adherence:.42,emotional_state:.62,social_support:.88,vocational_clarity:.38,self_efficacy:.48,cognitive_load:.48,fatigue:.42,frustration_tolerance:.48,metacognition:.38,time_management:.38,growth_mindset:.52,parental_support:.62,screen_time:.55,physical_activity:.42,stress_level:.28}},
 
-{id:8,name:'Martina',alias:'La Quemada',perfil:'Recuperaci\u00f3n Acad\u00e9mica',emoji:'\u{1F504}',paes:622,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'4-6%',
+{id:8,name:'Martina',alias:'La Quemada',perfil:'Recuperaci\u00f3n Acad\u00e9mica',emoji:'\u{1F504}',paes:640,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'4-6%',
 persona:'Tomas',personaJust:'emotional_state critico (0.18), fatigue extrema (0.88), frustration_tolerance colapsada (0.22). Necesita permiso absoluto para descansar.',
 agentes:['MIYAGI','KAZE','KAIZEN'],
 agentJust:'MIYAGI activa protocolo de pausa, KAZE estabiliza emocionalmente, KAIZEN reconstruye sueno y actividad fisica.',
@@ -2746,7 +2748,7 @@ acciones:['MIYAGI: Protocolo de pausa (reducir carga al 50% sin opcion de overri
 transiciones:{positivas:['Martina → Matias: burnout resuelto pero ansiedad residual permanece'],negativas:['Martina → crisis: si emotional_state < 0.15 sostenido + ideacion detectada → derivacion']},
 vars:{mastery:.58,anxiety:.62,confidence:.38,motivation:.38,sleep_quality:.28,attention_span:.38,study_adherence:.52,emotional_state:.18,social_support:.32,vocational_clarity:.52,self_efficacy:.32,cognitive_load:.68,fatigue:.88,frustration_tolerance:.22,metacognition:.48,time_management:.48,growth_mindset:.28,parental_support:.42,screen_time:.38,physical_activity:.12,stress_level:.72}},
 
-{id:9,name:'Joaquin',alias:'El Tardio',perfil:'Activaci\u00f3n Tard\u00eda',emoji:'\u{1F511}',paes:298,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'8-10%',
+{id:9,name:'Joaquin',alias:'El Tardio',perfil:'Activaci\u00f3n Tard\u00eda',emoji:'\u{1F511}',paes:325,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'8-10%',
 persona:'Tomas',personaJust:'motivation bajisimo (0.22), self_efficacy bajo (0.22), pero growth_mindset alto (0.78). Necesita validacion primero. Transicion a Martin cuando motivation > 0.50.',
 agentes:['COMPASS','IKIGAI','KAIZEN'],
 agentJust:'COMPASS encuentra proposito vocacional, IKIGAI activa motivacion latente, KAIZEN construye micro-habito minimo.',
@@ -2839,7 +2841,7 @@ const weakV=arqWeakVars(a.vars);
 h+=`<div class="card" style="cursor:pointer;transition:all .2s;border-left:4px solid ${a.riesgoClass==='badge-red'?'#E74C3C':a.riesgoClass==='badge-yellow'?'#F39C12':'#27AE60'}" onclick="showArqDetail(${a.id})">
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
 <div><h3 style="margin-bottom:2px;font-size:1.05em;color:var(--text)">${a.emoji} ${a.perfil}</h3>
-<div style="font-size:.82em;color:var(--text2);margin-bottom:2px">${a.name} <span style="font-style:italic;color:var(--accent)">${a.alias}</span></div>
+<div style="font-size:.82em;color:var(--text2);margin-bottom:2px">${a.name}</div>
 <div style="font-size:.78em;color:var(--text2)">Prevalencia: ${a.prevalencia}</div></div>
 <div style="text-align:right"><div style="font-size:1.5em;font-weight:800;color:var(--accent)">${a.paes}</div><div style="font-size:.72em;color:var(--text2)">PAES est.</div></div></div>
 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
@@ -2940,7 +2942,7 @@ panel.scrollIntoView({behavior:'smooth',block:'start'});
 let h=`<div class="card fade-in" style="border:2px solid var(--accent);margin-top:16px">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
 <h3 style="font-size:1.2em">${a.emoji} ${a.perfil} <span class="badge ${a.riesgoClass}" style="margin-left:8px">${a.riesgo}</span></h3>
-<div style="font-size:.88em;color:var(--text2);margin-top:2px">${a.name} <span style="font-style:italic;color:var(--accent)">${a.alias}</span></div>
+<div style="font-size:.88em;color:var(--text2);margin-top:2px">${a.name}</div>
 <button class="btn btn-sm btn-outline" onclick="document.getElementById('arqDetailPanel').style.display='none'">Cerrar</button>
 </div>`;
 
@@ -3266,31 +3268,31 @@ const CONSUL_CRISES=[
 {agent:'COMPASS',action:'Activar exploracion vocacional urgente si vocational_clarity < 0.40',vars:'motivation +0.15'},
 {agent:'KAIZEN',action:'Plan reactivacion 2 semanas: micro-sesiones de 3 preguntas faciles',vars:'study_adherence +0.10'}
 ]},
-{id:'burnout',title:'Burnout Academico',icon:'fire',profile:'Martina (La Quemada)',trigger:'burnout_score >= 0.60 + emotional_state < 0.30 + fatigue > 0.70',steps:[
+{id:'burnout',title:'Burnout Academico',icon:'fire',profile:'Martina (Recuperaci\u00f3n Acad\u00e9mica)',trigger:'burnout_score >= 0.60 + emotional_state < 0.30 + fatigue > 0.70',steps:[
 {agent:'KAZE',action:'Nivel 1: Template D1 — descansar no es rendirse, es estrategia',vars:'emotional_state +0.15'},
 {agent:'MIYAGI',action:'Solo sesiones de revision facil (P > 0.85), reducir push a 1/dia',vars:'cognitive_load -0.20'},
 {agent:'KAIZEN',action:'Protocolo sueno urgente + sugerir dia de descanso total',vars:'fatigue -0.20'},
 {agent:'KAZE',action:'Nivel 2-3: recursos de crisis + notificacion a tutor vinculado',vars:'safety first'}
 ]},
-{id:'inactividad',title:'Inactividad Prolongada',icon:'pause',profile:'Joaquin (El Tardio)',trigger:'days_since_last_session >= 3 o sesiones primera semana < 2',steps:[
+{id:'inactividad',title:'Inactividad Prolongada',icon:'pause',profile:'Joaquin (Activaci\u00f3n Tard\u00eda)',trigger:'days_since_last_session >= 3 o sesiones primera semana < 2',steps:[
 {agent:'KOTODAMA',action:'Dia 3: push de curiosidad calibrado a persona comunicacional',vars:'motivation +0.05'},
 {agent:'KOTODAMA',action:'Dia 5: push empatico sin presion, progreso guardado',vars:'emotional_state +0.05'},
 {agent:'KOTODAMA',action:'Dia 7: push respetuoso final, opcion de silencio',vars:'respeto'},
 {agent:'KAZE',action:'Si vuelve: bienvenida sin culpa + micro-sesion de 3 preguntas faciles',vars:'self_efficacy +0.10'}
 ]},
-{id:'tdah',title:'TDAH - Sesiones Incompletas',icon:'zap',profile:'Francisca (TDAH)',trigger:'attention_span < 0.30 + completacion < 50% + degradacion intra-sesion > 25%',steps:[
+{id:'tdah',title:'TDAH - Sesiones Incompletas',icon:'zap',profile:'Francisca (Funci\u00f3n Ejecutiva)',trigger:'attention_span < 0.30 + completacion < 50% + degradacion intra-sesion > 25%',steps:[
 {agent:'MIYAGI',action:'Sesiones ultra-cortas: bloques 2-3 min, max 8 min total',vars:'study_adherence +0.15'},
 {agent:'DOJO',action:'Alta rotacion de formatos: quiz, flashcard, visual, audio',vars:'attention_span +0.10'},
 {agent:'KAIZEN',action:'Pomodoro adaptativo 8/2, interfaz simplificada: 1 boton',vars:'time_management +0.05'},
 {agent:'KOTODAMA',action:'Notificaciones variadas, nunca el mismo texto. Celebrar cualquier interaccion',vars:'motivation +0.10'}
 ]},
-{id:'presion',title:'Presion Parental Excesiva',icon:'alert',profile:'Isidora (La Presionada)',trigger:'stress_level > 0.70 + parental_support < 0.30 + anxiety > 0.65',steps:[
+{id:'presion',title:'Presion Parental Excesiva',icon:'alert',profile:'Isidora (Prevenci\u00f3n de Sobrecarga)',trigger:'stress_level > 0.70 + parental_support < 0.30 + anxiety > 0.65',steps:[
 {agent:'KAZE',action:'Proteger estudiante: limitar sesiones 20 min, modo protegido',vars:'stress_level -0.15'},
 {agent:'MIYAGI',action:'Justificacion cientifica del descanso para el estudiante',vars:'confidence +0.05'},
 {agent:'KOTODAMA',action:'Reporte especial a padres: la presion REDUCE el rendimiento',vars:'parental_support +0.15'},
 {agent:'KAIZEN',action:'Monitoreo: si stress no baja en 2 sem, escalar con orientador',vars:'safety'}
 ]},
-{id:'gamer',title:'Gamer Sin Aprendizaje Real',icon:'game',profile:'Benjamin (El Gamer)',trigger:'Solo desafios con XP alto, mastery no sube, gaming the system',steps:[
+{id:'gamer',title:'Gamer Sin Aprendizaje Real',icon:'game',profile:'Benjamin (Engagement Digital)',trigger:'Solo desafios con XP alto, mastery no sube, gaming the system',steps:[
 {agent:'MIYAGI',action:'Vincular XP a precision: accuracy > 70% = XP x2',vars:'mastery +0.05'},
 {agent:'DOJO',action:'Boss fights: 5 problemas dificiles, necesita 3/5 para pasar',vars:'mastery +0.08'},
 {agent:'COMPASS',action:'Conexion gaming-carrera: desarrollo de videojuegos como opcion',vars:'vocational_clarity +0.15'},
@@ -3663,7 +3665,7 @@ el.innerHTML=`
 <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
 <div style="padding:8px 14px;background:rgba(231,76,60,.15);border-radius:8px;text-align:center">
 <div style="font-weight:700;color:#E74C3C">Matias</div>
-<div style="font-size:.75em;color:var(--text2)">El Ansioso</div>
+<div style="font-size:.75em;color:var(--text2)">Gesti\u00f3n Emocional</div>
 <div style="font-size:.78em;color:var(--text)">anxiety: 0.68</div>
 </div>
 <div style="font-size:1.5em;color:var(--accent)">→</div>
@@ -3675,7 +3677,7 @@ el.innerHTML=`
 <div style="font-size:1.5em;color:var(--accent)">→</div>
 <div style="padding:8px 14px;background:rgba(39,174,96,.15);border-radius:8px;text-align:center">
 <div style="font-weight:700;color:#27AE60">Camila</div>
-<div style="font-size:.75em;color:var(--text2)">La Resiliente</div>
+<div style="font-size:.75em;color:var(--text2)">Primera Generaci\u00f3n</div>
 <div style="font-size:.78em;color:var(--text)">Nuevo perfil</div>
 </div>
 </div>

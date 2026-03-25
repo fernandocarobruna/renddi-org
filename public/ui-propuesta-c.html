@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RENDDI | Grafo Estudiantil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #000000;
+  --bg-card: #111111;
+  --bg-hover: rgba(255,255,255,0.05);
+  --border: #333333;
+  --border-hover: #555555;
+  --accent: #FFFFFF;
+  --blue: #0070F3;
+  --blue-soft: rgba(0,112,243,0.1);
+  --success: #50E3C2;
+  --success-soft: rgba(80,227,194,0.1);
+  --warning: #F5A623;
+  --warning-soft: rgba(245,166,35,0.1);
+  --danger: #EE0000;
+  --danger-soft: rgba(238,0,0,0.1);
+  --text: #EDEDED;
+  --text-secondary: #888888;
+  --text-tertiary: #666666;
+  --radius: 6px;
+  --mono: 'JetBrains Mono', 'Geist Mono', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; font-size: 13px; -webkit-font-smoothing: antialiased; }
+
+/* Sidebar */
+.sidebar { width: 240px; min-height: 100vh; border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+.sidebar-logo { padding: 20px 20px 28px; display: flex; align-items: center; gap: 8px; }
+.sidebar-logo .logo-mark { width: 20px; height: 20px; background: var(--accent); border-radius: 4px; }
+.sidebar-logo span { font-weight: 700; font-size: 14px; letter-spacing: -0.5px; color: var(--text); }
+.sidebar-logo .version { font-size: 10px; font-family: var(--mono); color: var(--text-tertiary); margin-left: auto; }
+.sidebar-section { padding: 0 8px; margin-bottom: 4px; }
+.sidebar-section-title { font-size: 11px; font-weight: 500; color: var(--text-tertiary); padding: 8px 12px 4px; letter-spacing: -0.2px; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-radius: var(--radius); cursor: pointer; color: var(--text-secondary); font-size: 13px; font-weight: 400; transition: all 0.1s ease; }
+.sidebar-item:hover { background: var(--bg-hover); color: var(--text); }
+.sidebar-item.active { color: var(--text); background: var(--bg-hover); }
+.sidebar-item svg { width: 16px; height: 16px; opacity: 0.4; flex-shrink: 0; }
+.sidebar-item.active svg { opacity: 0.9; }
+.sidebar-spacer { flex: 1; }
+.sidebar-user { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.sidebar-user .avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--text); }
+.sidebar-user .uname { font-size: 12px; font-weight: 500; color: var(--text); }
+.sidebar-user .urole { font-size: 11px; color: var(--text-tertiary); }
+
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { height: 48px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; gap: 16px; }
+.topbar-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.topbar-breadcrumb .bc-sep { color: var(--text-tertiary); font-size: 11px; }
+.topbar-breadcrumb .bc-root { color: var(--text-secondary); }
+.topbar-breadcrumb .bc-current { color: var(--text); font-weight: 500; }
+.student-selector-bar { display: flex; align-items: center; gap: 2px; margin-left: 16px; }
+.student-pill { padding: 4px 10px; border-radius: var(--radius); font-size: 12px; font-weight: 400; color: var(--text-tertiary); cursor: pointer; transition: all 0.1s; border: 1px solid transparent; font-family: var(--mono); font-size: 11px; }
+.student-pill:hover { color: var(--text-secondary); background: var(--bg-hover); }
+.student-pill.active { color: var(--text); background: var(--bg-hover); border-color: var(--border); }
+.student-pill .paes-mini { color: var(--text-tertiary); margin-left: 4px; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.topbar-btn { background: none; border: 1px solid var(--border); border-radius: var(--radius); padding: 5px 12px; color: var(--text-secondary); font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.1s; font-family: inherit; }
+.topbar-btn:hover { border-color: var(--border-hover); color: var(--text); }
+.topbar-btn.blue { background: var(--blue); border-color: var(--blue); color: #fff; }
+.topbar-btn.blue:hover { background: #005CC5; }
+
+/* Content */
+.content { flex: 1; overflow-y: auto; padding: 24px; }
+.content-section { display: none; }
+.content-section.active { display: block; }
+
+/* Stat Cards */
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-bottom: 24px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.stat-card { background: var(--bg-card); padding: 18px 20px; transition: background 0.1s; }
+.stat-card:hover { background: #161616; }
+.stat-label { font-size: 11px; color: var(--text-tertiary); font-weight: 400; margin-bottom: 8px; letter-spacing: -0.1px; }
+.stat-value { font-size: 28px; font-weight: 700; letter-spacing: -1.5px; line-height: 1; font-family: var(--mono); font-weight: 600; }
+.stat-value.white { color: var(--text); }
+.stat-value.success { color: var(--success); }
+.stat-value.warning { color: var(--warning); }
+.stat-value.danger { color: var(--danger); }
+.stat-value.blue { color: var(--blue); }
+.stat-delta { font-size: 11px; margin-top: 8px; font-family: var(--mono); font-weight: 400; }
+.stat-delta.pos { color: var(--success); }
+.stat-delta.neg { color: var(--danger); }
+.stat-delta.neutral { color: var(--text-tertiary); }
+
+/* Two Column */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.panel-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.panel-title { font-size: 12px; font-weight: 500; color: var(--text); letter-spacing: -0.2px; }
+.panel-count { font-size: 11px; font-family: var(--mono); color: var(--text-tertiary); }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 8px 18px; font-size: 11px; font-weight: 400; color: var(--text-tertiary); border-bottom: 1px solid var(--border); letter-spacing: -0.1px; }
+td { padding: 10px 18px; font-size: 12px; border-bottom: 1px solid rgba(51,51,51,0.5); color: var(--text-secondary); }
+tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.08s; }
+tbody tr:hover { background: var(--bg-hover); }
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; font-family: var(--mono); }
+.badge-active { background: var(--success-soft); color: var(--success); }
+.badge-recommended { background: var(--warning-soft); color: var(--warning); }
+.badge-inactive { background: var(--bg-hover); color: var(--text-tertiary); }
+.badge-high { background: var(--blue-soft); color: var(--blue); }
+.badge-medium { background: var(--warning-soft); color: var(--warning); }
+.badge-low { background: var(--bg-hover); color: var(--text-tertiary); }
+
+/* Progress Bars */
+.var-list { padding: 16px 18px; }
+.var-row { display: flex; align-items: center; gap: 12px; padding: 5px 0; }
+.var-name { width: 130px; font-size: 12px; color: var(--text-secondary); flex-shrink: 0; }
+.var-bar { flex: 1; height: 2px; background: rgba(255,255,255,0.06); border-radius: 1px; overflow: hidden; }
+.var-bar .fill { height: 100%; border-radius: 1px; transition: width 0.5s ease; }
+.var-val { width: 44px; text-align: right; font-size: 12px; font-weight: 500; font-family: var(--mono); color: var(--text); font-variant-numeric: tabular-nums; }
+
+.full-panel { margin-bottom: 24px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+.fade-in { animation: fadeIn 0.15s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark"></div>
+    <span>RENDDI</span>
+    <span class="version">v2.1.0</span>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Analisis</div>
+    <div class="sidebar-item active" data-tab="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="sidebar-item" data-tab="variables">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg>
+      Variables
+    </div>
+    <div class="sidebar-item" data-tab="fad">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      Acciones FAD
+    </div>
+    <div class="sidebar-item" data-tab="grafo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M8.5 7.5L15.5 16.5M8.5 6H15"/></svg>
+      Grafo Causal
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Motor</div>
+    <div class="sidebar-item" data-tab="simulador">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="6"/></svg>
+      Simulador
+    </div>
+    <div class="sidebar-item" data-tab="recetas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      Recetas
+    </div>
+    <div class="sidebar-item" data-tab="agentes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+      Agentes
+    </div>
+    <div class="sidebar-item" data-tab="predictor">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      Predictor PAES
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Contenido</div>
+    <div class="sidebar-item" data-tab="carreras">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg>
+      Carreras
+    </div>
+    <div class="sidebar-item" data-tab="mitos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
+      Mitos PAES
+    </div>
+    <div class="sidebar-item" data-tab="heatmap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+      Heatmap
+    </div>
+    <div class="sidebar-item" data-tab="flow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Flujo Sensei
+    </div>
+  </div>
+
+  <div class="sidebar-spacer"></div>
+  <div class="sidebar-user">
+    <div class="avatar">F</div>
+    <div>
+      <div class="uname">Fernando R.</div>
+      <div class="urole">Administrador</div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-breadcrumb">
+      <span class="bc-root">RENDDI</span>
+      <span class="bc-sep">/</span>
+      <span class="bc-current" id="topTitle">Dashboard</span>
+    </div>
+    <div class="student-selector-bar" id="studentBar"></div>
+    <div class="topbar-right">
+      <button class="topbar-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Filtros
+      </button>
+      <button class="topbar-btn blue">Exportar</button>
+    </div>
+  </div>
+
+  <div class="content" id="contentArea">
+    <!-- Dashboard -->
+    <div class="content-section active fade-in" id="sec-dashboard">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">PAES Estimado</div>
+          <div class="stat-value white" id="stat-paes">687</div>
+          <div class="stat-delta pos">+23 vs diagnostico</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Dominio Global</div>
+          <div class="stat-value success" id="stat-dominio">72%</div>
+          <div class="stat-delta pos">+8% semana</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Ansiedad</div>
+          <div class="stat-value warning" id="stat-ansiedad">0.45</div>
+          <div class="stat-delta neutral">moderada</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Motivacion</div>
+          <div class="stat-value blue" id="stat-motivacion">0.78</div>
+          <div class="stat-delta pos">alta</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Acciones FAD</span>
+            <span class="panel-count">5</span>
+          </div>
+          <table>
+            <thead><tr><th>Accion</th><th>Agente</th><th>Estado</th><th>Prioridad</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--text)">Repaso de algebra con ejercicios adaptativos</td><td>Tutor</td><td><span class="badge badge-active">activa</span></td><td><span class="badge badge-high">alta</span></td></tr>
+              <tr><td style="color:var(--text)">Sesion de respiracion pre-ensayo</td><td>Coach</td><td><span class="badge badge-active">activa</span></td><td><span class="badge badge-high">alta</span></td></tr>
+              <tr><td style="color:var(--text)">Refuerzo en comprension lectora</td><td>Tutor</td><td><span class="badge badge-recommended">sugerida</span></td><td><span class="badge badge-medium">media</span></td></tr>
+              <tr><td style="color:var(--text)">Desafio de geometria con pares</td><td>Social</td><td><span class="badge badge-recommended">sugerida</span></td><td><span class="badge badge-medium">media</span></td></tr>
+              <tr><td style="color:var(--text)">Recordatorio de meta semanal</td><td>Motivador</td><td><span class="badge badge-inactive">pendiente</span></td><td><span class="badge badge-low">baja</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Variables</span>
+            <span class="panel-count">12</span>
+          </div>
+          <div class="var-list">
+            <div class="var-row"><span class="var-name">Dominio Algebra</span><div class="var-bar"><div class="fill" style="width:78%;background:var(--success)"></div></div><span class="var-val">0.78</span></div>
+            <div class="var-row"><span class="var-name">Dominio Geometria</span><div class="var-bar"><div class="fill" style="width:62%;background:var(--warning)"></div></div><span class="var-val">0.62</span></div>
+            <div class="var-row"><span class="var-name">Dominio Lectura</span><div class="var-bar"><div class="fill" style="width:55%;background:var(--warning)"></div></div><span class="var-val">0.55</span></div>
+            <div class="var-row"><span class="var-name">Ansiedad Evaluativa</span><div class="var-bar"><div class="fill" style="width:45%;background:var(--danger)"></div></div><span class="var-val">0.45</span></div>
+            <div class="var-row"><span class="var-name">Motivacion Intrinseca</span><div class="var-bar"><div class="fill" style="width:78%;background:var(--blue)"></div></div><span class="var-val">0.78</span></div>
+            <div class="var-row"><span class="var-name">Habitos de Estudio</span><div class="var-bar"><div class="fill" style="width:70%;background:var(--success)"></div></div><span class="var-val">0.70</span></div>
+            <div class="var-row"><span class="var-name">Autoeficacia</span><div class="var-bar"><div class="fill" style="width:65%;background:var(--warning)"></div></div><span class="var-val">0.65</span></div>
+            <div class="var-row"><span class="var-name">Comp. Datos</span><div class="var-bar"><div class="fill" style="width:80%;background:var(--success)"></div></div><span class="var-val">0.80</span></div>
+            <div class="var-row"><span class="var-name">Probabilidad</span><div class="var-bar"><div class="fill" style="width:48%;background:var(--danger)"></div></div><span class="var-val">0.48</span></div>
+            <div class="var-row"><span class="var-name">Velocidad Resp.</span><div class="var-bar"><div class="fill" style="width:72%;background:var(--success)"></div></div><span class="var-val">0.72</span></div>
+            <div class="var-row"><span class="var-name">Consistencia</span><div class="var-bar"><div class="fill" style="width:60%;background:var(--warning)"></div></div><span class="var-val">0.60</span></div>
+            <div class="var-row"><span class="var-name">Resiliencia</span><div class="var-bar"><div class="fill" style="width:68%;background:var(--success)"></div></div><span class="var-val">0.68</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Variables Tab -->
+    <div class="content-section" id="sec-variables">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Variables Trackeadas</div><div class="stat-value white">12</div></div>
+        <div class="stat-card"><div class="stat-label">En zona optima</div><div class="stat-value success">7</div></div>
+        <div class="stat-card"><div class="stat-label">Requieren atencion</div><div class="stat-value warning">3</div></div>
+        <div class="stat-card"><div class="stat-label">Criticas</div><div class="stat-value danger">2</div></div>
+      </div>
+      <div class="panel full-panel">
+        <div class="panel-header"><span class="panel-title">Detalle de Variables</span></div>
+        <table>
+          <thead><tr><th>Variable</th><th>Valor</th><th>Tendencia</th><th>Zona</th><th>Actualizado</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--text)">Dominio Algebra</td><td style="font-family:var(--mono)">0.78</td><td style="color:var(--success);font-family:var(--mono)">+0.05</td><td><span class="badge badge-active">optima</span></td><td style="font-family:var(--mono)">2h</td></tr>
+            <tr><td style="color:var(--text)">Dominio Geometria</td><td style="font-family:var(--mono)">0.62</td><td style="color:var(--success);font-family:var(--mono)">+0.03</td><td><span class="badge badge-recommended">atencion</span></td><td style="font-family:var(--mono)">3h</td></tr>
+            <tr><td style="color:var(--text)">Dominio Lectura</td><td style="font-family:var(--mono)">0.55</td><td style="color:var(--danger);font-family:var(--mono)">-0.02</td><td><span class="badge badge-recommended">atencion</span></td><td style="font-family:var(--mono)">1h</td></tr>
+            <tr><td style="color:var(--text)">Ansiedad Evaluativa</td><td style="font-family:var(--mono)">0.45</td><td style="color:var(--danger);font-family:var(--mono)">+0.08</td><td><span class="badge badge-recommended">atencion</span></td><td style="font-family:var(--mono)">1h</td></tr>
+            <tr><td style="color:var(--text)">Motivacion Intrinseca</td><td style="font-family:var(--mono)">0.78</td><td style="color:var(--success);font-family:var(--mono)">+0.02</td><td><span class="badge badge-active">optima</span></td><td style="font-family:var(--mono)">4h</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FAD Tab -->
+    <div class="content-section" id="sec-fad">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Acciones Activas</div><div class="stat-value success">2</div></div>
+        <div class="stat-card"><div class="stat-label">Sugeridas</div><div class="stat-value warning">2</div></div>
+        <div class="stat-card"><div class="stat-label">Pendientes</div><div class="stat-value" style="color:var(--text-secondary)">1</div></div>
+        <div class="stat-card"><div class="stat-label">Completadas hoy</div><div class="stat-value blue">3</div></div>
+      </div>
+      <div class="panel full-panel">
+        <div class="panel-header"><span class="panel-title">Historial de Acciones</span><span class="panel-count">ultimo ciclo</span></div>
+        <table>
+          <thead><tr><th>Accion</th><th>Agente</th><th>Target</th><th>Estado</th><th>Impacto</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--text)">Repaso algebra adaptativo</td><td>Tutor</td><td style="font-family:var(--mono);font-size:11px">dominio_algebra</td><td><span class="badge badge-active">activa</span></td><td style="color:var(--success);font-family:var(--mono)">+0.05</td></tr>
+            <tr><td style="color:var(--text)">Respiracion pre-ensayo</td><td>Coach</td><td style="font-family:var(--mono);font-size:11px">ansiedad_eval</td><td><span class="badge badge-active">activa</span></td><td style="color:var(--success);font-family:var(--mono)">-0.08</td></tr>
+            <tr><td style="color:var(--text)">Refuerzo comprension lectora</td><td>Tutor</td><td style="font-family:var(--mono);font-size:11px">dominio_lectura</td><td><span class="badge badge-recommended">sugerida</span></td><td style="font-family:var(--mono);color:var(--text-tertiary)">--</td></tr>
+            <tr><td style="color:var(--text)">Desafio geometria pares</td><td>Social</td><td style="font-family:var(--mono);font-size:11px">dominio_geo</td><td><span class="badge badge-recommended">sugerida</span></td><td style="font-family:var(--mono);color:var(--text-tertiary)">--</td></tr>
+            <tr><td style="color:var(--text)">Recordatorio meta semanal</td><td>Motivador</td><td style="font-family:var(--mono);font-size:11px">motivacion</td><td><span class="badge badge-inactive">pendiente</span></td><td style="font-family:var(--mono);color:var(--text-tertiary)">--</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Placeholder tabs -->
+    <div class="content-section" id="sec-grafo"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Grafo Causal</span></div><div style="padding:60px 18px;text-align:center;color:var(--text-tertiary);font-family:var(--mono);font-size:12px">Visualizacion interactiva del grafo causal</div></div></div>
+    <div class="content-section" id="sec-simulador"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Simulador</span></div><div style="padding:60px 18px;text-align:center;color:var(--text-tertiary);font-family:var(--mono);font-size:12px">Motor de simulacion what-if</div></div></div>
+    <div class="content-section" id="sec-recetas"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Recetas</span></div><div style="padding:60px 18px;text-align:center;color:var(--text-tertiary);font-family:var(--mono);font-size:12px">Biblioteca de recetas pedagogicas</div></div></div>
+    <div class="content-section" id="sec-agentes"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Agentes</span></div><div style="padding:60px 18px;text-align:center;color:var(--text-tertiary);font-family:var(--mono);font-size:12px">Estado de los 4 agentes</div></div></div>
+    <div class="content-section" id="sec-predictor"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Predictor PAES</span></div><div style="padding:60px 18px;text-align:center;color:var(--text-tertiary);font-family:var(--mono);font-size:12px">Modelo predictivo</div></div></div>
+    <div class="content-section" id="sec-carreras"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Carreras</span></div><div style="padding:60px 18px;text-align:center;color:var(--text-tertiary);font-family:var(--mono);font-size:12px">Match de carreras por perfil</div></div></div>
+    <div class="content-section" id="sec-mitos"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Mitos PAES</span></div><div style="padding:60px 18px;text-align:center;color:var(--text-tertiary);font-family:var(--mono);font-size:12px">Desmitificacion basada en datos</div></div></div>
+    <div class="content-section" id="sec-heatmap"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Heatmap</span></div><div style="padding:60px 18px;text-align:center;color:var(--text-tertiary);font-family:var(--mono);font-size:12px">Mapa de calor por eje tematico</div></div></div>
+    <div class="content-section" id="sec-flow"><div class="panel full-panel"><div class="panel-header"><span class="panel-title">Flujo Sensei</span></div><div style="padding:60px 18px;text-align:center;color:var(--text-tertiary);font-family:var(--mono);font-size:12px">Pipeline completo</div></div></div>
+  </div>
+</main>
+
+<script>
+const students = [
+  { id: 'sofia', name: 'Sofia M.', paes: 687, dominio: 72, ansiedad: 0.45, motivacion: 0.78 },
+  { id: 'mateo', name: 'Mateo R.', paes: 542, dominio: 48, ansiedad: 0.72, motivacion: 0.35 },
+  { id: 'valentina', name: 'Valentina L.', paes: 725, dominio: 81, ansiedad: 0.22, motivacion: 0.88 },
+  { id: 'benjamin', name: 'Benjamin C.', paes: 610, dominio: 60, ansiedad: 0.55, motivacion: 0.62 },
+  { id: 'isidora', name: 'Isidora P.', paes: 498, dominio: 38, ansiedad: 0.80, motivacion: 0.25 },
+  { id: 'tomas', name: 'Tomas A.', paes: 658, dominio: 67, ansiedad: 0.38, motivacion: 0.72 },
+  { id: 'antonia', name: 'Antonia V.', paes: 750, dominio: 85, ansiedad: 0.18, motivacion: 0.92 },
+  { id: 'lucas', name: 'Lucas F.', paes: 580, dominio: 55, ansiedad: 0.60, motivacion: 0.50 },
+  { id: 'catalina', name: 'Catalina G.', paes: 695, dominio: 74, ansiedad: 0.30, motivacion: 0.82 },
+  { id: 'nicolas', name: 'Nicolas H.', paes: 520, dominio: 42, ansiedad: 0.68, motivacion: 0.40 },
+  { id: 'florencia', name: 'Florencia S.', paes: 670, dominio: 70, ansiedad: 0.35, motivacion: 0.75 },
+  { id: 'joaquin', name: 'Joaquin D.', paes: 600, dominio: 58, ansiedad: 0.50, motivacion: 0.58 },
+];
+
+let currentStudent = 0;
+
+function renderStudentBar() {
+  const bar = document.getElementById('studentBar');
+  bar.innerHTML = students.map((s, i) =>
+    `<div class="student-pill ${i === currentStudent ? 'active' : ''}" data-idx="${i}">${s.name}<span class="paes-mini">${s.paes}</span></div>`
+  ).join('');
+}
+
+function updateDashboard(idx) {
+  const s = students[idx];
+  document.getElementById('stat-paes').textContent = s.paes;
+  document.getElementById('stat-dominio').textContent = s.dominio + '%';
+  document.getElementById('stat-ansiedad').textContent = s.ansiedad.toFixed(2);
+  document.getElementById('stat-motivacion').textContent = s.motivacion.toFixed(2);
+}
+
+document.querySelectorAll('.sidebar-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    const tab = item.dataset.tab;
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+    const sec = document.getElementById('sec-' + tab);
+    if (sec) { sec.classList.add('active'); sec.classList.add('fade-in'); }
+    document.getElementById('topTitle').textContent = item.textContent.trim();
+  });
+});
+
+document.getElementById('studentBar').addEventListener('click', e => {
+  const pill = e.target.closest('.student-pill');
+  if (!pill) return;
+  currentStudent = parseInt(pill.dataset.idx);
+  renderStudentBar();
+  updateDashboard(currentStudent);
+});
+
+renderStudentBar();
+</script>
+</body>
+</html>
