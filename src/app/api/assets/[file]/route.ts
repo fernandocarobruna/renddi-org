@@ -40,6 +40,7 @@ export async function GET(
         "X-Frame-Options": "SAMEORIGIN",
         "Cache-Control": "private, no-cache, no-store, must-revalidate",
         "X-Content-Type-Options": "nosniff",
+        "Content-Security-Policy": "default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com data: blob:; img-src 'self' data: blob:; connect-src *;",
       },
     });
   } catch {

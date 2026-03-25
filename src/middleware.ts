@@ -120,7 +120,7 @@ export async function middleware(request: NextRequest) {
   );
   supabaseResponse.headers.set(
     "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://api.resend.com; frame-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';"
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://api.resend.com; frame-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';"
   );
 
   return supabaseResponse;
