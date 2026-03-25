@@ -84,18 +84,6 @@ export default function LoginForm() {
           }}>
             道場 · DOJO DEL CONOCIMIENTO
           </div>
-          <div style={{
-            marginTop: 20,
-            padding: "10px 24px",
-            background: "rgba(243,156,18,0.1)",
-            border: "1px solid rgba(243,156,18,0.2)",
-            borderRadius: 8,
-            display: "inline-block",
-          }}>
-            <span style={{ fontSize: 14, color: "#F39C12", fontWeight: 600 }}>
-              ⚡ Ya casi estamos listos
-            </span>
-          </div>
         </div>
 
         {/* Login card */}

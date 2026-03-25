@@ -86,6 +86,7 @@ export async function GET() {
       : "activo",
     created_at: u.created_at,
     last_sign_in_at: u.last_sign_in_at,
+    temp_password: u.user_metadata?.temp_password || null,
   }));
 
   return NextResponse.json({ users });
@@ -125,7 +126,7 @@ export async function POST(request: Request) {
     email,
     password,
     email_confirm: true,
-    user_metadata: { role: "user", must_change_password: true },
+    user_metadata: { role: "user", must_change_password: true, temp_password: password },
   });
 
   if (error) {
@@ -176,7 +177,7 @@ export async function PATCH(request: Request) {
     const { error } = await adminClient.auth.admin.updateUserById(userId, {
       ban_duration: "none",
       password: tempPassword,
-      user_metadata: { must_change_password: true },
+      user_metadata: { must_change_password: true, temp_password: tempPassword },
     });
     if (error) {
       console.error("Admin reactivate error:", error.message);
@@ -189,7 +190,16 @@ export async function PATCH(request: Request) {
       await sendReactivationEmail(userData.user.email, tempPassword);
     }
 
-    return NextResponse.json({ success: true, emailSent: true });
+    return NextResponse.json({ success: true, emailSent: true, tempPassword });
+  }
+
+  if (action === "delete_permanent") {
+    const { error } = await adminClient.auth.admin.deleteUser(userId);
+    if (error) {
+      console.error("Admin delete_permanent error:", error.message);
+      return NextResponse.json({ error: "Error al eliminar usuario definitivamente" }, { status: 500 });
+    }
+    return NextResponse.json({ success: true, permanent: true });
   }
 
   return NextResponse.json({ error: "Accion no valida" }, { status: 400 });

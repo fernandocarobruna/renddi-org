@@ -10,6 +10,7 @@ interface User {
   status: string;
   created_at: string;
   last_sign_in_at: string | null;
+  temp_password: string | null;
 }
 
 export default function GrafoClient({ email, isAdmin }: { email: string; isAdmin: boolean }) {
@@ -27,6 +28,8 @@ export default function GrafoClient({ email, isAdmin }: { email: string; isAdmin
   const [creating, setCreating] = useState(false);
   const [adminMsg, setAdminMsg] = useState("");
   const [adminErr, setAdminErr] = useState("");
+  const [showPasswords, setShowPasswords] = useState(false);
+  const [reactivateMsg, setReactivateMsg] = useState<Record<string, string>>({});
 
   // isAdmin is now passed as a prop from the server component
 
@@ -81,12 +84,21 @@ export default function GrafoClient({ email, isAdmin }: { email: string; isAdmin
   }
 
   async function handleUserAction(userId: string, action: string) {
-    await fetch("/api/admin/users", {
+    const res = await fetch("/api/admin/users", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, action }),
     });
+    const data = await res.json();
+    if (action === "reactivate" && data.success) {
+      setReactivateMsg(prev => ({ ...prev, [userId]: data.tempPassword || "" }));
+      setTimeout(() => setReactivateMsg(prev => { const n = { ...prev }; delete n[userId]; return n; }), 15000);
+    }
     fetchUsers();
+  }
+
+  function copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text);
   }
 
   function formatDate(d: string | null) {
@@ -138,7 +150,7 @@ export default function GrafoClient({ email, isAdmin }: { email: string; isAdmin
 
         {/* Admin Panel */}
         {menuOpen && adminOpen && isAdmin && (
-          <div style={s({ position: "fixed", top: 60, right: 16, width: "min(600px, calc(100vw - 32px))", maxHeight: "calc(100vh - 80px)", overflowY: "auto", background: "#0d0d14", border: "1px solid #F39C12", borderRadius: 12, padding: 24, boxShadow: "0 12px 48px rgba(0,0,0,0.7)", zIndex: 100000 })}>
+          <div style={s({ position: "fixed", top: 60, right: 16, width: "min(780px, calc(100vw - 32px))", maxHeight: "calc(100vh - 80px)", overflowY: "auto", background: "#0d0d14", border: "1px solid #F39C12", borderRadius: 12, padding: 24, boxShadow: "0 12px 48px rgba(0,0,0,0.7)", zIndex: 100000 })}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <h2 style={{ margin: 0, color: "#F39C12", fontSize: 18 }}>⚙️ Administrar Usuarios</h2>
               <button onClick={() => setAdminOpen(false)} style={s({ background: "none", border: "none", color: "#888", fontSize: 20, cursor: "pointer" })}>✕</button>
@@ -182,7 +194,12 @@ export default function GrafoClient({ email, isAdmin }: { email: string; isAdmin
 
             {/* Lista de usuarios */}
             <div style={s({ background: "#141419", borderRadius: 10, padding: 16, border: "1px solid #222" })}>
-              <h3 style={{ margin: "0 0 12px", color: "#e0e0e0", fontSize: 14 }}>Usuarios registrados</h3>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                <h3 style={{ margin: 0, color: "#e0e0e0", fontSize: 14 }}>Usuarios registrados</h3>
+                <button onClick={() => setShowPasswords(!showPasswords)} style={s({ background: "#1a1a2e", border: "1px solid #444", color: showPasswords ? "#F39C12" : "#888", padding: "4px 10px", borderRadius: 6, fontSize: 11, cursor: "pointer" })}>
+                  {showPasswords ? "🔓 Ocultar claves" : "🔒 Mostrar claves"}
+                </button>
+              </div>
               {loadingUsers ? (
                 <div style={{ color: "#888", fontSize: 13 }}>Cargando...</div>
               ) : (
@@ -194,6 +211,7 @@ export default function GrafoClient({ email, isAdmin }: { email: string; isAdmin
                       <th style={{ textAlign: "left", padding: "8px 6px", color: "#888", fontWeight: 500 }}>Estado</th>
                       <th style={{ textAlign: "left", padding: "8px 6px", color: "#888", fontWeight: 500 }}>Creado</th>
                       <th style={{ textAlign: "left", padding: "8px 6px", color: "#888", fontWeight: 500 }}>Último login</th>
+                      <th style={{ textAlign: "left", padding: "8px 6px", color: "#888", fontWeight: 500 }}>Clave temporal</th>
                       <th style={{ textAlign: "center", padding: "8px 6px", color: "#888", fontWeight: 500 }}>Acción</th>
                     </tr>
                   </thead>
@@ -217,13 +235,34 @@ export default function GrafoClient({ email, isAdmin }: { email: string; isAdmin
                         </td>
                         <td style={{ padding: "8px 6px", color: "#888", fontSize: 11 }}>{formatDate(u.created_at)}</td>
                         <td style={{ padding: "8px 6px", color: "#888", fontSize: 11 }}>{formatDate(u.last_sign_in_at)}</td>
+                        <td style={{ padding: "8px 6px", fontSize: 11 }}>
+                          {reactivateMsg[u.id] ? (
+                            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                              <span style={{ color: "#4CAF50", fontFamily: "monospace", fontSize: 11 }}>{reactivateMsg[u.id]}</span>
+                              <button onClick={() => copyToClipboard(reactivateMsg[u.id])} style={s({ background: "none", border: "none", color: "#F39C12", cursor: "pointer", fontSize: 11, padding: "2px 4px" })} title="Copiar">📋</button>
+                            </div>
+                          ) : u.temp_password ? (
+                            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                              <span style={{ fontFamily: "monospace", color: "#e0e0e0", fontSize: 11 }}>{showPasswords ? u.temp_password : "••••••••"}</span>
+                              {showPasswords && <button onClick={() => copyToClipboard(u.temp_password!)} style={s({ background: "none", border: "none", color: "#F39C12", cursor: "pointer", fontSize: 11, padding: "2px 4px" })} title="Copiar">📋</button>}
+                            </div>
+                          ) : (
+                            <span style={{ color: "#555" }}>—</span>
+                          )}
+                        </td>
                         <td style={{ padding: "8px 6px", textAlign: "center" }}>
                           {u.role !== "admin" && (
                             u.status === "eliminado" ? (
-                              <button onClick={() => handleUserAction(u.id, "reactivate")} style={s({ background: "#153a15", border: "1px solid #4CAF50", color: "#4CAF50", padding: "4px 10px", borderRadius: 4, fontSize: 11, cursor: "pointer" })}>Reactivar</button>
+                              <div style={{ display: "flex", gap: 4, justifyContent: "center", flexWrap: "wrap" }}>
+                                <button onClick={() => handleUserAction(u.id, "reactivate")} style={s({ background: "#153a15", border: "1px solid #4CAF50", color: "#4CAF50", padding: "4px 10px", borderRadius: 4, fontSize: 11, cursor: "pointer" })}>Reactivar</button>
+                                <button onClick={() => { if (confirm("¿Eliminar DEFINITIVAMENTE a " + u.email + "? Esta accion es IRREVERSIBLE.")) { if (confirm("SEGUNDA CONFIRMACION: ¿Realmente deseas eliminar permanentemente a " + u.email + "? NO se puede deshacer.")) handleUserAction(u.id, "delete_permanent"); } }} style={s({ background: "#2a0a0a", border: "1px solid #8b0000", color: "#cc3333", padding: "4px 10px", borderRadius: 4, fontSize: 11, cursor: "pointer" })}>Eliminar definitivamente</button>
+                              </div>
                             ) : (
                               <button onClick={() => { if (confirm("¿Eliminar cuenta de " + u.email + "?")) handleUserAction(u.id, "delete"); }} style={s({ background: "#3a1515", border: "1px solid #cc3333", color: "#ff6666", padding: "4px 10px", borderRadius: 4, fontSize: 11, cursor: "pointer" })}>Eliminar</button>
                             )
+                          )}
+                          {reactivateMsg[u.id] && (
+                            <div style={{ fontSize: 10, color: "#4CAF50", marginTop: 4 }}>Reactivado — email enviado</div>
                           )}
                         </td>
                       </tr>
