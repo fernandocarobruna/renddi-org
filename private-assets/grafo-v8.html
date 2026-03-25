@@ -260,18 +260,18 @@ const EDGES=[
 {from:'anxiety',to:'mastery',w:-0.40},{from:'confidence',to:'mastery',w:0.35},{from:'sleep_quality',to:'attention_span',w:0.60},{from:'attention_span',to:'mastery',w:0.30},{from:'motivation',to:'study_adherence',w:0.55},{from:'study_adherence',to:'mastery',w:0.50},{from:'stress_level',to:'anxiety',w:0.45},{from:'cognitive_load',to:'fatigue',w:0.40},{from:'fatigue',to:'attention_span',w:-0.50},{from:'screen_time',to:'sleep_quality',w:-0.35},{from:'physical_activity',to:'sleep_quality',w:0.30},{from:'physical_activity',to:'emotional_state',w:0.35},{from:'social_support',to:'emotional_state',w:0.30},{from:'emotional_state',to:'motivation',w:0.40},{from:'vocational_clarity',to:'motivation',w:0.45},{from:'self_efficacy',to:'confidence',w:0.60},{from:'mastery',to:'self_efficacy',w:0.50},{from:'parental_support',to:'emotional_state',w:0.25},{from:'metacognition',to:'study_adherence',w:0.35},{from:'growth_mindset',to:'frustration_tolerance',w:0.40},{from:'frustration_tolerance',to:'study_adherence',w:0.30},{from:'time_management',to:'study_adherence',w:0.35},{from:'fatigue',to:'emotional_state',w:-0.30},{from:'stress_level',to:'sleep_quality',w:-0.40}
 ];
 const STU=[
-{id:0,name:'Valentina',alias:'La Aplicada',comuna:'Providencia',gse:'Alto',mastery:.82,anxiety:.35,confidence:.75,motivation:.85,sleep_quality:.70,attention_span:.80,study_adherence:.90,emotional_state:.70,social_support:.65,vocational_clarity:.80,self_efficacy:.78,cognitive_load:.45,fatigue:.35,frustration_tolerance:.70,metacognition:.75,time_management:.85,growth_mindset:.70,parental_support:.85,screen_time:.30,physical_activity:.40,stress_level:.40},
-{id:1,name:'Matias',alias:'El Ansioso',comuna:'Las Condes',gse:'Alto',mastery:.65,anxiety:.82,confidence:.35,motivation:.60,sleep_quality:.40,attention_span:.50,study_adherence:.55,emotional_state:.35,social_support:.45,vocational_clarity:.30,self_efficacy:.30,cognitive_load:.70,fatigue:.60,frustration_tolerance:.30,metacognition:.45,time_management:.50,growth_mindset:.40,parental_support:.70,screen_time:.50,physical_activity:.25,stress_level:.85},
-{id:2,name:'Camila',alias:'La Resiliente',comuna:'Maipu',gse:'Medio',mastery:.55,anxiety:.45,confidence:.60,motivation:.75,sleep_quality:.65,attention_span:.60,study_adherence:.70,emotional_state:.65,social_support:.70,vocational_clarity:.65,self_efficacy:.55,cognitive_load:.45,fatigue:.40,frustration_tolerance:.80,metacognition:.55,time_management:.60,growth_mindset:.85,parental_support:.60,screen_time:.40,physical_activity:.50,stress_level:.50},
-{id:3,name:'Benjamin',alias:'El Gamer',comuna:'Nunoa',gse:'Medio',mastery:.45,anxiety:.25,confidence:.50,motivation:.35,sleep_quality:.35,attention_span:.30,study_adherence:.25,emotional_state:.55,social_support:.60,vocational_clarity:.20,self_efficacy:.40,cognitive_load:.35,fatigue:.70,frustration_tolerance:.55,metacognition:.30,time_management:.20,growth_mindset:.45,parental_support:.55,screen_time:.90,physical_activity:.15,stress_level:.30},
-{id:4,name:'Isidora',alias:'La Presionada',comuna:'Vitacura',gse:'Alto',mastery:.70,anxiety:.75,confidence:.40,motivation:.50,sleep_quality:.50,attention_span:.55,study_adherence:.65,emotional_state:.35,social_support:.40,vocational_clarity:.15,self_efficacy:.35,cognitive_load:.65,fatigue:.55,frustration_tolerance:.40,metacognition:.55,time_management:.60,growth_mindset:.45,parental_support:.30,screen_time:.40,physical_activity:.30,stress_level:.80},
-{id:5,name:'Diego',alias:'El Deportista',comuna:'Rancagua',gse:'Medio',mastery:.40,anxiety:.30,confidence:.65,motivation:.55,sleep_quality:.80,attention_span:.55,study_adherence:.40,emotional_state:.75,social_support:.80,vocational_clarity:.45,self_efficacy:.55,cognitive_load:.30,fatigue:.25,frustration_tolerance:.70,metacognition:.35,time_management:.25,growth_mindset:.65,parental_support:.60,screen_time:.30,physical_activity:.95,stress_level:.25},
-{id:6,name:'Francisca',alias:'TDAH',comuna:'La Florida',gse:'Medio-bajo',mastery:.35,anxiety:.50,confidence:.30,motivation:.60,sleep_quality:.55,attention_span:.25,study_adherence:.30,emotional_state:.45,social_support:.50,vocational_clarity:.35,self_efficacy:.30,cognitive_load:.75,fatigue:.65,frustration_tolerance:.35,metacognition:.25,time_management:.25,growth_mindset:.55,parental_support:.45,screen_time:.60,physical_activity:.30,stress_level:.55},
-{id:7,name:'Tomas',alias:'El Social',comuna:'Stgo Centro',gse:'Medio',mastery:.50,anxiety:.35,confidence:.55,motivation:.50,sleep_quality:.60,attention_span:.50,study_adherence:.45,emotional_state:.80,social_support:.90,vocational_clarity:.40,self_efficacy:.50,cognitive_load:.40,fatigue:.35,frustration_tolerance:.60,metacognition:.45,time_management:.30,growth_mindset:.55,parental_support:.55,screen_time:.70,physical_activity:.45,stress_level:.30},
-{id:8,name:'Martina',alias:'La Quemada',comuna:'Vina del Mar',gse:'Medio-alto',mastery:.60,anxiety:.70,confidence:.35,motivation:.25,sleep_quality:.30,attention_span:.35,study_adherence:.35,emotional_state:.20,social_support:.40,vocational_clarity:.50,self_efficacy:.30,cognitive_load:.85,fatigue:.90,frustration_tolerance:.25,metacognition:.50,time_management:.55,growth_mindset:.35,parental_support:.50,screen_time:.75,physical_activity:.10,stress_level:.85},
-{id:9,name:'Joaquin',alias:'El Tardio',comuna:'Temuco',gse:'Medio-bajo',mastery:.25,anxiety:.40,confidence:.40,motivation:.70,sleep_quality:.70,attention_span:.60,study_adherence:.60,emotional_state:.60,social_support:.50,vocational_clarity:.85,self_efficacy:.45,cognitive_load:.40,fatigue:.30,frustration_tolerance:.65,metacognition:.40,time_management:.50,growth_mindset:.80,parental_support:.40,screen_time:.35,physical_activity:.55,stress_level:.35},
-{id:10,name:'Andres',alias:'El Trabajador',comuna:'Puente Alto',gse:'Medio-bajo',mastery:.35,anxiety:.45,confidence:.40,motivation:.55,sleep_quality:.35,attention_span:.38,study_adherence:.30,emotional_state:.42,social_support:.45,vocational_clarity:.45,self_efficacy:.35,cognitive_load:.62,fatigue:.72,frustration_tolerance:.48,metacognition:.30,time_management:.25,growth_mindset:.55,parental_support:.50,screen_time:.40,physical_activity:.45,stress_level:.65},
-{id:11,name:'Javiera',alias:'La Rural',comuna:'Cauquenes',gse:'Medio-bajo',mastery:.30,anxiety:.50,confidence:.38,motivation:.60,sleep_quality:.55,attention_span:.42,study_adherence:.45,emotional_state:.50,social_support:.55,vocational_clarity:.20,self_efficacy:.35,cognitive_load:.55,fatigue:.55,frustration_tolerance:.50,metacognition:.28,time_management:.35,growth_mindset:.58,parental_support:.60,screen_time:.35,physical_activity:.58,stress_level:.52}
+{id:0,name:'Valentina',alias:'La Aplicada',perfil:'Alto Rendimiento',comuna:'Providencia',gse:'Alto',mastery:.82,anxiety:.35,confidence:.75,motivation:.85,sleep_quality:.70,attention_span:.80,study_adherence:.90,emotional_state:.70,social_support:.65,vocational_clarity:.80,self_efficacy:.78,cognitive_load:.45,fatigue:.35,frustration_tolerance:.70,metacognition:.75,time_management:.85,growth_mindset:.70,parental_support:.85,screen_time:.30,physical_activity:.40,stress_level:.40},
+{id:1,name:'Matias',alias:'El Ansioso',perfil:'Gesti\u00f3n Emocional',comuna:'Las Condes',gse:'Alto',mastery:.65,anxiety:.82,confidence:.35,motivation:.60,sleep_quality:.40,attention_span:.50,study_adherence:.55,emotional_state:.35,social_support:.45,vocational_clarity:.30,self_efficacy:.30,cognitive_load:.70,fatigue:.60,frustration_tolerance:.30,metacognition:.45,time_management:.50,growth_mindset:.40,parental_support:.70,screen_time:.50,physical_activity:.25,stress_level:.85},
+{id:2,name:'Camila',alias:'La Resiliente',perfil:'Primera Generaci\u00f3n',comuna:'Maipu',gse:'Medio',mastery:.55,anxiety:.45,confidence:.60,motivation:.75,sleep_quality:.65,attention_span:.60,study_adherence:.70,emotional_state:.65,social_support:.70,vocational_clarity:.65,self_efficacy:.55,cognitive_load:.45,fatigue:.40,frustration_tolerance:.80,metacognition:.55,time_management:.60,growth_mindset:.85,parental_support:.60,screen_time:.40,physical_activity:.50,stress_level:.50},
+{id:3,name:'Benjamin',alias:'El Gamer',perfil:'Engagement Digital',comuna:'Nunoa',gse:'Medio',mastery:.45,anxiety:.25,confidence:.50,motivation:.35,sleep_quality:.35,attention_span:.30,study_adherence:.25,emotional_state:.55,social_support:.60,vocational_clarity:.20,self_efficacy:.40,cognitive_load:.35,fatigue:.70,frustration_tolerance:.55,metacognition:.30,time_management:.20,growth_mindset:.45,parental_support:.55,screen_time:.90,physical_activity:.15,stress_level:.30},
+{id:4,name:'Isidora',alias:'La Presionada',perfil:'Prevenci\u00f3n de Sobrecarga',comuna:'Vitacura',gse:'Alto',mastery:.70,anxiety:.75,confidence:.40,motivation:.50,sleep_quality:.50,attention_span:.55,study_adherence:.65,emotional_state:.35,social_support:.40,vocational_clarity:.15,self_efficacy:.35,cognitive_load:.65,fatigue:.55,frustration_tolerance:.40,metacognition:.55,time_management:.60,growth_mindset:.45,parental_support:.30,screen_time:.40,physical_activity:.30,stress_level:.80},
+{id:5,name:'Diego',alias:'El Deportista',perfil:'Integraci\u00f3n Deportiva',comuna:'Rancagua',gse:'Medio',mastery:.40,anxiety:.30,confidence:.65,motivation:.55,sleep_quality:.80,attention_span:.55,study_adherence:.40,emotional_state:.75,social_support:.80,vocational_clarity:.45,self_efficacy:.55,cognitive_load:.30,fatigue:.25,frustration_tolerance:.70,metacognition:.35,time_management:.25,growth_mindset:.65,parental_support:.60,screen_time:.30,physical_activity:.95,stress_level:.25},
+{id:6,name:'Francisca',alias:'TDAH',perfil:'Funci\u00f3n Ejecutiva',comuna:'La Florida',gse:'Medio-bajo',mastery:.35,anxiety:.50,confidence:.30,motivation:.60,sleep_quality:.55,attention_span:.25,study_adherence:.30,emotional_state:.45,social_support:.50,vocational_clarity:.35,self_efficacy:.30,cognitive_load:.75,fatigue:.65,frustration_tolerance:.35,metacognition:.25,time_management:.25,growth_mindset:.55,parental_support:.45,screen_time:.60,physical_activity:.30,stress_level:.55},
+{id:7,name:'Tomas',alias:'El Social',perfil:'Aprendizaje Social',comuna:'Stgo Centro',gse:'Medio',mastery:.50,anxiety:.35,confidence:.55,motivation:.50,sleep_quality:.60,attention_span:.50,study_adherence:.45,emotional_state:.80,social_support:.90,vocational_clarity:.40,self_efficacy:.50,cognitive_load:.40,fatigue:.35,frustration_tolerance:.60,metacognition:.45,time_management:.30,growth_mindset:.55,parental_support:.55,screen_time:.70,physical_activity:.45,stress_level:.30},
+{id:8,name:'Martina',alias:'La Quemada',perfil:'Recuperaci\u00f3n Acad\u00e9mica',comuna:'Vina del Mar',gse:'Medio-alto',mastery:.60,anxiety:.70,confidence:.35,motivation:.25,sleep_quality:.30,attention_span:.35,study_adherence:.35,emotional_state:.20,social_support:.40,vocational_clarity:.50,self_efficacy:.30,cognitive_load:.85,fatigue:.90,frustration_tolerance:.25,metacognition:.50,time_management:.55,growth_mindset:.35,parental_support:.50,screen_time:.75,physical_activity:.10,stress_level:.85},
+{id:9,name:'Joaquin',alias:'El Tardio',perfil:'Activaci\u00f3n Tard\u00eda',comuna:'Temuco',gse:'Medio-bajo',mastery:.25,anxiety:.40,confidence:.40,motivation:.70,sleep_quality:.70,attention_span:.60,study_adherence:.60,emotional_state:.60,social_support:.50,vocational_clarity:.85,self_efficacy:.45,cognitive_load:.40,fatigue:.30,frustration_tolerance:.65,metacognition:.40,time_management:.50,growth_mindset:.80,parental_support:.40,screen_time:.35,physical_activity:.55,stress_level:.35},
+{id:10,name:'Andres',alias:'El Trabajador',perfil:'Doble Jornada',comuna:'Puente Alto',gse:'Medio-bajo',mastery:.35,anxiety:.45,confidence:.40,motivation:.55,sleep_quality:.35,attention_span:.38,study_adherence:.30,emotional_state:.42,social_support:.45,vocational_clarity:.45,self_efficacy:.35,cognitive_load:.62,fatigue:.72,frustration_tolerance:.48,metacognition:.30,time_management:.25,growth_mindset:.55,parental_support:.50,screen_time:.40,physical_activity:.45,stress_level:.65},
+{id:11,name:'Javiera',alias:'La Rural',perfil:'Contexto Rural',comuna:'Cauquenes',gse:'Medio-bajo',mastery:.30,anxiety:.50,confidence:.38,motivation:.60,sleep_quality:.55,attention_span:.42,study_adherence:.45,emotional_state:.50,social_support:.55,vocational_clarity:.20,self_efficacy:.35,cognitive_load:.55,fatigue:.55,frustration_tolerance:.50,metacognition:.28,time_management:.35,growth_mindset:.58,parental_support:.60,screen_time:.35,physical_activity:.58,stress_level:.52}
 ];
 const CAREERS=[
 {name:'Ingenieria Civil',paesMin:700,paesAvg:725,empleab:85,sueldo:'$1.200.000',dur:'6 anos',area:'Ingenieria'},
@@ -524,7 +524,7 @@ return r.slice(0,5)}
 function toggleTheme(){const c=document.documentElement.getAttribute('data-theme');document.documentElement.setAttribute('data-theme',c==='light'?'':'light')}
 function dc(id){if(charts[id]){charts[id].destroy();delete charts[id]}}
 function renderNav(){document.getElementById('navTabs').innerHTML=TABS.map(t=>`<button class="nav-tab ${t.id===selTab?'active':''}" onclick="switchTab('${t.id}')">${t.label}</button>`).join('')}
-function renderSel(){document.getElementById('studentSelector').innerHTML=STU.map((s,i)=>`<div class="student-card-mini ${i===selStu?'active':''}" onclick="selectStu(${i})"><div class="sname">${s.name}</div><div class="salias">${s.alias}</div><div class="spaes">PAES: ${paes(s.mastery)}</div></div>`).join('')}
+function renderSel(){document.getElementById('studentSelector').innerHTML=STU.map((s,i)=>`<div class="student-card-mini ${i===selStu?'active':''}" onclick="selectStu(${i})"><div class="sname">${s.name}</div><div class="salias">${s.perfil||s.alias}</div><div class="spaes">PAES: ${paes(s.mastery)}</div></div>`).join('')}
 function switchTab(id){selTab=id;renderNav();document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));const el=document.getElementById('tab-'+id);if(el){el.classList.add('active');el.classList.add('fade-in')}renderTab()}
 function selectStu(i){selStu=i;renderSel();renderTab()}
 function renderTab(){switch(selTab){case'grafo':renderGrafo();break;case'plan':renderPlan();break;case'diagnostico':renderDiag();break;case'vocacional':renderVoc();break;case'progreso':renderProg();break;case'prediccion':renderPred();break;case'cohorte':renderCoh();break;case'miyagi':renderMiyagi();break;case'flujo':renderFlujo();break;case'ecosistema':renderEcosistema();break;case'arquetipos':renderArquetipos();break;case'consultoria':renderConsultoria();break}}
@@ -536,7 +536,7 @@ const s=STU[selStu],rk=risk(s),el=document.getElementById('tab-grafo');
 el.innerHTML=`
 <div class="grid-2" style="margin-bottom:16px">
 <div class="card">
-<h3>Perfil: ${s.name} "${s.alias}"</h3>
+<h3>Perfil: ${s.name} "${s.perfil||s.alias}"</h3>
 <div style="display:flex;gap:20px;align-items:center;margin-bottom:12px">
 <div><div class="paes-big">${paes(s.mastery)}</div><div class="paes-label">PAES Estimado</div></div>
 <div style="flex:1">
@@ -1112,9 +1112,9 @@ let h=`<div class="consul-subtabs" style="margin-bottom:0">
 
 if(planView==='fad'){
 /* --- PANEL SUPERIOR: RESUMEN --- */
-h+=`<div class="card" style="margin-top:12px;margin-bottom:16px"><h3>Resumen del Plan — ${s.name} "${s.alias}"</h3>
+h+=`<div class="card" style="margin-top:12px;margin-bottom:16px"><h3>Resumen del Plan — ${s.name} "${s.perfil||s.alias}"</h3>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;align-items:center">
-<div style="text-align:center"><div style="font-size:.75em;color:var(--text2)">Arquetipo</div><div style="font-size:1.1em;font-weight:700;color:var(--accent)">${archData.name}</div><div style="font-size:.78em;color:var(--text2)">${archData.alias} | Persona: ${persona.name}</div></div>
+<div style="text-align:center"><div style="font-size:.75em;color:var(--text2)">Arquetipo</div><div style="font-size:1.1em;font-weight:700;color:var(--accent)">${archData.perfil||archData.alias}</div><div style="font-size:.78em;color:var(--text2)">${archData.name} | Persona: ${persona.name}</div></div>
 <div style="text-align:center"><div class="paes-big">${paesNow}</div><div class="paes-label">PAES Actual</div></div>
 <div style="text-align:center;font-size:1.5em;color:var(--accent)">&#8594;</div>
 <div style="text-align:center"><div class="paes-big" style="color:#27AE60">${paesProj}</div><div class="paes-label">PAES Proyectado <span style="font-size:.8em">(IC: ${paesProj-25}—${paesProj+25})</span></div></div>
@@ -1330,7 +1330,7 @@ h+=`</div>
 <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;font-size:.82em;color:var(--text2)">
 <span>Dias de descanso: <strong>${7-freqNum}</strong></span>
 <span>Simulacro mensual: <strong>Si (ultimo viernes)</strong></span>
-<span>Ajuste por arquetipo: <strong>${archData.alias}</strong></span>
+<span>Ajuste por arquetipo: <strong>${archData.perfil||archData.alias}</strong></span>
 </div></div>`;
 
 /* Distribucion visual del tiempo semanal */
@@ -1569,7 +1569,7 @@ h+=`<div class="card" style="margin-bottom:16px">
 <div style="display:flex;flex-direction:column;justify-content:center;gap:10px">
 <div style="padding:12px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--accent)">
 <div style="font-size:.82em;color:var(--text2)">Eres mas parecido/a a:</div>
-<div style="font-size:1.2em;font-weight:700;color:var(--accent)">${archData2.name} — "${archData2.alias}"</div>
+<div style="font-size:1.2em;font-weight:700;color:var(--accent)">${archData2.emoji||''} ${archData2.perfil||archData2.alias} (${archData2.name})</div>
 <div style="font-size:.82em;color:var(--text2);margin-top:4px">Persona comunicacional: <strong>${persona2.name}</strong> (${persona2.desc})</div>
 </div>
 <div style="display:flex;gap:12px">
@@ -1621,7 +1621,7 @@ h+=`<div class="card" style="margin-bottom:16px"><h3>Distancia a los 12 Arquetip
 archR2.distances.forEach((d,i)=>{
 const a=ARCHETYPOS[d.idx];
 h+=`<tr style="${i===0?'background:rgba(243,156,18,.1)':''}">
-<td>${i+1}</td><td><strong>${d.name}</strong> "${d.alias}"</td>
+<td>${i+1}</td><td><strong>${d.name}</strong> <span style="color:var(--text2);font-size:.85em">${d.alias}</span></td>
 <td style="font-weight:700;color:${i===0?'var(--accent)':'var(--text)'}">${d.dist}</td>
 <td>${a.paes}</td><td>${a.persona}</td>
 <td><span class="badge ${a.riesgo.includes('Alto')||a.riesgo.includes('Muy')?'badge-red':a.riesgo.includes('Medio')?'badge-yellow':'badge-green'}">${a.riesgo}</span></td></tr>`;
@@ -1735,7 +1735,7 @@ window.answerCAT=answerCAT;
 
 function renderVoc(){
 const s=STU[selStu],p=paes(s.mastery),el=document.getElementById('tab-vocacional');
-let h=`<div class="card" style="margin-bottom:16px"><h3>Orientacion Vocacional — ${s.name} "${s.alias}"</h3>
+let h=`<div class="card" style="margin-bottom:16px"><h3>Orientacion Vocacional — ${s.name} "${s.perfil||s.alias}"</h3>
 <div style="display:flex;gap:20px;align-items:center">
 <div><div class="paes-big">${p}</div><div class="paes-label">PAES Actual</div></div>
 <div style="font-size:.85em"><strong>Claridad vocacional:</strong> ${(s.vocational_clarity*100).toFixed(0)}%
@@ -1783,7 +1783,7 @@ if(f==='ok')show=g<=0;else if(f==='hard')show=g>0&&g<80;else if(f!=='all')show=a
 
 function renderProg(){
 const s=STU[selStu],prog=genProgress(s),el=document.getElementById('tab-progreso');
-let h=`<div class="card" style="margin-bottom:16px"><h3>Progreso Temporal — ${s.name} "${s.alias}" (12 semanas)</h3><div class="chart-wrap" style="max-height:280px"><canvas id="progC"></canvas></div></div>`;
+let h=`<div class="card" style="margin-bottom:16px"><h3>Progreso Temporal — ${s.name} "${s.perfil||s.alias}" (12 semanas)</h3><div class="chart-wrap" style="max-height:280px"><canvas id="progC"></canvas></div></div>`;
 h+=`<div class="card" style="margin-bottom:16px"><h3>Insights Semanales</h3><div style="max-height:380px;overflow-y:auto">`;
 for(let w=1;w<prog.length;w++){
 const prev=prog[w-1],curr=prog[w],pd=curr.paes-prev.paes;
@@ -1817,7 +1817,7 @@ plugins:{legend:{labels:{color:'#ccc',font:{size:10}}}}}})}
 
 function renderPred(){
 const s=STU[selStu],sc=genScenarios(s),bp=findBreak(s),el=document.getElementById('tab-prediccion');
-let h=`<div class="card" style="margin-bottom:16px"><h3>Prediccion MIYAGI — ${s.name} "${s.alias}"</h3><div class="chart-wrap" style="max-height:240px"><canvas id="scC"></canvas></div></div>`;
+let h=`<div class="card" style="margin-bottom:16px"><h3>Prediccion MIYAGI — ${s.name} "${s.perfil||s.alias}"</h3><div class="chart-wrap" style="max-height:240px"><canvas id="scC"></canvas></div></div>`;
 h+=`<div class="card" style="margin-bottom:16px"><h3>Punto de Quiebre</h3>
 <div style="padding:12px;background:var(--bg3);border-radius:8px;border-left:4px solid var(--accent)">
 <p style="font-size:.95em;font-weight:600;color:var(--accent)">Variable clave: ${bp.v?bp.v.label:'N/A'}</p>
@@ -1881,7 +1881,7 @@ h+='</tbody></table></div>';
 h+=`<div class="card"><h3>Prediccion 12 Semanas + Clasificacion de Riesgo</h3>
 <table><thead><tr><th>Estudiante</th><th>PAES Actual</th><th>PAES Proyectado</th><th>Cambio</th><th>Riesgo</th></tr></thead><tbody>`;
 STU.forEach(s=>{const prog=genProgress(s);const proj=prog[prog.length-1].paes;const cur=paes(s.mastery);const diff=proj-cur;const rk=risk(s);
-h+=`<tr><td><strong>${s.name}</strong> "${s.alias}"</td><td>${cur}</td><td>${proj}</td>
+h+=`<tr><td><strong>${s.name}</strong> "${s.perfil||s.alias}"</td><td>${cur}</td><td>${proj}</td>
 <td class="${diff>=0?'delta-pos':'delta-neg'}">${diff>=0?'+':''}${diff}</td>
 <td><span class="badge ${rk.c}">${rk.l}</span></td></tr>`});
 h+='</tbody></table></div>';
@@ -1942,7 +1942,7 @@ const results=miyagiQuery(msg);
 if(results.length===0){
 setTimeout(()=>{addChatMsg('miyagi','No encontre una respuesta especifica para eso. Puedo ayudarte con: BKT/IRT, ansiedad, respiracion, habitos, gamificacion, perfiles, arquetipos, carreras, empleabilidad, grupos, ranking, TDAH, dislexia, riesgo, grafo, propagacion, features, prediccion. Preguntame algo mas especifico!')},300);
 return}
-const stuContext=` [Contexto: ${s.name} "${s.alias}", PAES ${paes(s.mastery)}, ansiedad ${(s.anxiety*100).toFixed(0)}%, adherencia ${(s.study_adherence*100).toFixed(0)}%, claridad vocacional ${(s.vocational_clarity*100).toFixed(0)}%]`;
+const stuContext=` [Contexto: ${s.name} "${s.perfil||s.alias}", PAES ${paes(s.mastery)}, ansiedad ${(s.anxiety*100).toFixed(0)}%, adherencia ${(s.study_adherence*100).toFixed(0)}%, claridad vocacional ${(s.vocational_clarity*100).toFixed(0)}%]`;
 if(results.length===1){
 const r=results[0];
 setTimeout(()=>{addChatMsg('miyagi',`Consultare con <strong>${r.agent.name}</strong> sobre esto...`)},200);
@@ -1970,7 +1970,7 @@ el.innerHTML=`
 <div class="card chat-container">
 <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px">
 <div class="agent-icon" style="background:#F39C12;width:32px;height:32px;font-size:.9em">M</div>
-<div><strong style="color:#F39C12">Consulta MIYAGI</strong><br><span style="font-size:.78em;color:var(--text2)">Asistente de investigacion para el equipo SENSEI | Estudiante: <strong>${s.name} "${s.alias}"</strong></span></div>
+<div><strong style="color:#F39C12">Consulta MIYAGI</strong><br><span style="font-size:.78em;color:var(--text2)">Asistente de investigacion para el equipo SENSEI | Estudiante: <strong>${s.name} "${s.perfil||s.alias}"</strong></span></div>
 </div>
 <div class="chat-messages" id="chatMsgs"></div>
 <div class="chat-input-area">
@@ -1980,7 +1980,7 @@ el.innerHTML=`
 </div>`;
 if(wasEmpty||chatHistory.length===0){
 chatHistory=[];
-addChatMsg('miyagi',`Hola! Soy MIYAGI, el orquestador de SENSEI. Estoy viendo el perfil de <strong>${s.name} "${s.alias}"</strong> (PAES ${paes(s.mastery)}). Preguntame sobre cualquier aspecto de la investigacion.`)}
+addChatMsg('miyagi',`Hola! Soy MIYAGI, el orquestador de SENSEI. Estoy viendo el perfil de <strong>${s.name} "${s.perfil||s.alias}"</strong> (PAES ${paes(s.mastery)}). Preguntame sobre cualquier aspecto de la investigacion.`)}
 else{renderChatMessages()}}
 
 // ============================================================
@@ -2014,7 +2014,7 @@ const AGENTS=[
 ];
 
 let html=`<div class="card"><h2>🔄 Flujo: Diagnostico → Grafo → Agentes</h2>
-<p style="color:var(--text2)">Visualizacion de como el diagnostico inicial alimenta las 21 variables del grafo causal y como los 9 agentes las consumen. Estudiante actual: <strong>${s.name} "${s.alias}"</strong></p>
+<p style="color:var(--text2)">Visualizacion de como el diagnostico inicial alimenta las 21 variables del grafo causal y como los 9 agentes las consumen. Estudiante actual: <strong>${s.name} "${s.perfil||s.alias}"</strong></p>
 <div id="flujoSvg" style="width:100%;overflow-x:auto;margin:20px 0"></div></div>`;
 
 // Block detail cards
@@ -2620,7 +2620,7 @@ simStop.addEventListener('click',resetSim);
 // TAB: ARQUETIPOS — 12 arquetipos del sistema SENSEI
 // ============================================================
 const ARCHETYPES=[
-{id:0,name:'Valentina',alias:'La Aplicada',paes:802,riesgo:'Estable',riesgoClass:'badge-green',prevalencia:'5-7%',
+{id:0,name:'Valentina',alias:'La Aplicada',perfil:'Alto Rendimiento',emoji:'\u{1F3AF}',paes:802,riesgo:'Estable',riesgoClass:'badge-green',prevalencia:'5-7%',
 persona:'Catalina',personaJust:'emotional_state alto, anxiety bajo. Ruta central ELM: responde a datos concretos y estadisticas.',
 agentes:['SENPAI','DOJO','COMPASS'],
 agentJust:'SENPAI optimiza KCs residuales, DOJO ofrece ensayos simulados realistas, COMPASS confirma meta vocacional.',
@@ -2634,7 +2634,7 @@ acciones:['SENPAI: Sesiones adaptativas en KCs residuales (percentil 80+)','DOJO
 transiciones:{positivas:['Mantiene perfil estable — ya es el arquetipo objetivo'],negativas:['Valentina → Isidora: si presion por nota maxima genera ansiedad cronica']},
 vars:{mastery:.78,anxiety:.25,confidence:.75,motivation:.82,sleep_quality:.72,attention_span:.80,study_adherence:.88,emotional_state:.75,social_support:.68,vocational_clarity:.82,self_efficacy:.80,cognitive_load:.32,fatigue:.22,frustration_tolerance:.72,metacognition:.70,time_management:.78,growth_mindset:.68,parental_support:.72,screen_time:.25,physical_activity:.55,stress_level:.25}},
 
-{id:1,name:'Matias',alias:'El Ansioso',paes:622,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'12-15%',
+{id:1,name:'Matias',alias:'El Ansioso',perfil:'Gesti\u00f3n Emocional',emoji:'\u{1F9D8}',paes:622,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'12-15%',
 persona:'Tomas',personaJust:'anxiety alto (0.68), emotional_state bajo (0.42). Ruta periferica ELM: los datos agravan su ansiedad. Necesita validacion y calma.',
 agentes:['KAZE','SENPAI','KOAN'],
 agentJust:'KAZE reduce ansiedad con respiracion/defusion, SENPAI calibra al 70%+ exito para construir confianza, KOAN mejora metacognicion.',
@@ -2648,7 +2648,7 @@ acciones:['KAZE: Respiracion de caja pre-sesion (d=0.40-0.60)','KAZE: Defusion c
 transiciones:{positivas:['Matias → Camila: si anxiety baja < 0.40 y confidence sube > 0.55 sostenido 4 semanas'],negativas:['Matias → Martina: si estres cronico produce burnout (fatigue > 0.80)']},
 vars:{mastery:.58,anxiety:.68,confidence:.38,motivation:.52,sleep_quality:.48,attention_span:.52,study_adherence:.62,emotional_state:.42,social_support:.52,vocational_clarity:.48,self_efficacy:.42,cognitive_load:.58,fatigue:.52,frustration_tolerance:.38,metacognition:.52,time_management:.52,growth_mindset:.48,parental_support:.58,screen_time:.42,physical_activity:.38,stress_level:.62}},
 
-{id:2,name:'Camila',alias:'La Resiliente',paes:568,riesgo:'Medio',riesgoClass:'badge-yellow',prevalencia:'10-12%',
+{id:2,name:'Camila',alias:'La Resiliente',perfil:'Primera Generaci\u00f3n',emoji:'\u{1F331}',paes:568,riesgo:'Medio',riesgoClass:'badge-yellow',prevalencia:'10-12%',
 persona:'Catalina',personaJust:'Resiliente y pragmatica: responde a datos de progreso concretos. Transicion a Tomas si social_support cae < 0.30.',
 agentes:['KAIZEN','NAKAMA','COMPASS'],
 agentJust:'KAIZEN construye habitos desde cero, NAKAMA compensa bajo apoyo social, COMPASS activa motivacion vocacional.',
@@ -2662,7 +2662,7 @@ acciones:['KAIZEN: Construccion de habitos desde cero (micro-habito 2-5 min/dia)
 transiciones:{positivas:['Camila → Valentina: si mastery sube > 0.70 y adherencia se consolida > 0.80'],negativas:['Camila → Joaquin: si apoyo social y parental caen simultaneamente < 0.25']},
 vars:{mastery:.52,anxiety:.42,confidence:.52,motivation:.48,sleep_quality:.42,attention_span:.48,study_adherence:.52,emotional_state:.48,social_support:.38,vocational_clarity:.38,self_efficacy:.52,cognitive_load:.55,fatigue:.55,frustration_tolerance:.68,metacognition:.42,time_management:.42,growth_mindset:.62,parental_support:.32,screen_time:.48,physical_activity:.32,stress_level:.52}},
 
-{id:3,name:'Benjamin',alias:'El Gamer',paes:478,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'8-10%',
+{id:3,name:'Benjamin',alias:'El Gamer',perfil:'Engagement Digital',emoji:'\u{1F3AE}',paes:478,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'8-10%',
 persona:'Martin',personaJust:'anxiety bajo, perfil conductual como barrera. Responde a desafios, XP, competencia. Los datos lo aburren, la empatia la percibe como innecesaria.',
 agentes:['KAIZEN','COMPASS','DOJO'],
 agentJust:'KAIZEN introduce screen curfew gradual, COMPASS conecta gaming con carreras TI, DOJO gamifica ensayos.',
@@ -2676,7 +2676,7 @@ acciones:['KAIZEN: Screen curfew gradual ("Cierra pantallas a las 23:00 por 5 di
 transiciones:{positivas:['Benjamin → Tomas: si se engancha socialmente via NAKAMA y study_adherence > 0.45'],negativas:['Benjamin → Joaquin: si motivation colapsa y screen_time se mantiene > 0.85']},
 vars:{mastery:.42,anxiety:.32,confidence:.48,motivation:.32,sleep_quality:.28,attention_span:.32,study_adherence:.22,emotional_state:.52,social_support:.58,vocational_clarity:.28,self_efficacy:.38,cognitive_load:.62,fatigue:.68,frustration_tolerance:.58,metacognition:.28,time_management:.18,growth_mindset:.52,parental_support:.48,screen_time:.88,physical_activity:.18,stress_level:.35}},
 
-{id:4,name:'Isidora',alias:'La Presionada',paes:712,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'6-8%',
+{id:4,name:'Isidora',alias:'La Presionada',perfil:'Prevenci\u00f3n de Sobrecarga',emoji:'\u{1F6E1}\u{FE0F}',paes:712,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'6-8%',
 persona:'Tomas',personaJust:'anxiety altisimo (0.72), stress extremo (0.78), emotional_state bajo (0.32). Los datos de rendimiento amplifican su presion.',
 agentes:['KAZE','KAIZEN','MIYAGI'],
 agentJust:'KAZE reduce estres/ansiedad con tecnicas de respiracion, KAIZEN mejora sueno, MIYAGI activa protocolo de proteccion.',
@@ -2690,7 +2690,7 @@ acciones:['KAZE: Reestructuracion cognitiva + respiracion de caja diaria','KAIZE
 transiciones:{positivas:['Isidora → Valentina: si estres baja < 0.45 y emotional_state sube > 0.55'],negativas:['Isidora → Martina: si fatigue > 0.80 y emotional_state < 0.25 (burnout)']},
 vars:{mastery:.68,anxiety:.72,confidence:.42,motivation:.62,sleep_quality:.38,attention_span:.58,study_adherence:.72,emotional_state:.32,social_support:.42,vocational_clarity:.52,self_efficacy:.48,cognitive_load:.58,fatigue:.68,frustration_tolerance:.32,metacognition:.58,time_management:.68,growth_mindset:.38,parental_support:.28,screen_time:.28,physical_activity:.28,stress_level:.78}},
 
-{id:5,name:'Diego',alias:'El Deportista',paes:388,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'4-5%',
+{id:5,name:'Diego',alias:'El Deportista',perfil:'Integraci\u00f3n Deportiva',emoji:'\u{26A1}',paes:388,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'4-5%',
 persona:'Martin',personaJust:'anxiety bajo, emotional_state alto. Mentalidad deportiva: responde a desafios, competencia y metas concretas. Formato empatico lo aburre.',
 agentes:['COMPASS','KAIZEN','SENPAI'],
 agentJust:'COMPASS conecta deporte con carrera (kinesiologia, ed. fisica), KAIZEN integra estudio en rutina deportiva, SENPAI adapta contenido.',
@@ -2704,7 +2704,7 @@ acciones:['COMPASS: Conexion deporte-carrera (kinesiologia, ed. fisica, nutricio
 transiciones:{positivas:['Diego → Camila: si COMPASS activa vocacion y motivation sube > 0.55'],negativas:['Diego → Joaquin: si lesion deportiva elimina identidad atletica y motivation cae']},
 vars:{mastery:.32,anxiety:.32,confidence:.58,motivation:.38,sleep_quality:.62,attention_span:.48,study_adherence:.38,emotional_state:.62,social_support:.68,vocational_clarity:.32,self_efficacy:.52,cognitive_load:.55,fatigue:.28,frustration_tolerance:.62,metacognition:.28,time_management:.32,growth_mindset:.48,parental_support:.52,screen_time:.32,physical_activity:.92,stress_level:.28}},
 
-{id:6,name:'Francisca',alias:'TDAH',paes:352,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'5-7%',
+{id:6,name:'Francisca',alias:'TDAH',perfil:'Funci\u00f3n Ejecutiva',emoji:'\u{1F9E9}',paes:352,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'5-7%',
 persona:'Martin',personaJust:'Necesita novedad constante y engagement inmediato. Desafios rapidos y variados se alinean con su necesidad de estimulacion. Mensajes ultra-breves.',
 agentes:['KOAN','KAIZEN','SENPAI'],
 agentJust:'KOAN compensa deficit metacognitivo, KAIZEN construye micro-habitos de 2-3 min, SENPAI calibra para exitos frecuentes.',
@@ -2718,7 +2718,7 @@ acciones:['KOAN: Estrategias metacognitivas compensatorias (auto-monitoreo pre/p
 transiciones:{positivas:['Francisca → Tomas: si NAKAMA canaliza su sociabilidad natural hacia estudio colaborativo'],negativas:['Francisca → Martina: si sobrecarga cognitiva sostenida produce agotamiento']},
 vars:{mastery:.28,anxiety:.52,confidence:.32,motivation:.32,sleep_quality:.38,attention_span:.22,study_adherence:.28,emotional_state:.38,social_support:.42,vocational_clarity:.22,self_efficacy:.28,cognitive_load:.72,fatigue:.62,frustration_tolerance:.28,metacognition:.22,time_management:.18,growth_mindset:.42,parental_support:.52,screen_time:.68,physical_activity:.22,stress_level:.55}},
 
-{id:7,name:'Tomas',alias:'El Social',paes:478,riesgo:'Medio',riesgoClass:'badge-yellow',prevalencia:'8-10%',
+{id:7,name:'Tomas',alias:'El Social',perfil:'Aprendizaje Social',emoji:'\u{1F465}',paes:478,riesgo:'Medio',riesgoClass:'badge-yellow',prevalencia:'8-10%',
 persona:'Martin',personaJust:'anxiety bajo, emotional_state alto, motivacion social. Responde a desafios entre amigos, competencia grupal y rankings.',
 agentes:['NAKAMA','COMPASS','KAIZEN'],
 agentJust:'NAKAMA canaliza capital social hacia estudio, COMPASS explora vocacion, KAIZEN construye habitos basicos.',
@@ -2732,7 +2732,7 @@ acciones:['NAKAMA: Study buddy matching + grupos de estudio (4-8 personas)','NAK
 transiciones:{positivas:['Tomas → Camila: si COMPASS genera claridad vocacional y adherencia individual sube > 0.55'],negativas:['Tomas → Benjamin: si red social se desintegra y busca engagement en pantallas']},
 vars:{mastery:.42,anxiety:.32,confidence:.52,motivation:.48,sleep_quality:.48,attention_span:.42,study_adherence:.42,emotional_state:.62,social_support:.88,vocational_clarity:.38,self_efficacy:.48,cognitive_load:.48,fatigue:.42,frustration_tolerance:.48,metacognition:.38,time_management:.38,growth_mindset:.52,parental_support:.62,screen_time:.55,physical_activity:.42,stress_level:.28}},
 
-{id:8,name:'Martina',alias:'La Quemada',paes:622,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'4-6%',
+{id:8,name:'Martina',alias:'La Quemada',perfil:'Recuperaci\u00f3n Acad\u00e9mica',emoji:'\u{1F504}',paes:622,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'4-6%',
 persona:'Tomas',personaJust:'emotional_state critico (0.18), fatigue extrema (0.88), frustration_tolerance colapsada (0.22). Necesita permiso absoluto para descansar.',
 agentes:['MIYAGI','KAZE','KAIZEN'],
 agentJust:'MIYAGI activa protocolo de pausa, KAZE estabiliza emocionalmente, KAIZEN reconstruye sueno y actividad fisica.',
@@ -2746,7 +2746,7 @@ acciones:['MIYAGI: Protocolo de pausa (reducir carga al 50% sin opcion de overri
 transiciones:{positivas:['Martina → Matias: burnout resuelto pero ansiedad residual permanece'],negativas:['Martina → crisis: si emotional_state < 0.15 sostenido + ideacion detectada → derivacion']},
 vars:{mastery:.58,anxiety:.62,confidence:.38,motivation:.38,sleep_quality:.28,attention_span:.38,study_adherence:.52,emotional_state:.18,social_support:.32,vocational_clarity:.52,self_efficacy:.32,cognitive_load:.68,fatigue:.88,frustration_tolerance:.22,metacognition:.48,time_management:.48,growth_mindset:.28,parental_support:.42,screen_time:.38,physical_activity:.12,stress_level:.72}},
 
-{id:9,name:'Joaquin',alias:'El Tardio',paes:298,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'8-10%',
+{id:9,name:'Joaquin',alias:'El Tardio',perfil:'Activaci\u00f3n Tard\u00eda',emoji:'\u{1F511}',paes:298,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'8-10%',
 persona:'Tomas',personaJust:'motivation bajisimo (0.22), self_efficacy bajo (0.22), pero growth_mindset alto (0.78). Necesita validacion primero. Transicion a Martin cuando motivation > 0.50.',
 agentes:['COMPASS','IKIGAI','KAIZEN'],
 agentJust:'COMPASS encuentra proposito vocacional, IKIGAI activa motivacion latente, KAIZEN construye micro-habito minimo.',
@@ -2760,7 +2760,7 @@ acciones:['COMPASS: Encontrar proposito vocacional urgente (primer semana)','IKI
 transiciones:{positivas:['Joaquin → Camila: si motivation sube > 0.45 y study_adherence > 0.40 sostenido'],negativas:['Joaquin → abandono: si motivation < 0.15 sostenido 2+ semanas sin uso']},
 vars:{mastery:.22,anxiety:.42,confidence:.28,motivation:.22,sleep_quality:.38,attention_span:.32,study_adherence:.18,emotional_state:.38,social_support:.32,vocational_clarity:.12,self_efficacy:.22,cognitive_load:.58,fatigue:.52,frustration_tolerance:.38,metacognition:.18,time_management:.12,growth_mindset:.78,parental_support:.28,screen_time:.62,physical_activity:.28,stress_level:.45}},
 
-{id:10,name:'Andres',alias:'El Trabajador',paes:420,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'5-7%',
+{id:10,name:'Andres',alias:'El Trabajador',perfil:'Doble Jornada',emoji:'\u{23F1}\u{FE0F}',paes:420,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'5-7%',
 persona:'Tomas',personaJust:'Empatico y validador: necesita sentir que el sistema entiende su realidad de trabajo. Reconoce su esfuerzo antes de pedir mas. Ruta periferica ELM por fatiga cognitiva.',
 agentes:['KAIZEN','SENPAI','KAZE'],
 agentJust:'KAIZEN optimiza las escasas ventanas de tiempo, SENPAI maximiza aprendizaje por minuto con KCs de mayor ROI, KAZE maneja estres laboral.',
@@ -2774,7 +2774,7 @@ acciones:['KAIZEN: Micro-sesiones de 3-5 min en ventanas laborales (break, trans
 transiciones:{positivas:['Andres → Camila: si deja de trabajar, restriccion temporal desaparece','Andres → Diego: si incorpora actividad fisica y mejora sueno'],negativas:['Andres → Martina: si fatiga laboral produce burnout (fatigue > 0.85)']},
 vars:{mastery:.35,anxiety:.45,confidence:.40,motivation:.55,sleep_quality:.35,attention_span:.38,study_adherence:.30,emotional_state:.42,social_support:.45,vocational_clarity:.45,self_efficacy:.35,cognitive_load:.62,fatigue:.72,frustration_tolerance:.48,metacognition:.30,time_management:.25,growth_mindset:.55,parental_support:.50,screen_time:.40,physical_activity:.45,stress_level:.65}},
 
-{id:11,name:'Javiera',alias:'La Rural',paes:380,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'4-6%',
+{id:11,name:'Javiera',alias:'La Rural',perfil:'Contexto Rural',emoji:'\u{1F3D4}\u{FE0F}',paes:380,riesgo:'Alto',riesgoClass:'badge-red',prevalencia:'4-6%',
 persona:'Tomas',personaJust:'Empatico y validador: necesita sentirse acompanada pese al aislamiento rural. Ruta periferica ELM por bajo acceso a informacion y falta de modelos cercanos.',
 agentes:['SENPAI','COMPASS','KAIZEN'],
 agentJust:'SENPAI en modo offline-first maximiza aprendizaje sin conexion, COMPASS conecta con opciones universitarias accesibles desde regiones, KAIZEN adapta habitos a ritmos rurales.',
@@ -2838,7 +2838,8 @@ const topV=arqTopVars(a.vars);
 const weakV=arqWeakVars(a.vars);
 h+=`<div class="card" style="cursor:pointer;transition:all .2s;border-left:4px solid ${a.riesgoClass==='badge-red'?'#E74C3C':a.riesgoClass==='badge-yellow'?'#F39C12':'#27AE60'}" onclick="showArqDetail(${a.id})">
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-<div><h3 style="margin-bottom:2px;font-size:1.05em;color:var(--text)">${a.name} <span style="color:var(--accent);font-weight:400">— ${a.alias}</span></h3>
+<div><h3 style="margin-bottom:2px;font-size:1.05em;color:var(--text)">${a.emoji} ${a.perfil}</h3>
+<div style="font-size:.82em;color:var(--text2);margin-bottom:2px">${a.name} <span style="font-style:italic;color:var(--accent)">${a.alias}</span></div>
 <div style="font-size:.78em;color:var(--text2)">Prevalencia: ${a.prevalencia}</div></div>
 <div style="text-align:right"><div style="font-size:1.5em;font-weight:800;color:var(--accent)">${a.paes}</div><div style="font-size:.72em;color:var(--text2)">PAES est.</div></div></div>
 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
@@ -2862,12 +2863,12 @@ h+=`<div class="card" style="margin-bottom:24px">
 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
 <select id="arqCmp1" onchange="renderArqCompare()" style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:.85em">
 <option value="">Seleccionar arquetipo 1...</option>
-${ARCHETYPES.map(a=>`<option value="${a.id}">${a.name} — ${a.alias}</option>`).join('')}
+${ARCHETYPES.map(a=>`<option value="${a.id}">${a.emoji} ${a.perfil} (${a.name})</option>`).join('')}
 </select>
 <span style="color:var(--accent);font-weight:700">vs</span>
 <select id="arqCmp2" onchange="renderArqCompare()" style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:.85em">
 <option value="">Seleccionar arquetipo 2...</option>
-${ARCHETYPES.map(a=>`<option value="${a.id}">${a.name} — ${a.alias}</option>`).join('')}
+${ARCHETYPES.map(a=>`<option value="${a.id}">${a.emoji} ${a.perfil} (${a.name})</option>`).join('')}
 </select>
 </div>
 <div id="arqCmpResult"></div>
@@ -2938,7 +2939,8 @@ panel.scrollIntoView({behavior:'smooth',block:'start'});
 
 let h=`<div class="card fade-in" style="border:2px solid var(--accent);margin-top:16px">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-<h3 style="font-size:1.2em">${a.name} — ${a.alias} <span class="badge ${a.riesgoClass}" style="margin-left:8px">${a.riesgo}</span></h3>
+<h3 style="font-size:1.2em">${a.emoji} ${a.perfil} <span class="badge ${a.riesgoClass}" style="margin-left:8px">${a.riesgo}</span></h3>
+<div style="font-size:.88em;color:var(--text2);margin-top:2px">${a.name} <span style="font-style:italic;color:var(--accent)">${a.alias}</span></div>
 <button class="btn btn-sm btn-outline" onclick="document.getElementById('arqDetailPanel').style.display='none'">Cerrar</button>
 </div>`;
 
@@ -3179,11 +3181,11 @@ if(!a1||!a2)return;
 
 let h=`<div class="grid-2" style="margin-top:12px">
 <div style="text-align:center;padding:10px;background:var(--bg3);border-radius:var(--radius)">
-<strong style="color:var(--accent)">${a1.name} — ${a1.alias}</strong><br>
+<strong style="color:var(--accent)">${a1.emoji} ${a1.perfil}</strong><br><span style="font-size:.82em;color:var(--text2)">${a1.name}</span><br>
 <span class="badge ${a1.riesgoClass}">${a1.riesgo}</span> <span class="badge badge-blue">${a1.persona}</span> <span style="font-size:.85em;color:var(--text2)">PAES ${a1.paes}</span>
 </div>
 <div style="text-align:center;padding:10px;background:var(--bg3);border-radius:var(--radius)">
-<strong style="color:#3498db">${a2.name} — ${a2.alias}</strong><br>
+<strong style="color:#3498db">${a2.emoji} ${a2.perfil}</strong><br><span style="font-size:.82em;color:var(--text2)">${a2.name}</span><br>
 <span class="badge ${a2.riesgoClass}">${a2.riesgo}</span> <span class="badge badge-blue">${a2.persona}</span> <span style="font-size:.85em;color:var(--text2)">PAES ${a2.paes}</span>
 </div></div>`;
 
@@ -3230,8 +3232,8 @@ destroyArqChart('arqCR');
 const ctx=document.getElementById('arqCmpRadar');
 if(ctx){
 arqCharts['arqCR']=new Chart(ctx,{type:'radar',data:{labels:VARS.map(v=>v.label),datasets:[
-{label:a1.name+' — '+a1.alias,data:VARS.map(v=>a1.vars[v.id]||0),backgroundColor:'rgba(243,156,18,.15)',borderColor:'#F39C12',borderWidth:2,pointBackgroundColor:'#F39C12',pointRadius:3},
-{label:a2.name+' — '+a2.alias,data:VARS.map(v=>a2.vars[v.id]||0),backgroundColor:'rgba(52,152,219,.15)',borderColor:'#3498db',borderWidth:2,pointBackgroundColor:'#3498db',pointRadius:3}
+{label:a1.perfil+' ('+a1.name+')',data:VARS.map(v=>a1.vars[v.id]||0),backgroundColor:'rgba(243,156,18,.15)',borderColor:'#F39C12',borderWidth:2,pointBackgroundColor:'#F39C12',pointRadius:3},
+{label:a2.perfil+' ('+a2.name+')',data:VARS.map(v=>a2.vars[v.id]||0),backgroundColor:'rgba(52,152,219,.15)',borderColor:'#3498db',borderWidth:2,pointBackgroundColor:'#3498db',pointRadius:3}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{beginAtZero:true,max:1,ticks:{stepSize:.2,color:'#888',backdropColor:'transparent',font:{size:8}},grid:{color:'rgba(255,255,255,.1)'},pointLabels:{color:'#ccc',font:{size:8}}}},plugins:{legend:{labels:{color:'#ccc',font:{size:10}}}}}})
 }},100)}
 
@@ -3572,12 +3574,13 @@ panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 function renderConsulTimeline(){
 const el=document.getElementById('consul-timeline');
 const archetypes=['Default','Valentina','Matias','Camila','Benjamin','Isidora','Diego','Francisca','Tomas','Joaquin','Martina','Andres','Javiera'];
+const archPerfilMap={'Valentina':'Alto Rendimiento','Matias':'Gesti\u00f3n Emocional','Camila':'Primera Generaci\u00f3n','Benjamin':'Engagement Digital','Isidora':'Prev. Sobrecarga','Diego':'Integ. Deportiva','Francisca':'Funci\u00f3n Ejecutiva','Tomas':'Aprend. Social','Joaquin':'Activaci\u00f3n Tard\u00eda','Martina':'Recuperaci\u00f3n Acad.','Andres':'Doble Jornada','Javiera':'Contexto Rural'};
 el.innerHTML=`
 <div class="card" style="margin-bottom:16px">
 <h3>Flujo Diario del Estudiante</h3>
 <p style="font-size:.82em;color:var(--text2);margin-bottom:12px">Linea de tiempo de un dia tipico. Selecciona un arquetipo para ver como cambia la experiencia segun el perfil.</p>
 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
-${archetypes.map(a=>`<button class="btn btn-sm ${a==='Default'?'btn-primary':'btn-outline'}" onclick="switchTimelineArch('${a}',this)">${a}</button>`).join('')}
+${archetypes.map(a=>`<button class="btn btn-sm ${a==='Default'?'btn-primary':'btn-outline'}" onclick="switchTimelineArch('${a}',this)">${a==='Default'?a:(archPerfilMap[a]||a)}</button>`).join('')}
 </div>
 <div class="timeline-container" id="timelineContent"></div>
 </div>`;
