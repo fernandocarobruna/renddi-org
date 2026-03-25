@@ -4,9 +4,29 @@ import { NextResponse, type NextRequest } from "next/server";
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 const MAX_ATTEMPTS = 5;
 const WINDOW_MS = 15 * 60 * 1000;
+// Prevent unbounded memory growth — evict expired entries periodically
+const MAX_MAP_SIZE = 10000;
+
+function getClientIp(request: NextRequest): string {
+  // In production behind a trusted proxy (Vercel), x-forwarded-for first IP is reliable.
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    // Take the first IP (client IP set by the trusted proxy)
+    return forwarded.split(",")[0].trim();
+  }
+  return "unknown";
+}
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
+
+  // Evict expired entries if map is too large
+  if (loginAttempts.size > MAX_MAP_SIZE) {
+    for (const [key, val] of loginAttempts) {
+      if (now > val.resetAt) loginAttempts.delete(key);
+    }
+  }
+
   const record = loginAttempts.get(ip);
   if (!record || now > record.resetAt) {
     loginAttempts.set(ip, { count: 1, resetAt: now + WINDOW_MS });
@@ -18,8 +38,14 @@ function checkRateLimit(ip: string): boolean {
 }
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === "/login" && request.method === "POST") {
-    const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+  const pathname = request.nextUrl.pathname;
+
+  // Rate limit login attempts AND auth API endpoints
+  if (
+    (pathname === "/login" && request.method === "POST") ||
+    (pathname.startsWith("/api/auth") && request.method === "POST")
+  ) {
+    const ip = getClientIp(request);
     if (!checkRateLimit(ip)) {
       return NextResponse.json(
         { error: "Demasiados intentos. Intenta en 15 minutos." },
@@ -55,8 +81,6 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const pathname = request.nextUrl.pathname;
-
   // Not logged in → redirect to login
   if (
     !user &&
@@ -88,7 +112,15 @@ export async function middleware(request: NextRequest) {
   supabaseResponse.headers.set("X-XSS-Protection", "1; mode=block");
   supabaseResponse.headers.set(
     "Strict-Transport-Security",
-    "max-age=31536000; includeSubDomains"
+    "max-age=31536000; includeSubDomains; preload"
+  );
+  supabaseResponse.headers.set(
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=(), payment=()"
+  );
+  supabaseResponse.headers.set(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://api.resend.com; frame-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';"
   );
 
   return supabaseResponse;

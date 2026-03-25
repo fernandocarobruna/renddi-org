@@ -33,7 +33,8 @@ export default function CambiarPasswordForm() {
     });
 
     if (updateError) {
-      setError(updateError.message);
+      console.error("Password update error:", updateError.message);
+      setError("Error al actualizar la contrasena. Intenta nuevamente.");
       setLoading(false);
       return;
     }

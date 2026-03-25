@@ -3,8 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 
-const ADMIN_EMAILS = ["fernando@renddi.app", "fernando.caro.bruna@gmail.com"];
-
 interface User {
   id: string;
   email: string;
@@ -14,7 +12,7 @@ interface User {
   last_sign_in_at: string | null;
 }
 
-export default function GrafoClient({ email }: { email: string }) {
+export default function GrafoClient({ email, isAdmin }: { email: string; isAdmin: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [changingPw, setChangingPw] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
@@ -30,7 +28,7 @@ export default function GrafoClient({ email }: { email: string }) {
   const [adminMsg, setAdminMsg] = useState("");
   const [adminErr, setAdminErr] = useState("");
 
-  const isAdmin = ADMIN_EMAILS.includes(email);
+  // isAdmin is now passed as a prop from the server component
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -57,7 +55,7 @@ export default function GrafoClient({ email }: { email: string }) {
   async function handleChangePw() {
     if (newPw.length < 8) { setPwMsg("Mínimo 8 caracteres"); return; }
     const { error } = await supabase.auth.updateUser({ password: newPw });
-    if (error) setPwMsg("Error: " + error.message);
+    if (error) { console.error("Change pw error:", error.message); setPwMsg("Error al cambiar contrasena. Intenta nuevamente."); }
     else { setPwMsg("✅ Contraseña actualizada"); setNewPw(""); setTimeout(() => { setChangingPw(false); setPwMsg(""); }, 2000); }
   }
 

@@ -21,17 +21,14 @@ export default function LoginForm() {
     setMessage("");
 
     if (mode === "password") {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
-        setError(error.message);
+        setError("Credenciales incorrectas. Verifica tu email y contraseña.");
       } else if (data.user?.user_metadata?.must_change_password) {
         router.push("/cambiar-password");
         router.refresh();
       } else {
-        router.push("/");
+        router.push("/grafo");
         router.refresh();
       }
     } else {
@@ -42,9 +39,9 @@ export default function LoginForm() {
         },
       });
       if (error) {
-        setError(error.message);
+        setError("No pudimos enviar el link. Verifica que tu email esté registrado.");
       } else {
-        setMessage("Revisa tu email — te enviamos un link de acceso.");
+        setMessage("✅ Link enviado — revisa tu bandeja de entrada (y spam).");
       }
     }
 
@@ -52,81 +49,112 @@ export default function LoginForm() {
   }
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)",
-        padding: 24,
-      }}
-    >
-      <div style={{ width: "100%", maxWidth: 420 }}>
-        <div
-          style={{
-            background: "rgba(124, 58, 237, 0.15)",
-            backdropFilter: "blur(20px)",
-            border: "1px solid rgba(124, 58, 237, 0.3)",
-            color: "#fff",
-            padding: "32px 28px 24px",
-            borderRadius: "12px 12px 0 0",
-            textAlign: "center",
-          }}
-        >
-          <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: -1 }}>
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "radial-gradient(ellipse at 30% 20%, #1a0a2e 0%, #0a0a0f 50%, #0d1117 100%)",
+      padding: 24,
+      fontFamily: "'Inter', system-ui, sans-serif",
+    }}>
+      <div style={{ width: "100%", maxWidth: 440 }}>
+        {/* Header — Dojo/Miyagi theme */}
+        <div style={{
+          textAlign: "center",
+          marginBottom: 32,
+        }}>
+          <div style={{ fontSize: 56, marginBottom: 8 }}>🥋</div>
+          <h1 style={{
+            fontSize: 42,
+            fontWeight: 900,
+            color: "#F39C12",
+            letterSpacing: -2,
+            margin: 0,
+            textShadow: "0 0 40px rgba(243,156,18,0.3)",
+          }}>
             RENDDI
           </h1>
-          <p style={{ fontSize: 12, opacity: 0.6, marginTop: 4 }}>
-            Meta-Modelo de Construccion de Productos
-          </p>
+          <div style={{
+            fontSize: 13,
+            color: "rgba(255,255,255,0.4)",
+            marginTop: 8,
+            fontStyle: "italic",
+            letterSpacing: 2,
+          }}>
+            道場 · DOJO DEL CONOCIMIENTO
+          </div>
+          <div style={{
+            marginTop: 20,
+            padding: "10px 24px",
+            background: "rgba(243,156,18,0.1)",
+            border: "1px solid rgba(243,156,18,0.2)",
+            borderRadius: 8,
+            display: "inline-block",
+          }}>
+            <span style={{ fontSize: 14, color: "#F39C12", fontWeight: 600 }}>
+              ⚡ Ya casi estamos listos
+            </span>
+          </div>
         </div>
 
-        <div
-          className="card"
-          style={{
-            borderRadius: "0 0 12px 12px",
-            borderTop: "none",
-            padding: 28,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              gap: 4,
-              marginBottom: 24,
-              background: "var(--bg)",
-              borderRadius: 8,
-              padding: 4,
-            }}
-          >
+        {/* Login card */}
+        <div style={{
+          background: "rgba(20,20,25,0.95)",
+          border: "1px solid rgba(243,156,18,0.15)",
+          borderRadius: 16,
+          padding: 32,
+          backdropFilter: "blur(20px)",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+        }}>
+          {/* Mode tabs */}
+          <div style={{
+            display: "flex",
+            gap: 4,
+            marginBottom: 28,
+            background: "#0a0a0f",
+            borderRadius: 10,
+            padding: 4,
+          }}>
             <button
-              className={`tab ${mode === "password" ? "active" : ""}`}
               onClick={() => setMode("password")}
-              style={{ flex: 1, textAlign: "center" }}
+              style={{
+                flex: 1,
+                padding: "10px 16px",
+                borderRadius: 8,
+                border: "none",
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "all 0.2s",
+                background: mode === "password" ? "#F39C12" : "transparent",
+                color: mode === "password" ? "#0a0a0f" : "#888",
+              }}
             >
-              Email + Password
+              🔑 Email + Password
             </button>
             <button
-              className={`tab ${mode === "magic" ? "active" : ""}`}
               onClick={() => setMode("magic")}
-              style={{ flex: 1, textAlign: "center" }}
+              style={{
+                flex: 1,
+                padding: "10px 16px",
+                borderRadius: 8,
+                border: "none",
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "all 0.2s",
+                background: mode === "magic" ? "#F39C12" : "transparent",
+                color: mode === "magic" ? "#0a0a0f" : "#888",
+              }}
             >
-              Magic Link
+              ✨ Magic Link
             </button>
           </div>
 
           <form onSubmit={handleLogin}>
-            <div style={{ marginBottom: 16 }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: 13,
-                  fontWeight: 500,
-                  marginBottom: 6,
-                  color: "var(--navy)",
-                }}
-              >
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ display: "block", fontSize: 12, fontWeight: 500, marginBottom: 6, color: "#888", textTransform: "uppercase", letterSpacing: 1 }}>
                 Email
               </label>
               <input
@@ -134,75 +162,92 @@ export default function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder="tu@email.com"
+                placeholder="tu@renddi.app"
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
-                  border: "1px solid var(--border)",
-                  borderRadius: 8,
+                  padding: "12px 16px",
+                  background: "#0a0a0f",
+                  border: "1px solid #333",
+                  borderRadius: 10,
                   fontSize: 14,
+                  color: "#e0e0e0",
                   outline: "none",
+                  transition: "border-color 0.2s",
+                  boxSizing: "border-box",
                 }}
+                onFocus={(e) => e.target.style.borderColor = "#F39C12"}
+                onBlur={(e) => e.target.style.borderColor = "#333"}
               />
             </div>
 
             {mode === "password" && (
-              <div style={{ marginBottom: 16 }}>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: 13,
-                    fontWeight: 500,
-                    marginBottom: 6,
-                    color: "var(--navy)",
-                  }}
-                >
-                  Password
+              <div style={{ marginBottom: 20 }}>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 500, marginBottom: 6, color: "#888", textTransform: "uppercase", letterSpacing: 1 }}>
+                  Contraseña
                 </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  placeholder="Tu contrasena"
+                  placeholder="••••••••"
                   style={{
                     width: "100%",
-                    padding: "10px 14px",
-                    border: "1px solid var(--border)",
-                    borderRadius: 8,
+                    padding: "12px 16px",
+                    background: "#0a0a0f",
+                    border: "1px solid #333",
+                    borderRadius: 10,
                     fontSize: 14,
+                    color: "#e0e0e0",
                     outline: "none",
+                    transition: "border-color 0.2s",
+                    boxSizing: "border-box",
                   }}
+                  onFocus={(e) => e.target.style.borderColor = "#F39C12"}
+                  onBlur={(e) => e.target.style.borderColor = "#333"}
                 />
               </div>
             )}
 
+            {mode === "magic" && (
+              <div style={{
+                padding: "12px 16px",
+                background: "rgba(243,156,18,0.05)",
+                border: "1px solid rgba(243,156,18,0.1)",
+                borderRadius: 10,
+                marginBottom: 20,
+                fontSize: 12,
+                color: "#888",
+                lineHeight: 1.5,
+              }}>
+                Te enviaremos un link de acceso directo a tu email. Sin contraseña.
+              </div>
+            )}
+
             {error && (
-              <div
-                style={{
-                  background: "#fee2e2",
-                  color: "#991b1b",
-                  padding: "10px 14px",
-                  borderRadius: 8,
-                  fontSize: 13,
-                  marginBottom: 16,
-                }}
-              >
+              <div style={{
+                background: "rgba(239,68,68,0.1)",
+                border: "1px solid rgba(239,68,68,0.2)",
+                color: "#ff6666",
+                padding: "10px 14px",
+                borderRadius: 10,
+                fontSize: 13,
+                marginBottom: 16,
+              }}>
                 {error}
               </div>
             )}
 
             {message && (
-              <div
-                style={{
-                  background: "#d1fae5",
-                  color: "#065f46",
-                  padding: "10px 14px",
-                  borderRadius: 8,
-                  fontSize: 13,
-                  marginBottom: 16,
-                }}
-              >
+              <div style={{
+                background: "rgba(76,175,80,0.1)",
+                border: "1px solid rgba(76,175,80,0.2)",
+                color: "#4CAF50",
+                padding: "10px 14px",
+                borderRadius: 10,
+                fontSize: 13,
+                marginBottom: 16,
+              }}>
                 {message}
               </div>
             )}
@@ -212,24 +257,31 @@ export default function LoginForm() {
               disabled={loading}
               style={{
                 width: "100%",
-                padding: "12px 20px",
-                background: loading ? "var(--muted)" : "var(--accent)",
-                color: "#fff",
+                padding: "14px 20px",
+                background: loading ? "#444" : "linear-gradient(135deg, #F39C12, #e67e22)",
+                color: loading ? "#888" : "#0a0a0f",
                 border: "none",
-                borderRadius: 8,
-                fontSize: 14,
-                fontWeight: 600,
+                borderRadius: 10,
+                fontSize: 15,
+                fontWeight: 700,
                 cursor: loading ? "not-allowed" : "pointer",
-                transition: "background .2s",
+                transition: "all 0.2s",
+                boxShadow: loading ? "none" : "0 4px 20px rgba(243,156,18,0.3)",
               }}
             >
-              {loading
-                ? "Procesando..."
-                : mode === "password"
-                ? "Iniciar sesion"
-                : "Enviar magic link"}
+              {loading ? "Procesando..." : mode === "password" ? "Entrar al Dojo" : "Enviar Magic Link"}
             </button>
           </form>
+        </div>
+
+        {/* Footer */}
+        <div style={{
+          textAlign: "center",
+          marginTop: 24,
+          fontSize: 11,
+          color: "rgba(255,255,255,0.2)",
+        }}>
+          "El maestro aparece cuando el estudiante está listo" — MIYAGI
         </div>
       </div>
     </div>

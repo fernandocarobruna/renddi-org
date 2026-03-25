@@ -38,7 +38,8 @@ export async function GET(
       headers: {
         "Content-Type": "text/html; charset=utf-8",
         "X-Frame-Options": "SAMEORIGIN",
-        "Cache-Control": "private, no-cache",
+        "Cache-Control": "private, no-cache, no-store, must-revalidate",
+        "X-Content-Type-Options": "nosniff",
       },
     });
   } catch {
