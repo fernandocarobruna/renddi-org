@@ -4,10 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SENSEI | GRAFO v2 — Motor de Rendimiento Estudiantil</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script>if(typeof Chart==='undefined'){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"><\/script>')}</script>
-<script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
-<script>if(typeof d3==='undefined'){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"><\/script>')}</script>
+<script>
+function loadScript(url,fallback){return new Promise(function(resolve){var s=document.createElement('script');s.src=url;s.onload=resolve;s.onerror=function(){if(fallback){var f=document.createElement('script');f.src=fallback;f.onload=resolve;f.onerror=resolve;document.head.appendChild(f)}else{resolve()}};document.head.appendChild(s)})}
+Promise.all([
+loadScript('https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js','https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js'),
+loadScript('https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js','https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js')
+]).then(function(){document.dispatchEvent(new Event('libs-ready'))});
+</script>
 <style>
 :root{--bg:#0f1923;--bg2:#1a2733;--bg3:#243447;--text:#e8e8e8;--text2:#a0b4c8;--primary:#1B4F72;--accent:#F39C12;--success:#27AE60;--danger:#E74C3C;--warning:#F39C12;--card:#1a2733;--border:#2c3e50;--radius:10px;--shadow:0 4px 20px rgba(0,0,0,0.3)}
 [data-theme="light"]{--bg:#f0f2f5;--bg2:#ffffff;--bg3:#e8ecf1;--text:#1a1a2e;--text2:#555;--card:#fff;--border:#ddd;--shadow:0 4px 20px rgba(0,0,0,0.08)}
@@ -4039,9 +4042,11 @@ el.innerHTML=`
 </div>`;
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+function initApp(){
 document.getElementById('tabContents').innerHTML=TABS.map(t=>`<div class="tab-content ${t.id===selTab?'active':''}" id="tab-${t.id}"></div>`).join('');
-renderNav();renderSel();renderTab()});
+renderNav();renderSel();renderTab()}
+document.addEventListener('libs-ready',initApp);
+document.addEventListener('DOMContentLoaded',function(){setTimeout(function(){if(typeof Chart!=='undefined'&&typeof d3!=='undefined')initApp()},2000)});
 </script>
 </body>
 </html>
