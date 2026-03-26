@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { createBrowserClient } from "@supabase/ssr";
+import InformeTab from "./InformeTab";
 
-type Tab = "pricing" | "competencia" | "economics" | "percepcion" | "estrategia" | "producto" | "investigacion";
+type Tab = "pricing" | "competencia" | "economics" | "percepcion" | "estrategia" | "producto" | "investigacion" | "informe";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "pricing", label: "Pricing" },
@@ -13,6 +14,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "estrategia", label: "Estrategia" },
   { id: "producto", label: "Producto" },
   { id: "investigacion", label: "Investigacion" },
+  { id: "informe", label: "Informe Producto" },
 ];
 
 /* ─── Inline style helper ─── */
@@ -445,6 +447,7 @@ export default function ComercialClient({
         {activeTab === "estrategia" && <EstrategiaSection />}
         {activeTab === "producto" && <ProductoSection />}
         {activeTab === "investigacion" && <InvestigacionSection />}
+        {activeTab === "informe" && <InformeTab />}
       </main>
     </div>
   );
