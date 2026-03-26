@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 
-type Tab = "pricing" | "competencia" | "economics" | "percepcion" | "estrategia";
+type Tab = "pricing" | "competencia" | "economics" | "percepcion" | "estrategia" | "producto" | "investigacion";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "pricing", label: "Pricing" },
@@ -11,6 +11,8 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "economics", label: "Unit Economics" },
   { id: "percepcion", label: "Percepcion de Valor" },
   { id: "estrategia", label: "Estrategia" },
+  { id: "producto", label: "Producto" },
+  { id: "investigacion", label: "Investigacion" },
 ];
 
 /* ─── Inline style helper ─── */
@@ -441,6 +443,8 @@ export default function ComercialClient({
         {activeTab === "economics" && <EconomicsSection />}
         {activeTab === "percepcion" && <PercepcionSection />}
         {activeTab === "estrategia" && <EstrategiaSection />}
+        {activeTab === "producto" && <ProductoSection />}
+        {activeTab === "investigacion" && <InvestigacionSection />}
       </main>
     </div>
   );
@@ -1228,6 +1232,450 @@ function EstrategiaSection() {
                 <div style={{ fontSize: 13, color: "#aaa", lineHeight: 1.6 }}>
                   {t.actions}
                 </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ─── 6. Producto ─── */
+function ProductoSection() {
+  return (
+    <>
+      <SectionTitle
+        title="Producto"
+        subtitle="Que es Renddi, diferenciacion, buyer personas, features y roadmap"
+      />
+
+      {/* Que es Renddi */}
+      <div
+        style={{
+          background: "#141419",
+          border: "1px solid #1a1a2e",
+          borderRadius: 12,
+          padding: 28,
+          marginBottom: 24,
+        }}
+      >
+        <h3 style={{ margin: "0 0 16px", fontSize: 16, fontWeight: 700, color: "#F39C12" }}>
+          Que es Renddi
+        </h3>
+        <ul style={{ listStyle: "none", padding: 0, margin: "0 0 16px" }}>
+          {[
+            "Coach de rendimiento PAES con IA que opera sobre un modelo causal de 21 variables en 5 dimensiones",
+            "No ensena contenido — entrena rendimiento. Optimiza contra el potencial individual de cada estudiante",
+            "9 agentes especializados que cubren lo academico, emocional, conductual, social y vocacional",
+          ].map((item, i) => (
+            <li key={i} style={{ fontSize: 13, color: "#aaa", padding: "8px 0", borderBottom: "1px solid #1a1a2e", display: "flex", alignItems: "flex-start", gap: 8 }}>
+              <span style={{ color: "#F39C12", fontSize: 12, marginTop: 2 }}>&#9679;</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+        <div style={{ padding: 16, background: "rgba(243,156,18,0.06)", borderRadius: 8, border: "1px solid rgba(243,156,18,0.2)" }}>
+          <div style={{ fontSize: 11, color: "#F39C12", fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: 1, marginBottom: 6 }}>
+            Insight central
+          </div>
+          <p style={{ fontSize: 13, color: "#e0e0e0", margin: 0, lineHeight: 1.7 }}>
+            stress_level (0.255) tiene mas del doble de efecto en mastery que motivation (0.105). Las 3 variables con mayor impacto no son academicas. Esto invierte la logica de toda la industria de preus.
+          </p>
+        </div>
+      </div>
+
+      {/* Diferenciadores */}
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#e0e0e0", marginBottom: 16 }}>
+        7 Diferenciadores Unicos
+      </h3>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16, marginBottom: 32 }}>
+        {[
+          { title: "Grafo causal 21 variables", desc: "Red causal dirigida aciclica con 30 aristas ponderadas desde meta-analisis. 19 con soporte Nivel A.", color: "#F39C12" },
+          { title: "Stealth assessment", desc: "Mide 4 variables sin preguntar: attention_span, confidence, frustration_tolerance, metacognition.", color: "#9B59B6" },
+          { title: "12 arquetipos diferenciados", desc: "Misma app, 12 experiencias. Cubren 90-93% de la poblacion PAES. Con capas: 97-99%.", color: "#3498DB" },
+          { title: "Motor adaptativo IRT 2PL + BKT", desc: "Seleccion por maxima informacion de Fisher. Converge a theta con 5-8 items. delta_theta +0.003/sesion.", color: "#2ECC71" },
+          { title: "Coaching emocional integrado", desc: "Detecta ansiedad, estres, fatiga. Protocolo de crisis de 4 niveles. KAZE + stealth assessment.", color: "#E74C3C" },
+          { title: "Precio 94% menor", desc: "$6.990/mes vs $80K-120K/mes de preus. Accesible 24/7 desde el celular. IA personalizada 1:1.", color: "#F39C12" },
+          { title: "Validacion por simulacion", desc: "5,000 trayectorias Monte Carlo. 10 arquetipos, 5 escenarios, 180 dias. Evidencia cuantitativa, no claims.", color: "#1ABC9C" },
+        ].map((d) => (
+          <div key={d.title} style={s({ background: "#141419", border: `1px solid ${d.color}33`, borderRadius: 12, padding: 24 })}>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: d.color, marginBottom: 12 }} />
+            <h4 style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#e0e0e0" }}>{d.title}</h4>
+            <p style={{ fontSize: 12, color: "#aaa", margin: 0, lineHeight: 1.6 }}>{d.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Buyer Personas */}
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#e0e0e0", marginBottom: 16 }}>
+        Buyer Personas Principales
+      </h3>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16, marginBottom: 12 }}>
+        {[
+          { name: "Sofia", tag: "Estudiante aplicada", desc: "17, 4to medio, preu CPECH. Ensayo ~620, meta 750+ Medicina UC. Estudia mucho pero no sube.", dolor: "Estudio mucho pero mis ensayos salen igual", canal: "IG Story", ltv: "PAES Pack $29.990", color: "#F39C12" },
+          { name: "Constanza", tag: "Retaker ansiosa", desc: "19, egresada. PAES 720, necesita 750 para Medicina UV. Se bloquea el dia del examen.", dolor: "Se la materia pero me bloqueo bajo presion", canal: "Google SEO", ltv: "Premium x5 meses", color: "#E74C3C" },
+          { name: "Martin", tag: "Explorador sin preu", desc: "18, egresado, municipal Puente Alto. Sin preu, estudia con PDFs y YouTube. ~520.", dolor: "Los del preu tienen ventaja", canal: "TikTok", ltv: "Free a Premium sem 3", color: "#3498DB" },
+          { name: "Fernanda", tag: "Madre que paga preu", desc: "45, madre de Sofia. Paga CPECH $95K/mes sin visibilidad del progreso real.", dolor: "Pago el preu pero no se si funciona", canal: "WhatsApp WOM", ltv: "PAES Pack $29.990", color: "#9B59B6" },
+        ].map((bp) => (
+          <div key={bp.name} style={s({ background: "#141419", border: "1px solid #1a1a2e", borderRadius: 12, padding: 24 })}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <div style={{ width: 36, height: 36, borderRadius: "50%", background: `${bp.color}22`, border: `1px solid ${bp.color}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: bp.color }}>
+                {bp.name[0]}
+              </div>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#e0e0e0" }}>{bp.name}</div>
+                <div style={{ fontSize: 11, color: bp.color }}>{bp.tag}</div>
+              </div>
+            </div>
+            <p style={{ fontSize: 12, color: "#aaa", margin: "0 0 10px", lineHeight: 1.5 }}>{bp.desc}</p>
+            <div style={{ fontSize: 12, color: "#888", fontStyle: "italic", marginBottom: 10, padding: "8px 10px", background: "#0a0a0f", borderRadius: 6 }}>
+              &ldquo;{bp.dolor}&rdquo;
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <span style={{ fontSize: 10, padding: "3px 8px", borderRadius: 20, background: "#1a1a2e", color: "#aaa" }}>{bp.canal}</span>
+              <span style={{ fontSize: 10, padding: "3px 8px", borderRadius: 20, background: "#1a1a2e", color: "#4CAF50" }}>{bp.ltv}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p style={{ fontSize: 11, color: "#666", marginBottom: 32 }}>
+        + 8 buyer personas adicionales (Tomas gamer, Valentina elite, Isidora ansiosa, Diego doble jornada, Carlos padre de 2, Patricia orientadora, y 2 subtipos de padres). Ver 12 arquetipos en tab Investigacion.
+      </p>
+
+      {/* Features por fase */}
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#e0e0e0", marginBottom: 16 }}>
+        Features por Fase
+      </h3>
+      <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid #1a1a2e", marginBottom: 32 }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 700 }}>
+          <thead>
+            <tr style={{ background: "#141419" }}>
+              <th style={thStyle}>Fase</th>
+              <th style={thStyle}>Features</th>
+              <th style={thStyle}>Agentes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              { fase: "MVP", tag: "1 abril", features: "CAT diagnostico IRT 2PL, practica adaptativa, dashboard radar, coaching IA texto, streaks guilt-free, simulacro basico 30 items, paywall RevenueCat, push notifications", agentes: "SENPAI, KAZE basico, KAIZEN basico", color: "#F39C12" },
+              { fase: "V1", tag: "abr-jun", features: "PostHog/Sentry, social login, KAZE completo, PAES Pack pricing, COMPASS basico, reclasificacion 12 arquetipos, diferenciacion 5 tipos error, WhatsApp share", agentes: "9 agentes completos", color: "#3498DB" },
+              { fase: "V2", tag: "jul-nov", features: "NAKAMA grupos estudio, dashboard padres, simulacros completos 65 items, ejercicios ansiedad guiados, COMPASS calculadora carrera, modo offline, generacion IA, protocolo pre-PAES", agentes: "Todos + KOKORO", color: "#9B59B6" },
+            ].map((row) => (
+              <tr key={row.fase} style={{ borderBottom: "1px solid #1a1a2e" }}>
+                <td style={{ ...tdStyle, fontWeight: 700 }}>
+                  <span style={{ color: row.color }}>{row.fase}</span>
+                  <div style={{ fontSize: 10, color: "#666", marginTop: 2 }}>{row.tag}</div>
+                </td>
+                <td style={{ ...tdStyle, fontSize: 12, lineHeight: 1.6 }}>{row.features}</td>
+                <td style={{ ...tdStyle, fontSize: 12, color: "#888" }}>{row.agentes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Sistema FAD */}
+      <div style={{ background: "#141419", border: "1px solid #1a1a2e", borderRadius: 12, padding: 28, marginBottom: 32 }}>
+        <h3 style={{ margin: "0 0 12px", fontSize: 16, fontWeight: 700, color: "#F39C12" }}>
+          Sistema FAD (Fatigue-Adjusted Difficulty)
+        </h3>
+        <p style={{ fontSize: 13, color: "#aaa", margin: "0 0 16px", lineHeight: 1.7 }}>
+          Algoritmo de priorizacion diaria que decide que intervenir y en que orden para cada estudiante.
+        </p>
+        <div style={{ padding: 16, background: "#0a0a0f", borderRadius: 8, border: "1px solid #222", marginBottom: 16, fontFamily: "monospace" }}>
+          <div style={{ fontSize: 11, color: "#888", marginBottom: 8 }}>Formula de priorizacion</div>
+          <div style={{ fontSize: 14, color: "#F39C12", fontWeight: 600 }}>
+            prioridad_i = efecto_Wright_i x gap_i x intervenibilidad_i x urgencia_i x confianza_i
+          </div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+          {[
+            { factor: "efecto_Wright", desc: "Impacto total de la variable en mastery" },
+            { factor: "gap", desc: "Diferencia entre valor actual y optimo" },
+            { factor: "intervenibilidad", desc: "Que tan modificable es por la app [0,1]" },
+            { factor: "urgencia", desc: "Deterioro reciente o deadline cercano" },
+            { factor: "confianza", desc: "1 - sigma. Baja incertidumbre = mayor prioridad" },
+          ].map((f) => (
+            <div key={f.factor} style={{ padding: 12, background: "#0a0a0f", borderRadius: 8, border: "1px solid #222" }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#e0e0e0", marginBottom: 4, fontFamily: "monospace" }}>{f.factor}</div>
+              <div style={{ fontSize: 11, color: "#888" }}>{f.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Roadmap timeline */}
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#e0e0e0", marginBottom: 16 }}>
+        Roadmap
+      </h3>
+      <div style={{ background: "#141419", border: "1px solid #1a1a2e", borderRadius: 12, padding: 28 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+          {[
+            { phase: "MVP", date: "1 abril 2026", desc: "CAT diagnostico, practica adaptativa, coaching texto, streaks, simulacro basico. 3 agentes.", color: "#F39C12", target: "Launch + primeros 200 MAU" },
+            { phase: "V1", date: "Abril - Junio 2026", desc: "9 agentes completos, 12 arquetipos, COMPASS, WhatsApp share, analytics. Iteracion rapida.", color: "#3498DB", target: "1,500 MAU / 250 subs / D7 >40%" },
+            { phase: "V2", date: "Julio - Nov 2026", desc: "PAES season. NAKAMA social, simulacros completos, dashboard padres, modo offline.", color: "#9B59B6", target: "15,000 MAU / 3,000 subs / $21M CLP" },
+          ].map((t, i) => (
+            <div key={t.phase} style={{ display: "flex", gap: 20, padding: "20px 0", borderBottom: i < 2 ? "1px solid #1a1a2e" : "none" }}>
+              <div style={{ minWidth: 80, textAlign: "center" }}>
+                <div style={{ fontSize: 20, fontWeight: 800, color: t.color }}>{t.phase}</div>
+                <div style={{ fontSize: 10, color: "#666", marginTop: 4 }}>{t.date}</div>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, color: "#e0e0e0", lineHeight: 1.6, marginBottom: 8 }}>{t.desc}</div>
+                <span style={{ fontSize: 10, padding: "3px 10px", borderRadius: 20, background: `${t.color}15`, color: t.color, border: `1px solid ${t.color}33` }}>
+                  {t.target}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ─── 7. Investigacion ─── */
+function InvestigacionSection() {
+  return (
+    <>
+      <SectionTitle
+        title="Investigacion"
+        subtitle="Grafo causal, arquetipos, simulaciones, tesis validadas y comisiones revisoras"
+      />
+
+      {/* Grafo Causal */}
+      <div style={{ background: "#141419", border: "1px solid #1a1a2e", borderRadius: 12, padding: 28, marginBottom: 24 }}>
+        <h3 style={{ margin: "0 0 6px", fontSize: 16, fontWeight: 700, color: "#F39C12" }}>
+          Grafo Causal
+        </h3>
+        <p style={{ fontSize: 13, color: "#aaa", margin: "0 0 16px", lineHeight: 1.7 }}>
+          21 variables, 5 dimensiones, 30 aristas ponderadas. Red causal dirigida aciclica con pesos calibrados desde meta-analisis. 19 aristas Nivel A (soporte meta-analitico).
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 20 }}>
+          {[
+            { label: "Variables", value: "21", color: "#F39C12" },
+            { label: "Dimensiones", value: "5", color: "#3498DB" },
+            { label: "Aristas", value: "30", color: "#9B59B6" },
+            { label: "Nivel A", value: "19", color: "#2ECC71" },
+          ].map((stat) => (
+            <div key={stat.label} style={{ padding: 16, background: "#0a0a0f", borderRadius: 8, border: "1px solid #222", textAlign: "center" }}>
+              <div style={{ fontSize: 28, fontWeight: 800, color: stat.color }}>{stat.value}</div>
+              <div style={{ fontSize: 11, color: "#888" }}>{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <h4 style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 700, color: "#e0e0e0" }}>
+          5 Leverage Points (mayor efecto en mastery)
+        </h4>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 500 }}>
+            <thead>
+              <tr style={{ background: "#0a0a0f" }}>
+                <th style={thStyle}>#</th>
+                <th style={thStyle}>Variable</th>
+                <th style={thStyle}>Efecto total</th>
+                <th style={thStyle}>Tipo intervencion</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { rank: 1, variable: "stress_level", efecto: "0.255", tipo: "Emocional/conductual" },
+                { rank: 2, variable: "sleep_quality", efecto: "0.199", tipo: "Conductual" },
+                { rank: 3, variable: "physical_activity", efecto: "0.122", tipo: "Conductual" },
+                { rank: 4, variable: "motivation", efecto: "0.105", tipo: "Vocacional/emocional" },
+                { rank: 5, variable: "emotional_state", efecto: "0.032", tipo: "Emocional/social" },
+              ].map((lp) => (
+                <tr key={lp.rank} style={{ borderBottom: "1px solid #1a1a2e" }}>
+                  <td style={{ ...tdStyle, color: "#F39C12", fontWeight: 700, textAlign: "center" }}>{lp.rank}</td>
+                  <td style={{ ...tdStyle, fontFamily: "monospace", color: "#e0e0e0" }}>{lp.variable}</td>
+                  <td style={{ ...tdStyle, fontFamily: "monospace", color: "#F39C12", fontWeight: 600 }}>{lp.efecto}</td>
+                  <td style={{ ...tdStyle, color: "#888" }}>{lp.tipo}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div style={{ marginTop: 12, padding: 12, background: "rgba(243,156,18,0.06)", borderRadius: 8, border: "1px solid rgba(243,156,18,0.15)" }}>
+          <p style={{ fontSize: 12, color: "#aaa", margin: 0, lineHeight: 1.6 }}>
+            self_efficacy (0.507) tiene el mayor efecto combinado: alimenta mastery por 4 caminos aciclicos. Las 3 variables con mayor impacto directo no son academicas.
+          </p>
+        </div>
+      </div>
+
+      {/* 12 Arquetipos */}
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#e0e0e0", marginBottom: 16 }}>
+        12 Arquetipos de Estudiante
+      </h3>
+      <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid #1a1a2e", marginBottom: 32 }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, minWidth: 900 }}>
+          <thead>
+            <tr style={{ background: "#141419" }}>
+              <th style={thStyle}>#</th>
+              <th style={thStyle}>Nombre</th>
+              <th style={thStyle}>Perfil</th>
+              <th style={thStyle}>PAES est.</th>
+              <th style={thStyle}>Adherencia</th>
+              <th style={thStyle}>Duracion opt.</th>
+              <th style={thStyle}>Delta C</th>
+              <th style={thStyle}>Riesgo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              { n: 1, nombre: "Valentina", perfil: "Alto Rendimiento", paes: "835", adh: "0.85", dur: "15-25 min", delta: "-0.6", riesgo: "Bajo" },
+              { n: 2, nombre: "Matias", perfil: "Gestion Emocional", paes: "680", adh: "0.60", dur: "10-15 min", delta: "+79.0", riesgo: "Medio" },
+              { n: 3, nombre: "Camila", perfil: "Primera Generacion", paes: "590", adh: "0.55", dur: "10-15 min", delta: "+65.9", riesgo: "Medio" },
+              { n: 4, nombre: "Benjamin", perfil: "Engagement Digital", paes: "500", adh: "0.35", dur: "3-5 min", delta: "+53.9", riesgo: "Alto" },
+              { n: 5, nombre: "Isidora", perfil: "Prevencion Sobrecarga", paes: "725", adh: "0.70", dur: "10-15 min", delta: "-9.1", riesgo: "Alto" },
+              { n: 6, nombre: "Diego", perfil: "Integracion Deportiva", paes: "455", adh: "0.45", dur: "5-8 min", delta: "+141.8", riesgo: "Medio" },
+              { n: 7, nombre: "Francisca", perfil: "Funcion Ejecutiva", paes: "410", adh: "0.35", dur: "3-5 min", delta: "+117.2", riesgo: "Alto" },
+              { n: 8, nombre: "Tomas", perfil: "Aprendizaje Social", paes: "545", adh: "0.50", dur: "8-12 min", delta: "+62.5", riesgo: "Bajo" },
+              { n: 9, nombre: "Martina", perfil: "Recuperacion Academica", paes: "635", adh: "0.45", dur: "max 10 min", delta: "+36.1", riesgo: "Alto" },
+              { n: 10, nombre: "Joaquin", perfil: "Activacion Tardia", paes: "320", adh: "0.30", dur: "3-5 min", delta: "+111.6", riesgo: "Alto" },
+              { n: 11, nombre: "Andres", perfil: "Doble Jornada", paes: "420", adh: "0.40", dur: "3-5 min", delta: "N/A", riesgo: "Medio" },
+              { n: 12, nombre: "Javiera", perfil: "Contexto Rural", paes: "380", adh: "0.42", dur: "10-15 min", delta: "N/A", riesgo: "Medio" },
+            ].map((a) => (
+              <tr key={a.n} style={{ borderBottom: "1px solid #1a1a2e", background: a.n <= 10 ? "transparent" : "rgba(255,255,255,0.02)" }}>
+                <td style={{ ...tdStyle, color: "#666", textAlign: "center" }}>{a.n}</td>
+                <td style={{ ...tdStyle, fontWeight: 600, color: "#e0e0e0" }}>{a.nombre}</td>
+                <td style={{ ...tdStyle, color: "#888" }}>{a.perfil}</td>
+                <td style={{ ...tdStyle, fontFamily: "monospace", textAlign: "center" }}>{a.paes}</td>
+                <td style={{ ...tdStyle, fontFamily: "monospace", textAlign: "center" }}>{a.adh}</td>
+                <td style={{ ...tdStyle, textAlign: "center", color: "#888" }}>{a.dur}</td>
+                <td style={{ ...tdStyle, fontFamily: "monospace", textAlign: "center", color: a.delta.startsWith("+") ? "#4CAF50" : a.delta === "N/A" ? "#666" : "#E74C3C", fontWeight: 600 }}>{a.delta}</td>
+                <td style={{ ...tdStyle, textAlign: "center" }}>
+                  <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 20, background: a.riesgo === "Alto" ? "#3a151522" : a.riesgo === "Medio" ? "#3a2a1522" : "#1a2a1522", color: a.riesgo === "Alto" ? "#E74C3C" : a.riesgo === "Medio" ? "#F39C12" : "#4CAF50", border: `1px solid ${a.riesgo === "Alto" ? "#E74C3C33" : a.riesgo === "Medio" ? "#F39C1233" : "#4CAF5033"}` }}>
+                    {a.riesgo}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Simulaciones */}
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#e0e0e0", marginBottom: 16 }}>
+        Simulaciones Monte Carlo
+      </h3>
+      <div style={{ background: "#141419", border: "1px solid #1a1a2e", borderRadius: 12, padding: 28, marginBottom: 24 }}>
+        <p style={{ fontSize: 13, color: "#aaa", margin: "0 0 16px", lineHeight: 1.7 }}>
+          1,000 estudiantes, 10 arquetipos, 180 dias, 5 escenarios. Curva honeymoon realista + regresion a la media + eventos de crisis calibrados.
+        </p>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 500 }}>
+            <thead>
+              <tr style={{ background: "#0a0a0f" }}>
+                <th style={thStyle}>Escenario</th>
+                <th style={thStyle}>Delta PAES medio</th>
+                <th style={thStyle}>IC 95%</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { esc: "A — Sin Renddi", delta: "+6.3 pts", ic: "[-5.1, +17.6]", color: "#666" },
+                { esc: "B — Renddi basico (solo academico)", delta: "+69.6 pts", ic: "[+59.1, +80.1]", color: "#3498DB" },
+                { esc: "C — Renddi completo (todos agentes)", delta: "+65.8 pts", ic: "[+55.1, +76.5]", color: "#2ECC71" },
+                { esc: "D — Renddi + alta adherencia", delta: "+84.5 pts", ic: "[+74.0, +95.1]", color: "#F39C12" },
+                { esc: "E — Renddi + crisis", delta: "+60.2 pts", ic: "[+49.5, +70.9]", color: "#E74C3C" },
+              ].map((row) => (
+                <tr key={row.esc} style={{ borderBottom: "1px solid #1a1a2e" }}>
+                  <td style={{ ...tdStyle, color: row.color, fontWeight: 600 }}>{row.esc}</td>
+                  <td style={{ ...tdStyle, fontFamily: "monospace", fontWeight: 700, color: "#e0e0e0" }}>{row.delta}</td>
+                  <td style={{ ...tdStyle, fontFamily: "monospace", color: "#888" }}>{row.ic}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div style={{ marginTop: 16, padding: 12, background: "rgba(243,156,18,0.06)", borderRadius: 8, border: "1px solid rgba(243,156,18,0.15)" }}>
+          <p style={{ fontSize: 12, color: "#aaa", margin: 0, lineHeight: 1.6 }}>
+            <strong style={{ color: "#F39C12" }}>Hallazgo clave:</strong> La adherencia es el multiplicador, no el contenido. Perfiles PAES &lt;500 mejoran +106.1 pts promedio vs +38.8 pts los perfiles &gt;=500.
+          </p>
+        </div>
+      </div>
+
+      {/* Tesis Validadas */}
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#e0e0e0", marginBottom: 16 }}>
+        Tesis Validadas
+      </h3>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16, marginBottom: 32 }}>
+        {[
+          { name: "TAKUMI", num: "Tesis 95+", desc: "Acciones e intervenciones de Renddi. Define las acciones concretas por variable del grafo, presupuesto de tiempo por arquetipo, y mecanismos de cambio.", color: "#F39C12" },
+          { name: "SHOKUNIN", num: "Tesis 96", desc: "Perfilamiento y arquetipos. Define los 12 arquetipos con vectores de 21 variables, journeys diferenciados, y sistema de reclasificacion quincenal.", color: "#9B59B6" },
+          { name: "KOTODAMA", num: "Tesis 97", desc: "Comunicacion y messaging. Define personas comunicacionales (Catalina, Tomas, Martin), tono por arquetipo, y copy por pantalla.", color: "#3498DB" },
+        ].map((t) => (
+          <div key={t.name} style={s({ background: "#141419", border: `1px solid ${t.color}33`, borderRadius: 12, padding: 24, position: "relative" })}>
+            <div style={{ position: "absolute", top: -10, right: 16, background: t.color, color: "#0a0a0f", fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 20 }}>
+              {t.num}
+            </div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: t.color, marginBottom: 8 }}>{t.name}</div>
+            <p style={{ fontSize: 12, color: "#aaa", margin: 0, lineHeight: 1.6 }}>{t.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Sistema FAD detalle */}
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#e0e0e0", marginBottom: 16 }}>
+        Sistema FAD — Detalle de 5 Factores
+      </h3>
+      <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid #1a1a2e", marginBottom: 32 }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 700 }}>
+          <thead>
+            <tr style={{ background: "#141419" }}>
+              <th style={thStyle}>Factor</th>
+              <th style={thStyle}>Definicion</th>
+              <th style={thStyle}>Fuente</th>
+              <th style={thStyle}>Rango</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              { factor: "efecto_Wright", def: "Impacto total en mastery via descomposicion de rutas de Wright", fuente: "Grafo causal 30 aristas", rango: "[0, 0.507]" },
+              { factor: "gap", def: "1.0 - valor_actual (positivas) o valor_actual (negativas)", fuente: "Perfil del estudiante (21 vars)", rango: "[0, 1]" },
+              { factor: "intervenibilidad", def: "Que tan modificable es la variable por acciones de la app", fuente: "TAKUMI (calibrado)", rango: "[0.20, 0.90]" },
+              { factor: "urgencia", def: "Factor temporal: deterioro reciente o deadline cercano", fuente: "Thresholds por variable", rango: "[1.0, 3.0]" },
+              { factor: "confianza", def: "1 - sigma_variable. Alta incertidumbre = menor prioridad", fuente: "Observaciones acumuladas", rango: "[0, 1]" },
+            ].map((f) => (
+              <tr key={f.factor} style={{ borderBottom: "1px solid #1a1a2e" }}>
+                <td style={{ ...tdStyle, fontFamily: "monospace", fontWeight: 600, color: "#F39C12" }}>{f.factor}</td>
+                <td style={{ ...tdStyle, color: "#aaa", fontSize: 12 }}>{f.def}</td>
+                <td style={{ ...tdStyle, color: "#888", fontSize: 12 }}>{f.fuente}</td>
+                <td style={{ ...tdStyle, fontFamily: "monospace", color: "#e0e0e0", textAlign: "center" }}>{f.rango}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Comisiones Revisoras */}
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#e0e0e0", marginBottom: 16 }}>
+        Comisiones Revisoras
+      </h3>
+      <div style={{ background: "#141419", border: "1px solid #1a1a2e", borderRadius: 12, padding: 28 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+          {[
+            { id: "C1", title: "Revision Inicial", desc: "3 expertos mundiales (Learning Sciences, UX, Comunicacion). Validacion de grafo, arquetipos y propuesta de valor.", status: "Completada" },
+            { id: "C2", title: "Ingeniero Matematico", desc: "Validacion estadistica del modelo causal. Verificacion de pesos, aristas, descomposicion de Wright y simulaciones Monte Carlo.", status: "Completada" },
+            { id: "C3", title: "Auditoria Cruzada", desc: "Verificacion de consistencia entre 7 documentos: HTML grafo, Teoria Aplicada, TAKUMI, SHOKUNIN, KOTODAMA, Informe Consultor, Reporte Simulaciones.", status: "Completada" },
+            { id: "C4", title: "Comision Internacional", desc: "Panel completo: 3 expertos mundiales, ingeniero matematico, auditor bibliografico, auditor de coherencia, consultor McKinsey.", status: "Completada" },
+          ].map((c, i) => (
+            <div key={c.id} style={{ display: "flex", gap: 20, padding: "20px 0", borderBottom: i < 3 ? "1px solid #1a1a2e" : "none" }}>
+              <div style={{ minWidth: 48, textAlign: "center" }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#F39C1215", border: "1px solid #F39C1233", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#F39C12", margin: "0 auto" }}>
+                  {c.id}
+                </div>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: "#e0e0e0" }}>{c.title}</span>
+                  <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 20, background: "#1a2a1522", color: "#4CAF50", border: "1px solid #4CAF5033" }}>
+                    {c.status}
+                  </span>
+                </div>
+                <p style={{ fontSize: 12, color: "#888", margin: 0, lineHeight: 1.6 }}>{c.desc}</p>
               </div>
             </div>
           ))}
