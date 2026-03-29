@@ -438,7 +438,7 @@
       <circle cx="500" cy="340" r="52" fill="#0c1338" stroke="url(#grafoGrad)" stroke-width="3"/>
       <!-- Inner decoration -->
       <circle cx="500" cy="340" r="40" fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.3"/>
-      <!-- Mini-nodes representing the 21 variables -->
+      <!-- Mini-nodes representing the 22 variables -->
       <g opacity="0.5">
         <circle cx="475" cy="310" r="3" fill="#60a5fa"/>
         <circle cx="495" cy="305" r="3" fill="#60a5fa"/>
@@ -471,7 +471,7 @@
       </g>
       <text x="500" y="335" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700">GRAFO</text>
       <text x="500" y="348" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700">CAUSAL</text>
-      <text x="500" y="395" text-anchor="middle" fill="#475569" font-size="9">21 vars · 30 aristas</text>
+      <text x="500" y="395" text-anchor="middle" fill="#475569" font-size="9">22 vars · 34 aristas</text>
     </g>
 
     <!-- ===== INGENIERO MATEMATICO (Below Grafo) ===== -->
@@ -547,7 +547,7 @@
     <g class="agent-node" onclick="showInfo('tesis')">
       <rect x="400" y="640" width="200" height="45" rx="8" fill="#0c1338" stroke="#1e293b" stroke-width="1.5"/>
       <text x="500" y="660" text-anchor="middle" fill="#475569" font-size="10" font-weight="700">📖 TESIS v2 — Base de Conocimiento</text>
-      <text x="500" y="675" text-anchor="middle" fill="#334155" font-size="8">21 variables · 150+ refs · 8 ciclos de revision</text>
+      <text x="500" y="675" text-anchor="middle" fill="#334155" font-size="8">22 variables · 150+ refs · 8 ciclos de revision</text>
     </g>
     <!-- Tesis → Grafo connection -->
     <line x1="500" y1="640" x2="500" y2="395" stroke="#1e293b" stroke-width="1" opacity="0.3" stroke-dasharray="5,5"/>
@@ -666,7 +666,7 @@ const agentInfo = {
   },
   grafo: {
     title: '🔮 GRAFO CAUSAL — Motor de Rendimiento',
-    text: '21 variables, 30 aristas causales con evidencia clasificada (A/A*/B/C). 87% con soporte meta-analitico. Descomposicion de Wright para efectos directos e indirectos. Propagacion bayesiana con convergencia formalizada. Este grafo ES el cerebro del sistema — todos los agentes leen y alimentan sus pesos.',
+    text: '22 variables (v22 = NSE, exógena), 34 aristas causales con evidencia clasificada (A/A*/B/C). 87% con soporte meta-analitico. Descomposicion de Wright para efectos directos e indirectos. Propagacion sigmoidal con convergencia formalizada. Este grafo ES el cerebro del sistema — todos los agentes leen y alimentan sus pesos.',
     color: '#3b82f6'
   },
   ingeniero: {
@@ -686,7 +686,7 @@ const agentInfo = {
   },
   estudiante: {
     title: '🎓 ALUMNO — Usuario Renddi',
-    text: 'El estudiante que rinde la PAES. Interactua con MIYAGI, recibe coaching personalizado, y genera data que alimenta el grafo. Su progreso se mide en las 21 variables del modelo. La brecha promedio de 180-197 puntos PAES entre tipos de establecimiento es lo que Renddi busca reducir.',
+    text: 'El estudiante que rinde la PAES. Interactua con MIYAGI, recibe coaching personalizado, y genera data que alimenta el grafo. Su progreso se mide en las 22 variables del modelo. La brecha promedio de 180-197 puntos PAES entre tipos de establecimiento es lo que Renddi busca reducir.',
     color: '#94a3b8'
   },
   backlog: {
@@ -696,7 +696,7 @@ const agentInfo = {
   },
   tesis: {
     title: '📖 TESIS v2 — Base de Conocimiento',
-    text: 'La tesis es el fundamento cientifico de TODO el sistema. Contiene el grafo causal de 21 variables, 30 aristas con niveles de evidencia, 150+ referencias APA 7, y 8 ciclos de revision. Toda decision de diseno de agentes debe referirse a este documento. Evaluacion externa: 8.5-9/10.',
+    text: 'La tesis es el fundamento cientifico de TODO el sistema. Contiene el grafo causal de 22 variables, 34 aristas con niveles de evidencia, 150+ referencias APA 7, y 8 ciclos de revision. Toda decision de diseno de agentes debe referirse a este documento. Evaluacion externa: 8.5-9/10.',
     color: '#475569'
   }
 };
