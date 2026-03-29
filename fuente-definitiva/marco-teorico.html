@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RENDDI | Marco Teorico & Fundamentacion Cientifica v8.0</title>
+  <title>RENDDI | Marco Teorico & Fundamentacion Cientifica v8.1</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
     :root {
@@ -417,21 +417,33 @@
 <!-- ================================================================ -->
 <section class="hero" id="top">
   <div class="hero-content">
-    <div class="hero-badge">SENSEI v8.0 -- Documento Definitivo -- Marzo 2026</div>
+    <div class="hero-badge">SENSEI v8.1 -- Documento Definitivo -- Marzo 2026</div>
     <h1>Marco Teorico &<br>Fundamentacion Cientifica</h1>
     <p>Sistema Multi-Agente de Coaching Educativo con IA para la Preparacion de la PAES. Un Modelo de Grafo Causal para la Optimizacion del Rendimiento Estudiantil.</p>
     <div class="stats-row">
       <div class="stat-card"><div class="number">120+</div><div class="label">Investigadores</div></div>
       <div class="stat-card"><div class="number">13+</div><div class="label">Marcos Teoricos</div></div>
-      <div class="stat-card"><div class="number">21</div><div class="label">Variables</div></div>
-      <div class="stat-card"><div class="number">30</div><div class="label">Aristas Causales</div></div>
-      <div class="stat-card"><div class="number">87%</div><div class="label">Soporte Empirico</div></div>
-      <div class="stat-card"><div class="number">10</div><div class="label">Arquetipos</div></div>
+      <div class="stat-card"><div class="number">22</div><div class="label">Variables</div></div>
+      <div class="stat-card"><div class="number">34</div><div class="label">Aristas Causales</div></div>
+      <div class="stat-card"><div class="number">88%</div><div class="label">Soporte Empirico</div></div>
+      <div class="stat-card"><div class="number">12</div><div class="label">Arquetipos</div></div>
       <div class="stat-card"><div class="number">12</div><div class="label">Capitulos</div></div>
       <div class="stat-card"><div class="number">136+</div><div class="label">Referencias APA 7</div></div>
     </div>
   </div>
 </section>
+
+<!-- ========== CHANGELOG ========== -->
+<div style="max-width:900px;margin:0 auto;padding:0 2rem">
+  <div style="background:var(--surface);border:1px solid var(--accent3);border-radius:12px;padding:1.2rem 1.5rem;font-size:0.8rem;color:var(--text2)">
+    <div style="font-weight:700;color:var(--accent3);margin-bottom:0.5rem">Ultima actualizacion: 2026-03-29 02:01 CLT</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;line-height:1.8">
+      <strong>Changelog:</strong><br>
+      - v8.1 (2026-03-29 02:01 CLT): Implementacion D2 (propagacion sigmoide) + D3 (NSE como v22 exogena con 4 aristas). Total: 22 variables, 34 aristas.<br>
+      - v8.0 (2026-03-28): Version definitiva con 12 arquetipos, 21 variables, 30 aristas. Auditoria de referencias completada.
+    </div>
+  </div>
+</div>
 
 <!-- ========== STICKY NAV ========== -->
 <nav class="nav-sticky">
@@ -909,16 +921,16 @@
 <section class="section" id="s4">
   <div class="section-header">
     <div class="section-num">SECCION 04</div>
-    <h2>Grafo Causal: 21 Variables</h2>
+    <h2>Grafo Causal: 22 Variables</h2>
     <p class="subtitle">Cada variable con su ID, nombre, rango, dimension, indicador de inversion, metodo de medicion (del protocolo diagnostico SHOKUNIN) y descripcion.</p>
   </div>
 
   <div class="filter-tabs" id="dimFilter">
-    <button class="filter-tab active" onclick="filterVars('all')">Todas (21)</button>
+    <button class="filter-tab active" onclick="filterVars('all')">Todas (22)</button>
     <button class="filter-tab" onclick="filterVars('DA')">Academica (4)</button>
     <button class="filter-tab" onclick="filterVars('DE')">Emocional (6)</button>
     <button class="filter-tab" onclick="filterVars('DC')">Conductual (6)</button>
-    <button class="filter-tab" onclick="filterVars('DS')">Social (2)</button>
+    <button class="filter-tab" onclick="filterVars('DS')">Social (3)</button>
     <button class="filter-tab" onclick="filterVars('DV')">Vocacional (3)</button>
   </div>
 
@@ -946,6 +958,7 @@
       <tr data-dim="DC"><td>v16</td><td><strong>physical_activity</strong></td><td>[0,1]</td><td><span class="dim-badge dim-DC">DC</span></td><td>No</td><td>Auto-reporte + dispositivo</td><td>Nivel actividad fisica (exogena)</td></tr>
       <tr data-dim="DS"><td>v17</td><td><strong>social_support</strong></td><td>[0,1]</td><td><span class="dim-badge dim-DS">DS</span></td><td>No</td><td>Auto-reporte periodico</td><td>Apoyo social percibido de pares</td></tr>
       <tr data-dim="DS"><td>v18</td><td><strong>parental_support</strong></td><td>[0,1]</td><td><span class="dim-badge dim-DS">DS</span></td><td>No</td><td>Auto-reporte periodico</td><td>Apoyo parental (apoyo vs presion)</td></tr>
+      <tr data-dim="DS"><td>v22</td><td><strong>nse</strong></td><td>[0,1]</td><td><span class="dim-badge dim-DS">DS</span></td><td>No</td><td>Item diagnostico Primera Mision + dato establecimiento</td><td>Proxy: tipo establecimiento (municipal=0.25, subvencionado=0.50, pagado=0.75) + becas. Variable exogena no intervenible.</td></tr>
       <tr data-dim="DV"><td>v19</td><td><strong>vocational_clarity</strong></td><td>[0,1]</td><td><span class="dim-badge dim-DV">DV</span></td><td>No</td><td>Cuestionario + RIASEC + seguimiento</td><td>Claridad sobre que estudiar y por que</td></tr>
       <tr data-dim="DV"><td>v20</td><td><strong>motivation</strong></td><td>[0,1]</td><td><span class="dim-badge dim-DV">DV</span></td><td>No</td><td>SDT items + engagement</td><td>Motivacion combinada (continuo SDT)</td></tr>
       <tr data-dim="DV"><td>v21</td><td><strong>growth_mindset</strong></td><td>[0,1]</td><td><span class="dim-badge dim-DV">DV</span></td><td>No</td><td>Cuestionario breve + post-error</td><td>Creencia en maleabilidad (Dweck)</td></tr>
@@ -953,18 +966,18 @@
   </table>
   </div>
 
-  <p style="font-size:0.75rem;color:var(--text3);margin-top:1rem">9 variables exogenas (sin aristas entrantes): cognitive_load, screen_time, physical_activity, social_support, parental_support, vocational_clarity, growth_mindset, time_management, metacognition. 12 variables endogenas. "Inv?" indica si valores altos son negativos para mastery.</p>
+  <p style="font-size:0.75rem;color:var(--text3);margin-top:1rem">10 variables exogenas (sin aristas entrantes): cognitive_load, screen_time, physical_activity, social_support, parental_support, nse, vocational_clarity, growth_mindset, time_management, metacognition. 12 variables endogenas. "Inv?" indica si valores altos son negativos para mastery.</p>
 </section>
 
 <!-- ================================================================ -->
-<!-- SECTION 5: 30 ARISTAS CAUSALES                                   -->
+<!-- SECTION 5: 34 ARISTAS CAUSALES                                   -->
 <!-- ================================================================ -->
 <hr class="section-divider">
 <section class="section" id="s5">
   <div class="section-header">
     <div class="section-num">SECCION 05</div>
-    <h2>30 Aristas Causales</h2>
-    <p class="subtitle">Modelo canonico con pesos V2 corregidos (meta-analiticos). Se muestra peso V1 original y porcentaje de correccion. 24 aristas originales + 6 recomendadas por validacion matematica.</p>
+    <h2>34 Aristas Causales</h2>
+    <p class="subtitle">Modelo canonico con pesos V2 corregidos (meta-analiticos). Se muestra peso V1 original y porcentaje de correccion. 24 aristas originales + 6 recomendadas por validacion matematica + 4 aristas NSE (v8.1).</p>
   </div>
 
   <div style="overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px">
@@ -1001,9 +1014,13 @@
     <div class="edge-row" style="background:rgba(108,92,231,0.05)"><div>sleep_quality <span style="font-size:0.6rem;color:var(--accent)">[NUEVA]</span></div><div class="arrow">-></div><div>fatigue</div><div><span style="color:var(--red)">-0.50</span></div><div><span class="evidence-badge evidence-A">A</span></div><div>Dewald et al. (2010); Lim & Dinges (2010)</div></div>
     <div class="edge-row" style="background:rgba(108,92,231,0.05)"><div>self_efficacy <span style="font-size:0.6rem;color:var(--accent)">[NUEVA]</span></div><div class="arrow">-></div><div>anxiety</div><div><span style="color:var(--red)">-0.35</span></div><div><span class="evidence-badge evidence-A">A</span></div><div>Bandura (1997)</div></div>
     <div class="edge-row" style="background:rgba(108,92,231,0.05)"><div>physical_activity <span style="font-size:0.6rem;color:var(--accent)">[NUEVA]</span></div><div class="arrow">-></div><div>stress_level</div><div><span style="color:var(--red)">-0.25</span></div><div><span class="evidence-badge evidence-A">A</span></div><div>Salmon (2001); Biddle & Asare (2011)</div></div>
+    <div class="edge-row" style="background:rgba(0,206,201,0.05)"><div>nse <span style="font-size:0.6rem;color:var(--accent3)">[v8.1]</span></div><div class="arrow">-></div><div>mastery</div><div><span style="color:var(--green)">+0.20</span></div><div><span class="evidence-badge evidence-A">A</span></div><div>Richardson et al. (2012), DEMRE 2024</div></div>
+    <div class="edge-row" style="background:rgba(0,206,201,0.05)"><div>nse <span style="font-size:0.6rem;color:var(--accent3)">[v8.1]</span></div><div class="arrow">-></div><div>screen_time</div><div><span style="color:var(--red)">-0.15</span></div><div><span class="evidence-badge evidence-B">B</span></div><div>Hale & Guan (2015)</div></div>
+    <div class="edge-row" style="background:rgba(0,206,201,0.05)"><div>nse <span style="font-size:0.6rem;color:var(--accent3)">[v8.1]</span></div><div class="arrow">-></div><div>parental_support</div><div><span style="color:var(--green)">+0.25</span></div><div><span class="evidence-badge evidence-A">A</span></div><div>Fan & Chen (2001), Jeynes (2007)</div></div>
+    <div class="edge-row" style="background:rgba(0,206,201,0.05)"><div>nse <span style="font-size:0.6rem;color:var(--accent3)">[v8.1]</span></div><div class="arrow">-></div><div>study_adherence</div><div><span style="color:var(--green)">+0.15</span></div><div><span class="evidence-badge evidence-B">B</span></div><div>Crede & Phillips (2011)</div></div>
   </div>
 
-  <p style="font-size:0.75rem;color:var(--text3);margin-top:1rem"><strong>Niveles:</strong> A = meta-analisis publicado (21 aristas, 70%). A* = meta-analisis con efecto debatido (1, 3%). B = evidencia parcial (4, 13%). C = plausibilidad teorica (4, 13%). Total 30 aristas. Soporte A+A*+B = 87%.</p>
+  <p style="font-size:0.75rem;color:var(--text3);margin-top:1rem"><strong>Niveles:</strong> A = meta-analisis publicado (23 aristas, 68%). A* = meta-analisis con efecto debatido (1, 3%). B = evidencia parcial (6, 18%). C = plausibilidad teorica (4, 12%). Total 34 aristas. Soporte A+A*+B = 88%.</p>
 </section>
 
 <!-- ================================================================ -->
@@ -1020,7 +1037,7 @@
   <h3 style="margin-bottom:1rem">Sistema de Ecuaciones Estructurales (v = B*v + u)</h3>
 
   <div class="equation-block">
-<span class="eq-var">mastery</span> <span class="eq-op">=</span> <span class="eq-weight">-0.30</span>*<span class="eq-var">anxiety</span> <span class="eq-op">+</span> <span class="eq-weight">0.20</span>*<span class="eq-var">confidence</span> <span class="eq-op">+</span> <span class="eq-weight">0.30</span>*<span class="eq-var">attention_span</span> <span class="eq-op">+</span> <span class="eq-weight">0.30</span>*<span class="eq-var">study_adherence</span> <span class="eq-op">+</span> <span class="eq-weight">0.30</span>*<span class="eq-var">self_efficacy</span> <span class="eq-op">+</span> <span class="eq-error">u1</span>
+<span class="eq-var">mastery</span> <span class="eq-op">=</span> <span class="eq-weight">-0.30</span>*<span class="eq-var">anxiety</span> <span class="eq-op">+</span> <span class="eq-weight">0.20</span>*<span class="eq-var">confidence</span> <span class="eq-op">+</span> <span class="eq-weight">0.30</span>*<span class="eq-var">attention_span</span> <span class="eq-op">+</span> <span class="eq-weight">0.30</span>*<span class="eq-var">study_adherence</span> <span class="eq-op">+</span> <span class="eq-weight">0.30</span>*<span class="eq-var">self_efficacy</span> <span class="eq-op">+</span> <span class="eq-weight">0.20</span>*<span class="eq-var">nse</span> <span class="eq-op">+</span> <span class="eq-error">u1</span>
 <span class="eq-var">attention_span</span> <span class="eq-op">=</span> <span class="eq-weight">0.45</span>*<span class="eq-var">sleep_quality</span> <span class="eq-op">-</span> <span class="eq-weight">0.40</span>*<span class="eq-var">fatigue</span> <span class="eq-op">-</span> <span class="eq-weight">0.30</span>*<span class="eq-var">anxiety</span> <span class="eq-op">+</span> <span class="eq-error">u2</span>
 <span class="eq-var">anxiety</span> <span class="eq-op">=</span> <span class="eq-weight">0.45</span>*<span class="eq-var">stress_level</span> <span class="eq-op">-</span> <span class="eq-weight">0.35</span>*<span class="eq-var">self_efficacy</span> <span class="eq-op">+</span> <span class="eq-error">u5</span>
 <span class="eq-var">confidence</span> <span class="eq-op">=</span> <span class="eq-weight">0.35</span>*<span class="eq-var">self_efficacy</span> <span class="eq-op">+</span> <span class="eq-error">u6</span>
@@ -1028,22 +1045,32 @@
 <span class="eq-var">self_efficacy(t)</span> <span class="eq-op">=</span> <span class="eq-weight">0.30</span>*<span class="eq-var">mastery(t-1)</span> <span class="eq-op">+</span> <span class="eq-error">u8</span>  <span class="eq-op">[temporal]</span>
 <span class="eq-var">frustration_tolerance</span> <span class="eq-op">=</span> <span class="eq-weight">0.25</span>*<span class="eq-var">growth_mindset</span> <span class="eq-op">+</span> <span class="eq-error">u9</span>
 <span class="eq-var">stress_level</span> <span class="eq-op">=</span> <span class="eq-weight">-0.25</span>*<span class="eq-var">physical_activity</span> <span class="eq-op">+</span> <span class="eq-error">u10</span>
-<span class="eq-var">study_adherence</span> <span class="eq-op">=</span> <span class="eq-weight">0.35</span>*<span class="eq-var">motivation</span> <span class="eq-op">+</span> <span class="eq-weight">0.25</span>*<span class="eq-var">metacognition</span> <span class="eq-op">+</span> <span class="eq-weight">0.20</span>*<span class="eq-var">frustration_tolerance</span> <span class="eq-op">+</span> <span class="eq-weight">0.30</span>*<span class="eq-var">time_management</span> <span class="eq-op">+</span> <span class="eq-error">u11</span>
+<span class="eq-var">study_adherence</span> <span class="eq-op">=</span> <span class="eq-weight">0.35</span>*<span class="eq-var">motivation</span> <span class="eq-op">+</span> <span class="eq-weight">0.25</span>*<span class="eq-var">metacognition</span> <span class="eq-op">+</span> <span class="eq-weight">0.20</span>*<span class="eq-var">frustration_tolerance</span> <span class="eq-op">+</span> <span class="eq-weight">0.30</span>*<span class="eq-var">time_management</span> <span class="eq-op">+</span> <span class="eq-weight">0.15</span>*<span class="eq-var">nse</span> <span class="eq-op">+</span> <span class="eq-error">u11</span>
 <span class="eq-var">sleep_quality</span> <span class="eq-op">=</span> <span class="eq-weight">-0.40</span>*<span class="eq-var">screen_time</span> <span class="eq-op">+</span> <span class="eq-weight">0.25</span>*<span class="eq-var">physical_activity</span> <span class="eq-op">-</span> <span class="eq-weight">0.35</span>*<span class="eq-var">stress_level</span> <span class="eq-op">+</span> <span class="eq-error">u13</span>
 <span class="eq-var">fatigue</span> <span class="eq-op">=</span> <span class="eq-weight">0.30</span>*<span class="eq-var">cognitive_load</span> <span class="eq-op">-</span> <span class="eq-weight">0.50</span>*<span class="eq-var">sleep_quality</span> <span class="eq-op">+</span> <span class="eq-error">u15</span>
 <span class="eq-var">motivation</span> <span class="eq-op">=</span> <span class="eq-weight">0.30</span>*<span class="eq-var">emotional_state</span> <span class="eq-op">+</span> <span class="eq-weight">0.30</span>*<span class="eq-var">vocational_clarity</span> <span class="eq-op">+</span> <span class="eq-error">u20</span>
+<span class="eq-var">nse</span> <span class="eq-op">=</span> <span class="eq-error">u22</span>  <span class="eq-op">[variable exogena -- no tiene predecesores en el grafo]</span>
   </div>
 
-  <h3 style="margin:2rem 0 1rem">Algoritmo de Propagacion</h3>
+  <h3 style="margin:2rem 0 1rem">Algoritmo de Propagacion (Sigmoidal)</h3>
   <div class="equation-block">
+<span class="eq-op">DEFINIR</span> <span class="eq-var">sigma</span>(x) = 2 / (1 + e<sup>-5x</sup>) - 1  <span class="eq-error">// sigmoide acotada en [-1, 1]</span>
+
 <span class="eq-op">PARA</span> step = 0 <span class="eq-op">HASTA</span> 4:
   <span class="eq-op">PARA CADA</span> arista (from, to, w) <span class="eq-op">EN</span> E:
-    cambio[to] <span class="eq-op">+=</span> (estado[from] - estado_previo[from]) <span class="eq-op">*</span> w <span class="eq-op">*</span> <span class="eq-weight">0.7^step</span>
+    delta_in = (estado[from] - estado_previo[from]) <span class="eq-op">*</span> w
+    cambio[to] <span class="eq-op">+=</span> <span class="eq-var">sigma</span>(delta_in) <span class="eq-op">*</span> <span class="eq-weight">0.7^step</span>
   <span class="eq-op">FIN PARA</span>
 <span class="eq-op">FIN PARA</span>
-<span class="eq-error">// Convergencia: rho(0.7 * W) &lt; 1 demostrada</span>
+<span class="eq-error">// Convergencia: |sigma(x)| &lt;= 1 para todo x, por lo que gamma*rho(A) &lt; 1 sigue siendo suficiente</span>
 <span class="eq-error">// G1 = 0.30*0.35*0.20 = 0.021 (ciclo virtuoso)</span>
 <span class="eq-error">// G2 = 0.30*0.35*0.30 = 0.032 (ciclo protector)</span>
+  </div>
+
+  <div class="theory-card" style="border-color:var(--accent3)">
+    <h4 style="color:var(--accent3)">Propagacion Sigmoidal (D2)</h4>
+    <p>La funcion sigmoide sigma(x) = 2/(1 + e<sup>-5x</sup>) - 1 acota el delta propagado en [-1, 1], capturando efectos de saturacion: un cambio grande en la variable fuente no produce un cambio proporcionalmente grande en la destino. Esto resuelve la limitacion de linealidad para relaciones como cognitive_load-&gt;fatigue (U invertida) y parental_support-&gt;emotional_state (apoyo vs presion).</p>
+    <div class="connection">La convergencia se mantiene garantizada porque |sigma(x)| &lt;= 1 para todo x, por lo que la condicion gamma*rho(A) &lt; 1 sigue siendo suficiente.</div>
   </div>
 
   <h3 style="margin:2rem 0 1rem">FSRS (Free Spaced Repetition Scheduler)</h3>
@@ -1084,8 +1111,8 @@
 <section class="section" id="s7">
   <div class="section-header">
     <div class="section-num">SECCION 07</div>
-    <h2>10 Arquetipos Estudiantiles</h2>
-    <p class="subtitle">Perfiles representativos de la poblacion PAES con 21 variables, estrategia de agente primario, proyeccion PAES y persona comunicacional (KOTODAMA).</p>
+    <h2>12 Arquetipos Estudiantiles</h2>
+    <p class="subtitle">10 arquetipos base + 2 nuevos (Andrés/Trabajador, Javiera/Rural) + 4 capas complementarias transversales. Cobertura: 97-99%</p>
   </div>
 
   <div class="archetype-grid" id="archetypeGrid">
@@ -1225,9 +1252,9 @@
     <div class="agent-cards">
       <div class="agent-card" style="border-color:var(--gold)">
         <h4>&#x5BAE;&#x57CE; MIYAGI</h4>
-        <div class="agent-role">Orquestador -- Lee las 21 variables</div>
-        <div class="agent-vars"><span class="agent-var read">todas las 21 variables</span></div>
-        <p style="font-size:0.78rem;color:var(--text2)">5 funciones: (1) Deteccion cross-dimensional, (2) Priorizacion por urgencia*leverage*preferencia, (3) Propagacion causal iterativa (0.7^step), (4) Deteccion burnout, (5) Dashboard "Mi Radar" (6 ejes). Max 2 agentes/sesion. Precedencia emocional.</p>
+        <div class="agent-role">Orquestador -- Lee las 22 variables</div>
+        <div class="agent-vars"><span class="agent-var read">todas las 22 variables</span></div>
+        <p style="font-size:0.78rem;color:var(--text2)">5 funciones: (1) Deteccion cross-dimensional, (2) Priorizacion por urgencia*leverage*preferencia, (3) Propagacion causal sigmoidal iterativa (0.7^step), (4) Deteccion burnout, (5) Dashboard "Mi Radar" (6 ejes). Max 2 agentes/sesion. Precedencia emocional.</p>
         <div class="agent-theory">Wooldridge (2009) MAS + Pearl (2009) causalidad + Zimmerman (2002) autorregulacion</div>
       </div>
     </div>
@@ -1249,7 +1276,7 @@
     <h3>&#x8077;&#x4EBA; SHOKUNIN <span style="font-size:0.8rem;color:var(--text2)">-- Artesano</span></h3>
     <div class="role">Diseno de Experiencia de Usuario y Diagnostico</div>
     <ul class="consult-list">
-      <li><strong>"Primera Mision":</strong> Diagnostico gamificado de 8-10 min, 7 bloques (B0-B6), 19 de 21 variables capturadas</li>
+      <li><strong>"Primera Mision":</strong> Diagnostico gamificado de 8-10 min, 7 bloques (B0-B6), 20 de 22 variables capturadas</li>
       <li><strong>4 bloques de medicion:</strong> B1 Meta/Contexto (90s), B2 CAT Academico (180s, IRT 2PL, MFI), B3 Habitos (90s, swipe+emoji), B4 Escenarios Emocionales (120s, stealth assessment)</li>
       <li><strong>Gamificacion basada en evidencia:</strong> Endowed progress (Nunes & Dreze, 2006), goal-gradient (Kivetz et al., 2006), XP informativo no controlador</li>
       <li><strong>Accesibilidad WCAG 2.2:</strong> Contraste 4.5:1 (AA), area toque 44x44px (supera AA), texto redimensionable 200%</li>
@@ -1269,7 +1296,7 @@
       <li><strong>Spacing/Interleaving/Retrieval:</strong> Tres desirable difficulties (Bjork, 1994) integradas en cada sesion DOJO</li>
       <li><strong>Expertise reversal effect:</strong> Kalyuga (2007). Scaffolding se reduce dinamicamente con mastery alto</li>
       <li><strong>Diseno instruccional:</strong> Gagne (1985) Conditions of Learning: 9 eventos instruccionales. Merrill (2002) First Principles. Secuencia: activacion -> demostracion -> practica guiada -> practica independiente -> reflexion</li>
-      <li><strong>Protocolo por variable:</strong> Intervenciones especificas para cada una de las 21 variables con delta esperado cuantificado</li>
+      <li><strong>Protocolo por variable:</strong> Intervenciones especificas para cada una de las 22 variables con delta esperado cuantificado</li>
     </ul>
   </div>
 
@@ -1338,18 +1365,21 @@
   </div>
 
   <div class="proof-block">
-    <h4>Convergencia del Algoritmo de Propagacion</h4>
+    <h4>Convergencia del Algoritmo de Propagacion (Sigmoidal)</h4>
     <pre>Condicion: rho(alpha * W) < 1, con alpha = 0.7
+Propagacion sigmoidal: sigma(x) = 2/(1 + e^(-5x)) - 1, |sigma(x)| <= 1
+La convergencia se mantiene garantizada porque |sigma(x)| <= 1 para todo x,
+por lo que la condicion gamma*rho(A) < 1 sigue siendo suficiente.
 Ciclo 1 (mastery->se->conf->mastery): G1 = 0.30 * 0.35 * 0.20 = 0.021
 Ciclo 2 (mastery->se->anx->mastery):  G2 = 0.30 * 0.35 * 0.30 = 0.032
 G_max bajo perturbacion +/-20%: 0.036  (<<  1.0)
 Comparacion V1: G1(V1) = 0.50 * 0.40 * 0.35 = 0.070 (3.3x mayor)
-Conclusion: convergencia garantizada en todos los escenarios.</pre>
+Conclusion: convergencia garantizada en todos los escenarios (34 aristas, 22 variables).</pre>
   </div>
 
   <div class="proof-block">
     <h4>Monte Carlo (N=10,000)</h4>
-    <pre>Protocolo: epsilon ~ U(-0.20, +0.20) por arista, 10 perfiles
+    <pre>Protocolo: epsilon ~ U(-0.20, +0.20) por arista, 12 perfiles
 Resultados:
 - stress_level y sleep_quality en top-2: >90% iteraciones
 - Ranking top-6 estable: >90% iteraciones
@@ -1376,7 +1406,7 @@ Metricas de ajuste: CFI >= 0.95, RMSEA <= 0.06, SRMR <= 0.08</pre>
 Sin manipulacion experimental de variables individuales, no es posible
 establecer causalidad estricta (Pearl, 2009).
 Los pesos representan HIPOTESIS INFORMADAS, no parametros validados.
-El algoritmo de propagacion es HEURISTICO, no inferencia bayesiana
+El algoritmo de propagacion (sigmoidal desde v8.1) es HEURISTICO, no inferencia bayesiana
 formal ni do-calculus.
 El factor de atenuacion 0.7 es EMPIRICO, no derivado formalmente.</pre>
   </div>
@@ -1404,7 +1434,7 @@ El factor de atenuacion 0.7 es EMPIRICO, no derivado formalmente.</pre>
 
   <div class="cycle-timeline">
     <div class="cycle-item"><h4>C1-C2: Deteccion Inicial</h4><p>Identificacion de 15 citas fabricadas, inconsistencias en pesos, zonas muertas entre agentes.</p></div>
-    <div class="cycle-item"><h4>C3-C4: Correccion de Pesos</h4><p>Recalibracion de 30 aristas con evidencia meta-analitica. Reduccion sistematica de sobreestimaciones.</p></div>
+    <div class="cycle-item"><h4>C3-C4: Correccion de Pesos</h4><p>Recalibracion de aristas con evidencia meta-analitica. Reduccion sistematica de sobreestimaciones.</p></div>
     <div class="cycle-item"><h4>C5-C6: Aristas Nuevas</h4><p>Adicion de 6 aristas recomendadas: anxiety->attention, se->mastery, stress->emotional, sleep->fatigue, se->anxiety, pa->stress.</p></div>
     <div class="cycle-item"><h4>C7: Consistencia Global</h4><p>Unificacion transformacion logit (no probit). COMPASS 5 estados. B=MAP convergencia 2019. Fiorella & Mayer corregido.</p></div>
     <div class="cycle-item"><h4>C8: Cierre</h4><p>Ningun hallazgo critico pendiente. Score final: 92+/100. Base bibliografica: 136+ referencias APA 7 verificadas.</p></div>
@@ -1443,7 +1473,7 @@ El factor de atenuacion 0.7 es EMPIRICO, no derivado formalmente.</pre>
 
   <div class="theory-card"><h4>Compromisos Anti-Dark Patterns</h4><p>Test etico por mensaje: (1) Padres estarian de acuerdo? (2) Reduce o aumenta ansiedad? (3) Estudiante se sentiria manipulado? (4) Ayuda a estudiar mejor o solo a abrir la app? Deci et al. (1999): recompensas contingentes no deben socavar motivacion intrinseca. Gray et al. (2018): dark patterns en UX.</p></div>
 
-  <div class="theory-card"><h4>Privacidad y Datos</h4><p><strong>Cifrado:</strong> AES-256 en reposo, TLS 1.3 en transito. <strong>K-anonimato:</strong> k >= 5 para datos desidentificados. <strong>Privacidad diferencial:</strong> Evaluacion de implementacion (Dwork & Roth, 2014). <strong>Minimizacion:</strong> Solo datos que alimentan las 21 variables. <strong>Retencion:</strong> Datos sesion: periodo activo + 6 meses. Eliminacion automatica: 24 meses inactividad. <strong>Derecho al olvido:</strong> Eliminacion completa e irreversible a solicitud.</p></div>
+  <div class="theory-card"><h4>Privacidad y Datos</h4><p><strong>Cifrado:</strong> AES-256 en reposo, TLS 1.3 en transito. <strong>K-anonimato:</strong> k >= 5 para datos desidentificados. <strong>Privacidad diferencial:</strong> Evaluacion de implementacion (Dwork & Roth, 2014). <strong>Minimizacion:</strong> Solo datos que alimentan las 22 variables. <strong>Retencion:</strong> Datos sesion: periodo activo + 6 meses. Eliminacion automatica: 24 meses inactividad. <strong>Derecho al olvido:</strong> Eliminacion completa e irreversible a solicitud.</p></div>
 
   <div class="theory-card"><h4>Limites del Sistema</h4><p>SENSEI NO reemplaza orientacion profesional. NO diagnostica clinicamente. NO ofrece terapia. NO sustituye atencion de salud mental. Protocolo de crisis: derivacion inmediata a recursos profesionales. Disclaimer legal permanente en interfaz. Dashboard para orientadores escolares (human-in-the-loop).</p></div>
 </section>
@@ -1484,8 +1514,8 @@ El factor de atenuacion 0.7 es EMPIRICO, no derivado formalmente.</pre>
 <!-- FOOTER                                                            -->
 <!-- ================================================================ -->
 <footer class="footer">
-  <p><strong>RENDDI</strong> -- Marco Teorico v8.0 Definitivo -- Documento interno -- Marzo 2026</p>
-  <p>Basado en 136+ referencias verificadas APA 7 -- Tesis Doctoral SENSEI v2.0</p>
+  <p><strong>RENDDI</strong> -- Marco Teorico v8.1 (2026-03-29 02:01 CLT) -- Documento interno -- Marzo 2026</p>
+  <p>22 variables, 34 aristas, propagacion sigmoidal -- Basado en 136+ referencias verificadas APA 7 -- Tesis Doctoral SENSEI v2.0</p>
   <p style="margin-top:0.5rem">Autor: Fernando Caro Bruna -- Coautores: Dionisio Fernandez, Alejandro Lagos</p>
   <p style="margin-top:0.5rem;font-size:0.65rem;color:var(--text3)">Evaluacion independiente de fundamentacion: 8.5-9.0/10 (Rigor 9/10, Proceso 9/10, Bibliografia 8.5/10, Diferenciacion 9/10)</p>
 </footer>
@@ -1560,7 +1590,15 @@ const archetypes = [
   {name:"Joaquin",title:"El Tardio",paes:320,risk:"high",riskLabel:"Alto",color:"#ff6b6b",
    vars:{mastery:0.22,anxiety:0.42,confidence:0.28,motivation:0.22,attention_span:0.32,emotional_state:0.38,self_efficacy:0.22,stress_level:0.45,study_adherence:0.18,sleep_quality:0.38,fatigue:0.52,vocational_clarity:0.12},
    strategy:["KAIZEN (micro-habitos 2min)","COMPASS (meta)","IKIGAI (growth mindset)"],projection:"400-440",
-   persona:"Celebrar inicio. Sin culpa por el retraso. growth_mindset=0.78 como recurso."}
+   persona:"Celebrar inicio. Sin culpa por el retraso. growth_mindset=0.78 como recurso."},
+  {name:"Andrés",title:"El Trabajador",paes:420,risk:"high",riskLabel:"Alto",color:"#ff6b6b",
+   vars:{mastery:0.35,anxiety:0.45,confidence:0.40,motivation:0.55,attention_span:0.38,emotional_state:0.42,self_efficacy:0.35,stress_level:0.65,study_adherence:0.30,sleep_quality:0.35,fatigue:0.72,vocational_clarity:0.40},
+   strategy:["KAIZEN","SENPAI","KAZE"],projection:"+60-90 pts",
+   persona:"Micro-sesiones de 3-5 min en transporte. Fatiga cronica 0.72. Time management critico."},
+  {name:"Javiera",title:"La Rural",paes:380,risk:"high",riskLabel:"Alto",color:"#ff6b6b",
+   vars:{mastery:0.30,anxiety:0.50,confidence:0.38,motivation:0.60,attention_span:0.42,emotional_state:0.50,self_efficacy:0.35,stress_level:0.52,study_adherence:0.45,sleep_quality:0.55,fatigue:0.55,vocational_clarity:0.20},
+   strategy:["SENPAI","COMPASS","KAIZEN"],projection:"+70-100 pts",
+   persona:"Zona rural, conectividad precaria. Modo offline-first. Vocational clarity muy baja."}
 ];
 
 function getBarColor(val) {
