@@ -282,7 +282,7 @@ export default function GrafoClient({ email, isAdmin }: { email: string; isAdmin
       {/* Grafo iframe */}
       <iframe
         src="/api/assets/grafo-v8.html"
-        style={{ width: "100vw", height: "100vh", border: "none", position: "fixed", top: 0, left: 0, zIndex: 9998 }}
+        style={{ width: "100vw", height: "calc(100vh - 42px)", border: "none", position: "fixed", top: 42, left: 0, zIndex: 9998 }}
         title="SENSEI GRAFO v2 — Motor de Rendimiento Estudiantil"
       />
     </>

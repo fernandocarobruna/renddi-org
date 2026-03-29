@@ -11,15 +11,28 @@ export default function SectionNav({ active }: { active: string }) {
   return (
     <nav
       style={{
-        position: "fixed",
-        top: 12,
-        left: 16,
+        position: "relative",
         zIndex: 99999,
         fontFamily: "'Inter', system-ui, sans-serif",
         display: "flex",
-        gap: 6,
+        gap: 4,
+        padding: "8px 16px",
+        background: "#08080c",
+        borderBottom: "1px solid #1a1a2e",
       }}
     >
+      <span
+        style={{
+          fontSize: 13,
+          fontWeight: 800,
+          color: "#F39C12",
+          marginRight: 12,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        RENDDI
+      </span>
       {NAV_LINKS.map((link) => {
         const isActive = link.key === active;
         return (
@@ -29,22 +42,21 @@ export default function SectionNav({ active }: { active: string }) {
             style={{
               background: isActive
                 ? "rgba(243,156,18,0.15)"
-                : "rgba(20,20,30,0.9)",
+                : "transparent",
               border: isActive
                 ? "1px solid #F39C12"
-                : "1px solid #333",
+                : "1px solid transparent",
               color: isActive ? "#F39C12" : "#888",
-              padding: "8px 14px",
-              borderRadius: 8,
+              padding: "6px 12px",
+              borderRadius: 6,
               cursor: "pointer",
               fontSize: 12,
               fontWeight: 600,
               textDecoration: "none",
-              backdropFilter: "blur(8px)",
               transition: "all 0.2s",
               display: "flex",
               alignItems: "center",
-              gap: 6,
+              gap: 5,
             }}
           >
             <span>{link.icon}</span>

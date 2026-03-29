@@ -17,7 +17,7 @@ export default async function DictamenExpertoPage() {
       <SectionNav active="dictamen-experto" />
       <iframe
         src="/api/private2026/dictamen-experto"
-        style={{ width: "100vw", height: "100vh", border: "none", position: "fixed", top: 0, left: 0 }}
+        style={{ width: "100vw", height: "calc(100vh - 42px)", border: "none", position: "fixed", top: 42, left: 0 }}
         title="Dictamen Experto RENDDI"
       />
     </>

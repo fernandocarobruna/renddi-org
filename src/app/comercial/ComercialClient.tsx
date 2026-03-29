@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import InformeTab from "./InformeTab";
+import SectionNav from "@/components/SectionNav";
 
 type Tab = "pricing" | "competencia" | "economics" | "percepcion" | "estrategia" | "producto" | "investigacion" | "informe";
 
@@ -188,19 +189,19 @@ export default function ComercialClient({
         fontFamily: "'Inter', system-ui, sans-serif",
       }}
     >
+      {/* ─── Section Nav ─── */}
+      <SectionNav active="comercial" />
+
       {/* ─── Header ─── */}
       <header
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "16px 24px",
+          padding: "12px 24px",
           borderBottom: "1px solid #1a1a2e",
           background: "rgba(10,10,15,0.95)",
           backdropFilter: "blur(8px)",
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
