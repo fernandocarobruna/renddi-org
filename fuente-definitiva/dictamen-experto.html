@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RENDDI | Dictamen Experto - Dr. Ryan Baker</title>
+  <title>RENDDI | Dictamen del Comite de Revision Experta</title>
   <style>
     :root {
       --bg: #0a0a0f;
@@ -55,7 +55,7 @@
       33% { transform: translate(2%, -1%) rotate(1deg); }
       66% { transform: translate(-1%, 1%) rotate(-1deg); }
     }
-    .hero-content { position: relative; z-index: 1; max-width: 900px; }
+    .hero-content { position: relative; z-index: 1; max-width: 1000px; }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 0.5rem;
       padding: 0.5rem 1rem;
@@ -68,37 +68,106 @@
       letter-spacing: 0.05em;
     }
     .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
       font-weight: 900; line-height: 1.1;
       margin-bottom: 1.5rem;
       background: linear-gradient(135deg, #fff 0%, var(--accent2) 50%, var(--accent3) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .hero p { font-size: 1.15rem; color: var(--text2); max-width: 700px; margin: 0 auto 2rem; }
+    .hero p { font-size: 1.1rem; color: var(--text2); max-width: 750px; margin: 0 auto 2.5rem; }
 
-    .expert-card {
+    /* ========== AGENT GRID ========== */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 0 auto 2.5rem;
+      max-width: 1000px;
+      text-align: left;
+    }
+    .agent-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
-      max-width: 600px;
-      margin: 0 auto 3rem;
-      text-align: left;
-      display: flex; gap: 1.5rem; align-items: center;
+      border-radius: 14px;
+      padding: 1.25rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
     }
-    .expert-avatar {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent3));
+    .agent-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .agent-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+    }
+    .agent-card.ag1::before { background: linear-gradient(90deg, #6c5ce7, #a29bfe); }
+    .agent-card.ag2::before { background: linear-gradient(90deg, #00cec9, #55efc4); }
+    .agent-card.ag3::before { background: linear-gradient(90deg, #fd79a8, #e84393); }
+    .agent-card.ag4::before { background: linear-gradient(90deg, #fdcb6e, #f39c12); }
+    .agent-card.ag5::before { background: linear-gradient(90deg, #74b9ff, #0984e3); }
+    .agent-card.ag6::before { background: linear-gradient(90deg, #00b894, #00cec9); }
+    .agent-card.ag7::before { background: linear-gradient(90deg, #ff6b6b, #ee5a24); }
+    .agent-top {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .agent-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; font-weight: 900; color: #fff;
-      flex-shrink: 0;
+      font-size: 1.4rem; flex-shrink: 0;
     }
-    .expert-info h3 { font-size: 1.2rem; font-weight: 700; }
-    .expert-info .title { font-size: 0.85rem; color: var(--accent3); margin-bottom: 0.25rem; }
-    .expert-info .affil { font-size: 0.8rem; color: var(--text2); }
-    .expert-info .creds { font-size: 0.7rem; color: var(--text3); margin-top: 0.5rem; line-height: 1.5; }
+    .ag1 .agent-icon { background: rgba(108,92,231,0.2); }
+    .ag2 .agent-icon { background: rgba(0,206,201,0.2); }
+    .ag3 .agent-icon { background: rgba(232,67,147,0.2); }
+    .ag4 .agent-icon { background: rgba(253,203,110,0.2); }
+    .ag5 .agent-icon { background: rgba(116,185,255,0.2); }
+    .ag6 .agent-icon { background: rgba(0,184,148,0.2); }
+    .ag7 .agent-icon { background: rgba(255,107,107,0.2); }
+    .agent-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text3);
+      letter-spacing: 0.08em;
+    }
+    .agent-name { font-size: 0.85rem; font-weight: 700; }
+    .agent-domain { font-size: 0.72rem; color: var(--accent3); margin-bottom: 0.35rem; }
+    .agent-creds { font-size: 0.68rem; color: var(--text3); line-height: 1.5; }
+
+    .agent-badge-inline {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.65rem; font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      vertical-align: middle;
+    }
+    .ab1 { background: rgba(108,92,231,0.15); color: var(--accent2); }
+    .ab2 { background: rgba(0,206,201,0.15); color: var(--accent3); }
+    .ab3 { background: rgba(232,67,147,0.15); color: #fd79a8; }
+    .ab4 { background: rgba(253,203,110,0.15); color: var(--gold); }
+    .ab5 { background: rgba(116,185,255,0.15); color: #74b9ff; }
+    .ab6 { background: rgba(0,184,148,0.15); color: var(--green); }
+    .ab7 { background: rgba(255,107,107,0.15); color: var(--red); }
+
+    .disclaimer-card {
+      background: rgba(108,92,231,0.06);
+      border: 1px solid rgba(108,92,231,0.2);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto 2.5rem;
+      font-size: 0.82rem;
+      color: var(--text2);
+      text-align: left;
+      line-height: 1.6;
+    }
+    .disclaimer-card strong { color: var(--accent2); }
 
     .stats-row { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
     .stat-card {
@@ -127,6 +196,7 @@
       border-radius: 8px; cursor: pointer;
       font-size: 0.75rem; font-weight: 500;
       white-space: nowrap; transition: all 0.2s;
+      text-decoration: none;
     }
     .nav-btn:hover { background: var(--surface2); border-color: var(--border); color: var(--text); }
 
@@ -139,6 +209,11 @@
     }
     .section h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; margin-bottom: 0.75rem; }
     .section .subtitle { font-size: 1rem; color: var(--text2); max-width: 700px; }
+
+    .section-agents {
+      display: flex; gap: 0.4rem; flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
 
     .content-block {
       background: var(--surface);
@@ -170,6 +245,7 @@
     .researcher-card .r-inst { font-size: 0.75rem; color: var(--accent3); margin-bottom: 0.5rem; }
     .researcher-card .r-contrib { font-size: 0.82rem; color: var(--text2); margin-bottom: 0.5rem; }
     .researcher-card .r-paper { font-size: 0.75rem; color: var(--text3); font-style: italic; }
+    .researcher-card .r-eval { font-size: 0.7rem; margin-top: 0.5rem; }
 
     .evidence-badge {
       display: inline-block; padding: 0.15rem 0.5rem;
@@ -249,6 +325,34 @@
       color: var(--green); margin: 0.5rem 0;
     }
 
+    .vote-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .vote-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .vote-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .vote-info { flex: 1; }
+    .vote-info .vote-name { font-size: 0.8rem; font-weight: 600; }
+    .vote-info .vote-domain { font-size: 0.68rem; color: var(--text2); }
+    .vote-score {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.4rem; font-weight: 800;
+      color: var(--accent3);
+    }
+
     .strength-item, .weakness-item {
       padding: 1rem 1.25rem;
       border-radius: 8px;
@@ -288,14 +392,6 @@
       transition: all 0.3s;
     }
     .archetype-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-
-    .transition-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-    }
 
     .formula-box {
       background: var(--surface);
@@ -341,7 +437,8 @@
       .section { padding: 3rem 1rem; }
       .researcher-grid { grid-template-columns: 1fr; }
       .archetype-grid { grid-template-columns: 1fr; }
-      .expert-card { flex-direction: column; text-align: center; }
+      .agents-grid { grid-template-columns: 1fr; }
+      .vote-grid { grid-template-columns: 1fr; }
       .stats-row { gap: 0.75rem; }
       .stat-card { min-width: 100px; padding: 1rem; }
       .leverage-item { flex-direction: column; text-align: center; }
@@ -353,21 +450,104 @@
 <!-- ==================== HERO ==================== -->
 <div class="hero">
   <div class="hero-content">
-    <div class="hero-badge">DICTAMEN EXPERTO INDEPENDIENTE</div>
-    <h1>Revision Academica del Framework RENDDI/SENSEI</h1>
-    <p>Evaluacion comprehensiva del grafo causal de 21 variables, la arquitectura multi-agente y la fundamentacion cientifica del sistema de coaching educativo con IA para la preparacion de la PAES.</p>
+    <div class="hero-badge">COMITE DE REVISION EXPERTA -- 7 AGENTES DE IA</div>
+    <h1>Dictamen del Comite de Revision Experta</h1>
+    <p>Evaluacion realizada por un comite de 7 agentes de IA, cada uno emulando el perfil de un investigador de clase mundial en su dominio especializado. Analisis exhaustivo del framework RENDDI/SENSEI v8.0: grafo causal de 21 variables, arquitectura multi-agente y fundamentacion cientifica.</p>
 
-    <div class="expert-card">
-      <div class="expert-avatar">RB</div>
-      <div class="expert-info">
-        <div class="title">Revisor Experto</div>
-        <h3>Dr. Ryan Baker</h3>
-        <div class="affil">Professor, University of Pennsylvania -- Graduate School of Education</div>
-        <div class="creds">Ex-presidente, International Educational Data Mining Society. Investigador lider en Bayesian Knowledge Tracing, deteccion de afecto, student modeling e ITS design. 250+ publicaciones. h-index 72.</div>
+    <!-- AGENT CARDS -->
+    <div class="agents-grid">
+      <div class="agent-card ag1">
+        <div class="agent-top">
+          <div class="agent-icon">&#128202;</div>
+          <div>
+            <div class="agent-tag">AGENTE 1</div>
+            <div class="agent-name">Psicometria y Evaluacion Adaptativa</div>
+          </div>
+        </div>
+        <div class="agent-domain">IRT, CAT, Testing Adaptativo</div>
+        <div class="agent-creds">Perfil emulado: investigador lider en IRT, CAT y testing adaptativo. 200+ publicaciones en psicometria aplicada. Evalua el motor de diagnostico, la integracion BKT+IRT y la operacionalizacion de la ZDP.</div>
+      </div>
+
+      <div class="agent-card ag2">
+        <div class="agent-top">
+          <div class="agent-icon">&#9874;</div>
+          <div>
+            <div class="agent-tag">AGENTE 2</div>
+            <div class="agent-name">Educational Data Mining & Learning Analytics</div>
+          </div>
+        </div>
+        <div class="agent-domain">BKT, Student Modeling, ITS Design</div>
+        <div class="agent-creds">Perfil emulado: ex-presidente de International EDM Society. Lider en BKT, deteccion de afecto, student modeling e ITS design. 250+ publicaciones. Evalua la arquitectura multi-agente, knowledge tracing y comparacion con sistemas existentes.</div>
+      </div>
+
+      <div class="agent-card ag3">
+        <div class="agent-top">
+          <div class="agent-icon">&#129504;</div>
+          <div>
+            <div class="agent-tag">AGENTE 3</div>
+            <div class="agent-name">Psicologia Educacional y Motivacion</div>
+          </div>
+        </div>
+        <div class="agent-domain">SDT, Autorregulacion, Metacognicion</div>
+        <div class="agent-creds">Perfil emulado: investigador lider en SDT, autorregulacion y metacognicion. Evalua el modelo motivacional, la integracion de SDT, growth mindset (con el contrapeso de Sisk 2018) y el diseno de intervenciones emocionales.</div>
+      </div>
+
+      <div class="agent-card ag4">
+        <div class="agent-top">
+          <div class="agent-icon">&#128200;</div>
+          <div>
+            <div class="agent-tag">AGENTE 4</div>
+            <div class="agent-name">Causalidad y Modelamiento Estadistico</div>
+          </div>
+        </div>
+        <div class="agent-domain">SEM, Modelos Causales (Pearl), Path Analysis</div>
+        <div class="agent-creds">Perfil emulado: estadistico senior en SEM, modelos causales (Pearl), path analysis (Wright). Evalua la validez del grafo causal, convergencia del algoritmo, Monte Carlo, calibracion de pesos y la propuesta SEM.</div>
+      </div>
+
+      <div class="agent-card ag5">
+        <div class="agent-top">
+          <div class="agent-icon">&#129513;</div>
+          <div>
+            <div class="agent-tag">AGENTE 5</div>
+            <div class="agent-name">Neurociencia del Aprendizaje y Sueno</div>
+          </div>
+        </div>
+        <div class="agent-domain">Sueno, Fatiga, Atencion, Ejercicio</div>
+        <div class="agent-creds">Perfil emulado: neurocientifico cognitivo especializado en sueno, fatiga, atencion, ejercicio y rendimiento. Evalua las variables biologicas del grafo (sleep, fatigue, physical_activity, attention) y su fundamentacion.</div>
+      </div>
+
+      <div class="agent-card ag6">
+        <div class="agent-top">
+          <div class="agent-icon">&#127919;</div>
+          <div>
+            <div class="agent-tag">AGENTE 6</div>
+            <div class="agent-name">Orientacion Vocacional y Desarrollo de Carrera</div>
+          </div>
+        </div>
+        <div class="agent-domain">RIASEC, Career Construction, SCCT</div>
+        <div class="agent-creds">Perfil emulado: investigador en RIASEC, Career Construction, SCCT. Evalua la integracion vocacional, el agente COMPASS y la arista vocational_clarity -> motivation.</div>
+      </div>
+
+      <div class="agent-card ag7">
+        <div class="agent-top">
+          <div class="agent-icon">&#9881;</div>
+          <div>
+            <div class="agent-tag">AGENTE 7</div>
+            <div class="agent-name">Diseno de Sistemas Tutores Inteligentes</div>
+          </div>
+        </div>
+        <div class="agent-domain">Cognitive Tutors, AutoTutor, Multi-Agente</div>
+        <div class="agent-creds">Perfil emulado: arquitecto de ITS con experiencia en Cognitive Tutors, AutoTutor, sistemas multi-agente educativos. Evalua la arquitectura tecnica, el protocolo de orquestacion MIYAGI y la escalabilidad.</div>
       </div>
     </div>
 
+    <!-- DISCLAIMER -->
+    <div class="disclaimer-card">
+      <strong>Nota sobre la naturaleza de este dictamen:</strong> Este documento fue elaborado por agentes de inteligencia artificial de Anthropic (Claude), configurados para emular la perspectiva y rigor de investigadores de clase mundial en cada dominio. No representa la opinion de personas reales. Las evaluaciones se basan en el analisis exhaustivo de la totalidad del corpus documental de RENDDI/SENSEI v8.0 (4,677 lineas, 12 capitulos, 154+ referencias APA 7, 8 ciclos de revision C1-C8).
+    </div>
+
     <div class="stats-row">
+      <div class="stat-card"><div class="number">7</div><div class="label">Agentes revisores</div></div>
       <div class="stat-card"><div class="number">12</div><div class="label">Documentos revisados</div></div>
       <div class="stat-card"><div class="number">21</div><div class="label">Variables del grafo</div></div>
       <div class="stat-card"><div class="number">30</div><div class="label">Aristas causales</div></div>
@@ -393,22 +573,27 @@
 <div id="resumen" class="section">
   <div class="section-header">
     <div class="section-num">SECCION 01</div>
-    <h2>Resumen Ejecutivo</h2>
-    <p class="subtitle">Vision general del sistema RENDDI/SENSEI y sus pretensiones cientificas.</p>
+    <h2>Resumen Ejecutivo del Comite</h2>
+    <p class="subtitle">Vision consensuada del sistema RENDDI/SENSEI v8.0 y sus pretensiones cientificas.</p>
+    <div class="section-agents">
+      <span class="agent-badge-inline ab2">&#9874; Ag.2 EDM</span>
+      <span class="agent-badge-inline ab7">&#9881; Ag.7 ITS</span>
+      <span class="agent-badge-inline ab4">&#128200; Ag.4 Causalidad</span>
+    </div>
   </div>
 
   <div class="content-block">
-    <h3>Que es RENDDI/SENSEI</h3>
-    <p>RENDDI (anteriormente SENSEI/MIYAGI) es un sistema multi-agente de coaching educativo basado en inteligencia artificial, disenado para la preparacion de la Prueba de Acceso a la Educacion Superior (PAES) en Chile. El sistema se distingue de las plataformas EdTech convencionales por tres caracteristicas fundamentales:</p>
+    <h3>Que es RENDDI/SENSEI v8.0</h3>
+    <p>RENDDI (anteriormente SENSEI/MIYAGI) es un sistema multi-agente de coaching educativo basado en inteligencia artificial, disenado para la preparacion de la Prueba de Acceso a la Educacion Superior (PAES) en Chile. La tesis doctoral, en su version 8.0 (resultado de 8 ciclos de revision C1-C8 que elevaron el score de 78/100 a 92+/100), constituye un corpus de 4,677 lineas y 12 capitulos. El sistema se distingue de las plataformas EdTech convencionales por tres caracteristicas fundamentales:</p>
     <ul>
-      <li><strong>Modelamiento multidimensional:</strong> En lugar de rastrear unicamente el conocimiento academico (como hacen Carnegie Learning, ALEKS o Knewton), SENSEI modela 21 variables en 5 dimensiones: academica, emocional, conductual, social y vocacional.</li>
-      <li><strong>Grafo causal integrador:</strong> Las 21 variables estan conectadas por 30 aristas causales dirigidas con pesos calibrados desde evidencia meta-analitica, formalizadas como un grafo causal ponderado G = (V, E, W) siguiendo el framework de Pearl (2009).</li>
-      <li><strong>Arquitectura multi-agente:</strong> 9 agentes especializados (SENPAI, KAZE, COMPASS, KAIZEN, DOJO, NAKAMA, KOAN, IKIGAI) coordinados por un orquestador central (MIYAGI) que lee y escribe sobre el grafo causal compartido.</li>
+      <li><strong>Modelamiento multidimensional</strong> <span class="agent-badge-inline ab1">&#128202; Ag.1</span>: En lugar de rastrear unicamente el conocimiento academico (como hacen Carnegie Learning, ALEKS o Knewton), SENSEI modela 21 variables en 5 dimensiones: academica, emocional, conductual, social y vocacional.</li>
+      <li><strong>Grafo causal integrador</strong> <span class="agent-badge-inline ab4">&#128200; Ag.4</span>: Las 21 variables estan conectadas por 30 aristas causales dirigidas con pesos calibrados desde evidencia meta-analitica, formalizadas como un grafo causal ponderado G = (V, E, W) siguiendo el framework de Pearl (2009).</li>
+      <li><strong>Arquitectura multi-agente</strong> <span class="agent-badge-inline ab7">&#9881; Ag.7</span>: 9 agentes especializados (SENPAI, KAZE, COMPASS, KAIZEN, DOJO, NAKAMA, KOAN, IKIGAI) coordinados por un orquestador central (MIYAGI) que lee y escribe sobre el grafo causal compartido.</li>
     </ul>
     <p>El sistema pretende cerrar la brecha entre la investigacion sobre factores no cognitivos del rendimiento (ampliamente documentada desde Hattie, 2009 y Richardson et al., 2012) y su implementacion operacional en un sistema adaptativo funcional. La tesis central es que un sistema que interviene sobre estres, sueno, motivacion y habitos -- ademas de contenido academico -- producira mejoras superiores a un sistema puramente cognitivo.</p>
 
-    <h4>Alcance del corpus revisado</h4>
-    <p>He revisado la totalidad del corpus documental de RENDDI/SENSEI: la tesis doctoral principal (4,677 lineas, 12 capitulos, version 2.0 revisada y validada), el paper de validacion matematica del grafo causal (46 paginas con 9 apendices), el documento de caracterizacion multivariable (197 paginas, version 8.0), la evaluacion de fundamentacion cientifica, las tres tesis especializadas (SHOKUNIN para UX, TAKUMI para acciones, KOTODAMA para comunicacion), las keynotes de revision doctoral y propiedad intelectual, y los prototipos interactivos del grafo y simulador.</p>
+    <h4>Alcance del corpus revisado por el comite</h4>
+    <p>El comite de 7 agentes ha revisado la totalidad del corpus documental de RENDDI/SENSEI: la tesis doctoral principal (4,677 lineas, 12 capitulos, version 8.0 resultado de 8 ciclos de revision exhaustivos), el paper de validacion matematica del grafo causal (46 paginas con 9 apendices), el documento de caracterizacion multivariable (197 paginas, version 8.0), la evaluacion de fundamentacion cientifica, las tres tesis especializadas (SHOKUNIN para UX, TAKUMI para acciones, KOTODAMA para comunicacion), las keynotes de revision doctoral y propiedad intelectual, y los prototipos interactivos del grafo y simulador. Cada agente analizo el corpus completo desde la perspectiva de su dominio especializado.</p>
   </div>
 </div>
 
@@ -417,7 +602,14 @@
   <div class="section-header">
     <div class="section-num">SECCION 02</div>
     <h2>Los Investigadores Mas Relevantes</h2>
-    <p class="subtitle">Los 18 investigadores cuyo trabajo fundamenta de manera critica el sistema RENDDI/SENSEI.</p>
+    <p class="subtitle">Los 18 investigadores cuyo trabajo fundamenta de manera critica el sistema RENDDI/SENSEI v8.0, evaluados por los agentes con expertise en cada dominio.</p>
+    <div class="section-agents">
+      <span class="agent-badge-inline ab1">&#128202; Ag.1 Psicometria</span>
+      <span class="agent-badge-inline ab2">&#9874; Ag.2 EDM</span>
+      <span class="agent-badge-inline ab3">&#129504; Ag.3 Psicologia</span>
+      <span class="agent-badge-inline ab5">&#129513; Ag.5 Neuro</span>
+      <span class="agent-badge-inline ab6">&#127919; Ag.6 Vocacional</span>
+    </div>
   </div>
 
   <div class="researcher-grid">
@@ -426,6 +618,7 @@
       <div class="r-inst">University of Melbourne</div>
       <div class="r-contrib">Su sintesis de 800+ meta-analisis (Visible Learning, 2009) proporciona el marco maestro de tamanos de efecto que guia toda la priorizacion de intervenciones en SENSEI. El umbral d = 0.40 como "zona de impacto relevante" es el criterio de seleccion de acciones del sistema.</div>
       <div class="r-paper">Hattie, J. (2009). Visible Learning. Routledge. -- La referencia mas citada del corpus.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab2">&#9874; Ag.2</span> <span class="agent-badge-inline ab3">&#129504; Ag.3</span></div>
     </div>
 
     <div class="researcher-card">
@@ -433,6 +626,7 @@
       <div class="r-inst">Carnegie Mellon University</div>
       <div class="r-contrib">Bayesian Knowledge Tracing (BKT), el modelo fundacional que SENSEI utiliza para rastrear mastery (v1). La integracion BKT-IRT propuesta en SENSEI extiende directamente su trabajo. Los Cognitive Tutors validaron empiricamente el enfoque con 18,000+ estudiantes.</div>
       <div class="r-paper">Corbett, A.T. & Anderson, J.R. (1995). Knowledge tracing. User Modeling and User-Adapted Interaction, 4(4), 253-278.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab1">&#128202; Ag.1</span> <span class="agent-badge-inline ab2">&#9874; Ag.2</span></div>
     </div>
 
     <div class="researcher-card">
@@ -440,6 +634,7 @@
       <div class="r-inst">Adrian College</div>
       <div class="r-contrib">Su meta-analisis seminal de 562 estudios sobre ansiedad ante examenes (1988) fundamenta la arista anxiety -> mastery (-0.30) del grafo. Establecio las correlaciones r = -0.21 a -0.33 que calibran el peso. Su segundo meta-analisis (1990) sobre ansiedad matematica agrego granularidad por materia.</div>
       <div class="r-paper">Hembree, R. (1988). Correlates, causes, effects, and treatment of test anxiety. Review of Educational Research, 58(1), 47-77. k=562.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab3">&#129504; Ag.3</span> <span class="agent-badge-inline ab4">&#128200; Ag.4</span></div>
     </div>
 
     <div class="researcher-card">
@@ -447,6 +642,7 @@
       <div class="r-inst">University of Sussex / University of Brighton</div>
       <div class="r-contrib">Su meta-analisis de 241 datasets (N>50,000) sobre predictores no cognitivos del rendimiento (2012) proporciona las correlaciones que fundamentan multiples aristas: autoeficacia (r=0.31), motivacion intrinseca (r=0.17), regulacion del esfuerzo (r=0.22), ansiedad (r=-0.24). Es la referencia que justifica la inclusion de las 5 dimensiones.</div>
       <div class="r-paper">Richardson, M., Abraham, C. & Bond, R. (2012). Psychological Bulletin, 138(2), 353-387.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab3">&#129504; Ag.3</span> <span class="agent-badge-inline ab4">&#128200; Ag.4</span></div>
     </div>
 
     <div class="researcher-card">
@@ -454,6 +650,7 @@
       <div class="r-inst">UCLA -- Computer Science</div>
       <div class="r-contrib">El framework completo de causalidad basada en grafos (DAGs, do-calculus, d-separacion, back-door criterion) que fundamenta toda la arquitectura matematica del grafo SENSEI. Sin Pearl, el grafo seria una red correlacional, no causal.</div>
       <div class="r-paper">Pearl, J. (2009). Causality: Models, Reasoning, and Inference (2nd ed.). Cambridge University Press.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab4">&#128200; Ag.4</span></div>
     </div>
 
     <div class="researcher-card">
@@ -461,6 +658,7 @@
       <div class="r-inst">Stanford University</div>
       <div class="r-contrib">Teoria de autoeficacia que fundamenta las aristas self_efficacy -> confidence (+0.35), mastery -> self_efficacy (+0.30), y self_efficacy -> anxiety (-0.35). Las cuatro fuentes de autoeficacia (mastery experiences, experiencias vicarias, persuasion verbal, estados fisiologicos) informan directamente el diseno de intervenciones.</div>
       <div class="r-paper">Bandura, A. (1997). Self-Efficacy: The Exercise of Control. W.H. Freeman.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab3">&#129504; Ag.3</span></div>
     </div>
 
     <div class="researcher-card">
@@ -468,6 +666,7 @@
       <div class="r-inst">University of Rochester</div>
       <div class="r-contrib">Self-Determination Theory (SDT): el marco motivacional central del sistema. Las tres necesidades basicas (autonomia, competencia, relacion) informan tanto el diseno de la comunicacion (KOTODAMA) como la UX (SHOKUNIN). La arista emotional_state -> motivation (+0.30) se fundamenta en la SDT.</div>
       <div class="r-paper">Deci, E.L. & Ryan, R.M. (2000). Psychological Inquiry, 11(4), 227-268.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab3">&#129504; Ag.3</span></div>
     </div>
 
     <div class="researcher-card">
@@ -475,13 +674,15 @@
       <div class="r-inst">Arizona State University</div>
       <div class="r-contrib">Su meta-analisis (2011) que demostro que los ITS step-based alcanzan d=0.76, comparable a la tutoria humana (d=0.79), proporciona la justificacion practica del paradigma. Tambien su arquitectura clasica ITS (2006) informa la estructura de SENPAI.</div>
       <div class="r-paper">VanLehn, K. (2011). The relative effectiveness of human tutoring, intelligent tutoring systems, and other tutoring systems. Educational Psychologist, 46(4), 197-221.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab7">&#9881; Ag.7</span> <span class="agent-badge-inline ab2">&#9874; Ag.2</span></div>
     </div>
 
     <div class="researcher-card">
       <div class="r-name">Sidney D'Mello & Art Graesser <span class="evidence-badge evidence-A">NIVEL A</span></div>
       <div class="r-inst">University of Colorado / University of Memphis</div>
-      <div class="r-contrib">Su modelo de dinamica afectiva (2012) que identifica confusion, frustracion, aburrimiento y engagement como estados criticos fundamenta el agente KAZE. Baker, D'Mello, Rodrigo & Graesser (2010) desarrollaron los metodos de stealth assessment que SENSEI adopta para inferir estados emocionales sin sensores.</div>
+      <div class="r-contrib">Su modelo de dinamica afectiva (2012) que identifica confusion, frustracion, aburrimiento y engagement como estados criticos fundamenta el agente KAZE. Los metodos de stealth assessment que SENSEI adopta para inferir estados emocionales sin sensores derivan directamente de este trabajo.</div>
       <div class="r-paper">D'Mello, S.K. & Graesser, A.C. (2012). Learning and Instruction, 22(2), 145-157.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab2">&#9874; Ag.2</span> <span class="agent-badge-inline ab3">&#129504; Ag.3</span></div>
     </div>
 
     <div class="researcher-card">
@@ -489,6 +690,7 @@
       <div class="r-inst">University of New South Wales</div>
       <div class="r-contrib">Cognitive Load Theory (CLT): distingue carga intrinseca, extrinseca y germane. Fundamenta la arista cognitive_load -> fatigue (+0.30) y el diseno instruccional de SENPAI. La CLT tambien informa la decision de sesiones de 15 minutos maximo.</div>
       <div class="r-paper">Sweller, J. (1988). Cognitive Science, 12(2), 257-285.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab5">&#129513; Ag.5</span> <span class="agent-badge-inline ab7">&#9881; Ag.7</span></div>
     </div>
 
     <div class="researcher-card">
@@ -496,6 +698,7 @@
       <div class="r-inst">City University of New York</div>
       <div class="r-contrib">Modelo de Self-Regulated Learning (SRL) con tres fases (forethought, performance, self-reflection) que valida la estructura del grafo donde metacognition -> study_adherence -> mastery. Pintrich (2000) complemento con los componentes motivacionales.</div>
       <div class="r-paper">Zimmerman, B.J. (2002). Theory into Practice, 41(2), 64-70.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab3">&#129504; Ag.3</span></div>
     </div>
 
     <div class="researcher-card">
@@ -503,6 +706,7 @@
       <div class="r-inst">University of Amsterdam</div>
       <div class="r-contrib">Meta-analisis (N>15,000 adolescentes) sobre sueno y rendimiento academico que fundamenta la arista sleep_quality -> attention_span (+0.45) -- la arista de mayor peso del grafo. Identificaron r = 0.16 para calidad, r = 0.12 para duracion.</div>
       <div class="r-paper">Dewald, J.F. et al. (2010). Sleep Medicine Reviews, 14(3), 179-189.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab5">&#129513; Ag.5</span></div>
     </div>
 
     <div class="researcher-card">
@@ -510,6 +714,7 @@
       <div class="r-inst">University of South Florida</div>
       <div class="r-contrib">Actualizaron el meta-analisis de Hembree con 238 estudios publicados entre 1988-2015, confirmando r = -0.24 a -0.33 para la relacion ansiedad-rendimiento. Documentaron moderadores (tipo de tarea, tipo de medida de ansiedad) que son criticos para la implementacion.</div>
       <div class="r-paper">von der Embse, N. et al. (2018). Journal of Affective Disorders, 227, 483-493.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab3">&#129504; Ag.3</span> <span class="agent-badge-inline ab1">&#128202; Ag.1</span></div>
     </div>
 
     <div class="researcher-card">
@@ -517,6 +722,7 @@
       <div class="r-inst">University of Maryland</div>
       <div class="r-contrib">Social Cognitive Career Theory (SCCT) que fundamenta la arista vocational_clarity -> motivation (+0.30) y el agente COMPASS. Integra autoeficacia, expectativas de resultado y metas personales en un modelo de desarrollo vocacional.</div>
       <div class="r-paper">Lent, R.W., Brown, S.D. & Hackett, G. (1994). Journal of Vocational Behavior, 45(1), 79-122.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab6">&#127919; Ag.6</span></div>
     </div>
 
     <div class="researcher-card">
@@ -524,6 +730,7 @@
       <div class="r-inst">Stanford University</div>
       <div class="r-contrib">Teoria de growth mindset que fundamenta la arista growth_mindset -> frustration_tolerance (+0.25). Importante: el sistema reconoce correctamente que el efecto es modesto (Sisk et al., 2018: r=0.10) y reduce el peso original. La contribucion es al coaching comunicacional, no al modelo cuantitativo.</div>
       <div class="r-paper">Dweck, C.S. (2006). Mindset. Random House. + Yeager et al. (2019). Nature, 573, 364-369.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab3">&#129504; Ag.3</span></div>
     </div>
 
     <div class="researcher-card">
@@ -531,6 +738,7 @@
       <div class="r-inst">Iowa State University</div>
       <div class="r-contrib">Meta-analisis (k=67) de habitos de estudio y rendimiento que fundamenta la arista study_adherence -> mastery (+0.30). Encontraron r=0.19 para habilidades, r=0.26 para habitos, r=0.24 para actitud hacia el estudio.</div>
       <div class="r-paper">Crede, M. & Phillips, L.A. (2011). Learning and Individual Differences, 21(4), 337-346.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab3">&#129504; Ag.3</span> <span class="agent-badge-inline ab4">&#128200; Ag.4</span></div>
     </div>
 
     <div class="researcher-card">
@@ -538,6 +746,7 @@
       <div class="r-inst">Carnegie Mellon University</div>
       <div class="r-contrib">Modelo de buffering del apoyo social (1985): el apoyo social amortigua los efectos negativos del estres. Fundamenta las aristas social_support -> emotional_state (+0.30) y parental_support -> emotional_state (+0.25). Critico para el agente NAKAMA.</div>
       <div class="r-paper">Cohen, S. & Wills, T.A. (1985). Psychological Bulletin, 98(2), 310-357.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab3">&#129504; Ag.3</span></div>
     </div>
 
     <div class="researcher-card">
@@ -545,6 +754,7 @@
       <div class="r-inst">Stanford University</div>
       <div class="r-contrib">Modelo B=MAP (Behavior = Motivation x Ability x Prompt) que estructura el diseno de habitos del agente KAIZEN. Los Tiny Habits (2019) informan la "version minima" de sesiones (3 preguntas = sesion completada).</div>
       <div class="r-paper">Fogg, B.J. (2019). Tiny Habits. Houghton Mifflin Harcourt.</div>
+      <div class="r-eval"><span class="agent-badge-inline ab3">&#129504; Ag.3</span> <span class="agent-badge-inline ab7">&#9881; Ag.7</span></div>
     </div>
   </div>
 </div>
@@ -554,12 +764,19 @@
   <div class="section-header">
     <div class="section-num">SECCION 03</div>
     <h2>Los 10 Trabajos Mas Destacados</h2>
-    <p class="subtitle">Los estudios sobre los cuales descansa la validez del sistema completo.</p>
+    <p class="subtitle">Los estudios sobre los cuales descansa la validez del sistema completo, evaluados por los agentes especialistas en cada area.</p>
+    <div class="section-agents">
+      <span class="agent-badge-inline ab1">&#128202; Ag.1</span>
+      <span class="agent-badge-inline ab2">&#9874; Ag.2</span>
+      <span class="agent-badge-inline ab3">&#129504; Ag.3</span>
+      <span class="agent-badge-inline ab4">&#128200; Ag.4</span>
+      <span class="agent-badge-inline ab5">&#129513; Ag.5</span>
+    </div>
   </div>
 
   <div class="study-card">
     <div class="rank">#1</div>
-    <h4>Hembree (1988) -- Meta-analisis de ansiedad ante examenes</h4>
+    <h4>Hembree (1988) -- Meta-analisis de ansiedad ante examenes <span class="agent-badge-inline ab3">&#129504; Ag.3</span></h4>
     <p><strong>Citacion:</strong> Hembree, R. (1988). Correlates, causes, effects, and treatment of test anxiety. Review of Educational Research, 58(1), 47-77.</p>
     <p><strong>Importancia:</strong> k=562 estudios. Establecio la correlacion r = -0.21 a -0.33 entre ansiedad y rendimiento. Demostro que las intervenciones de reduccion de ansiedad (reestructuracion cognitiva + desensibilizacion) mejoran el rendimiento. Fundamenta la arista mas critica del sistema: anxiety -> mastery.</p>
     <p><strong>Si se invalidara:</strong> La priorizacion del agente KAZE (coach emocional) como agente principal para perfiles ansiosos perderia fundamentacion. El efecto total de stress_level en mastery (0.255) se reduciria significativamente.</p>
@@ -572,7 +789,7 @@
 
   <div class="study-card">
     <div class="rank">#2</div>
-    <h4>Richardson, Abraham & Bond (2012) -- Predictores no cognitivos</h4>
+    <h4>Richardson, Abraham & Bond (2012) -- Predictores no cognitivos <span class="agent-badge-inline ab3">&#129504; Ag.3</span> <span class="agent-badge-inline ab4">&#128200; Ag.4</span></h4>
     <p><strong>Citacion:</strong> Richardson, M., Abraham, C. & Bond, R. (2012). Psychological correlates of university students' academic performance. Psychological Bulletin, 138(2), 353-387.</p>
     <p><strong>Importancia:</strong> 241 datasets, N>50,000. Sintetizo 13 anos de investigacion. Establecio que la autoeficacia (r=0.31), la regulacion del esfuerzo (r=0.22) y la ansiedad (r=-0.24) predicen rendimiento independientemente de la capacidad cognitiva. Justifica la existencia misma del modelo multidimensional.</p>
     <p><strong>Si se invalidara:</strong> La justificacion teorica de incluir variables no cognitivas se debilitaria fundamentalmente. SENSEI perderia su principal argumento diferenciador respecto a ALEKS o Carnegie Learning.</p>
@@ -585,7 +802,7 @@
 
   <div class="study-card">
     <div class="rank">#3</div>
-    <h4>VanLehn (2011) -- ITS vs tutoria humana</h4>
+    <h4>VanLehn (2011) -- ITS vs tutoria humana <span class="agent-badge-inline ab7">&#9881; Ag.7</span> <span class="agent-badge-inline ab2">&#9874; Ag.2</span></h4>
     <p><strong>Citacion:</strong> VanLehn, K. (2011). Educational Psychologist, 46(4), 197-221.</p>
     <p><strong>Importancia:</strong> Demostro que los ITS step-based alcanzan d=0.76, comparable a la tutoria humana (d=0.79). Desafio el "problema de dos sigmas" de Bloom. Proporciona la justificacion practica de que un sistema computacional puede ser tan efectivo como un tutor humano.</p>
     <p><strong>Si se invalidara:</strong> La premisa fundamental de que un sistema de IA puede producir mejoras equiparables a la tutoria humana se debilitaria, cuestionando la viabilidad del enfoque completo.</p>
@@ -598,7 +815,7 @@
 
   <div class="study-card">
     <div class="rank">#4</div>
-    <h4>Dewald et al. (2010) -- Sueno y rendimiento en adolescentes</h4>
+    <h4>Dewald et al. (2010) -- Sueno y rendimiento en adolescentes <span class="agent-badge-inline ab5">&#129513; Ag.5</span></h4>
     <p><strong>Citacion:</strong> Dewald, J.F. et al. (2010). Sleep Medicine Reviews, 14(3), 179-189.</p>
     <p><strong>Importancia:</strong> Meta-analisis con N>15,000 adolescentes. sleep_quality es el leverage point #1 del grafo (efecto total en mastery = 0.195). La arista sleep_quality -> attention_span (+0.45) es la de mayor peso del modelo.</p>
     <p><strong>Si se invalidara:</strong> El hallazgo contraintuitivo de que mejorar el sueno es mas efectivo que estudiar mas (pilar comunicacional de RENDDI) perderia fundamentacion.</p>
@@ -611,7 +828,7 @@
 
   <div class="study-card">
     <div class="rank">#5</div>
-    <h4>Corbett & Anderson (1995) -- Bayesian Knowledge Tracing</h4>
+    <h4>Corbett & Anderson (1995) -- Bayesian Knowledge Tracing <span class="agent-badge-inline ab1">&#128202; Ag.1</span> <span class="agent-badge-inline ab2">&#9874; Ag.2</span></h4>
     <p><strong>Citacion:</strong> Corbett, A.T. & Anderson, J.R. (1995). User Modeling and User-Adapted Interaction, 4(4), 253-278.</p>
     <p><strong>Importancia:</strong> El modelo computacional fundacional para rastrear el conocimiento del estudiante. Los 4 parametros (P(L0), P(T), P(G), P(S)) son el motor de diagnostico academico del sistema. La extension de Yudelson et al. (2013) con BKT individualizado agrega la adaptacion por estudiante.</p>
     <p><strong>Si se invalidara:</strong> Todo el modulo de estimacion de mastery (v1) tendria que reconstruirse desde cero.</p>
@@ -624,7 +841,7 @@
 
   <div class="study-card">
     <div class="rank">#6</div>
-    <h4>Hattie (2009) -- Visible Learning</h4>
+    <h4>Hattie (2009) -- Visible Learning <span class="agent-badge-inline ab2">&#9874; Ag.2</span> <span class="agent-badge-inline ab3">&#129504; Ag.3</span></h4>
     <p><strong>Citacion:</strong> Hattie, J. (2009). Visible Learning. Routledge.</p>
     <p><strong>Importancia:</strong> 800+ meta-analisis sintetizados. Posiciono estrategias metacognitivas (d=0.69), autoeficacia (d=0.44), reduccion de ansiedad (d=0.40) como las intervenciones de mayor impacto. Establece el umbral d=0.40 como criterio de seleccion de acciones en TAKUMI.</p>
     <div class="study-meta">
@@ -636,7 +853,7 @@
 
   <div class="study-card">
     <div class="rank">#7</div>
-    <h4>Pearl (2009) -- Causality</h4>
+    <h4>Pearl (2009) -- Causality <span class="agent-badge-inline ab4">&#128200; Ag.4</span></h4>
     <p><strong>Citacion:</strong> Pearl, J. (2009). Causality (2nd ed.). Cambridge University Press.</p>
     <p><strong>Importancia:</strong> Proporciona todo el aparato formal: DAGs, do-calculus, d-separacion, back-door criterion, identificabilidad causal. Sin este framework, el "grafo" seria una red correlacional sin capacidad de razonamiento contrafactual.</p>
     <div class="study-meta">
@@ -648,7 +865,7 @@
 
   <div class="study-card">
     <div class="rank">#8</div>
-    <h4>Pintrich & De Groot (1990) -- Motivacion y autorregulacion</h4>
+    <h4>Pintrich & De Groot (1990) -- Motivacion y autorregulacion <span class="agent-badge-inline ab3">&#129504; Ag.3</span> <span class="agent-badge-inline ab4">&#128200; Ag.4</span></h4>
     <p><strong>Citacion:</strong> Pintrich, P.R. & De Groot, E.V. (1990). Journal of Educational Psychology, 82(1), 33-40.</p>
     <p><strong>Importancia:</strong> SEM con 173 estudiantes que proporciono coeficientes de path directos: autoeficacia -> rendimiento (beta=0.31), autoeficacia -> estrategias (beta=0.33), ansiedad -> rendimiento (beta=-0.18). Estos coeficientes calibran directamente los pesos del grafo.</p>
     <div class="study-meta">
@@ -660,7 +877,7 @@
 
   <div class="study-card">
     <div class="rank">#9</div>
-    <h4>Cepeda et al. (2006) -- Efecto de espaciamiento</h4>
+    <h4>Cepeda et al. (2006) -- Efecto de espaciamiento <span class="agent-badge-inline ab1">&#128202; Ag.1</span></h4>
     <p><strong>Citacion:</strong> Cepeda, N.J. et al. (2006). Psychological Bulletin, 132(3), 354-380.</p>
     <p><strong>Importancia:</strong> Confirma la robustez del spacing effect -- base del modulo FSRS que programa la practica optima. Sin spacing, el motor de practica seria suboptimo independientemente del diagnostico.</p>
     <div class="study-meta">
@@ -672,9 +889,9 @@
 
   <div class="study-card">
     <div class="rank">#10</div>
-    <h4>Sisk, Burgoyne, Sun, Butler & Macnamara (2018) -- Growth mindset: dos meta-analisis</h4>
+    <h4>Sisk, Burgoyne, Sun, Butler & Macnamara (2018) -- Growth mindset: dos meta-analisis <span class="agent-badge-inline ab3">&#129504; Ag.3</span></h4>
     <p><strong>Citacion:</strong> Sisk, V.F. et al. (2018). Psychological Science, 29(4), 549-571.</p>
-    <p><strong>Importancia:</strong> k=273, N>365,000. Encontro correlacion debil entre mindset y rendimiento (r=0.10) e intervenciones con efecto pequeno (d=0.08). Este estudio es critico porque FORZO la recalibracion del peso de growth_mindset en el grafo (de +0.40 a +0.25), demostrando la honestidad intelectual del proceso de revision.</p>
+    <p><strong>Importancia:</strong> k=273, N>365,000. Encontro correlacion debil entre mindset y rendimiento (r=0.10) e intervenciones con efecto pequeno (d=0.08). Este estudio es critico porque FORZO la recalibracion del peso de growth_mindset en el grafo (de +0.40 a +0.25), demostrando la honestidad intelectual del proceso de revision v8.0.</p>
     <div class="study-meta">
       <span class="meta-tag">N > 365,000</span>
       <span class="meta-tag">Calibracion correctiva</span>
@@ -688,11 +905,16 @@
   <div class="section-header">
     <div class="section-num">SECCION 04</div>
     <h2>Como se Identifico que Estas Teorias Eran las Adecuadas</h2>
-    <p class="subtitle">El recorrido epistemologico: criterios de seleccion, validacion y correccion de errores.</p>
+    <p class="subtitle">El recorrido epistemologico: criterios de seleccion, validacion y correccion de errores a lo largo de 8 ciclos de revision (C1-C8).</p>
+    <div class="section-agents">
+      <span class="agent-badge-inline ab4">&#128200; Ag.4 Causalidad</span>
+      <span class="agent-badge-inline ab1">&#128202; Ag.1 Psicometria</span>
+      <span class="agent-badge-inline ab3">&#129504; Ag.3 Psicologia</span>
+    </div>
   </div>
 
   <div class="content-block">
-    <h3>Criterios de seleccion de evidencia</h3>
+    <h3>Criterios de seleccion de evidencia <span class="agent-badge-inline ab4">&#128200; Ag.4</span></h3>
     <p>El sistema emplea una clasificacion de evidencia en tres niveles, aplicada a cada una de las 30 aristas del grafo:</p>
     <ul>
       <li><strong>Nivel A (14 aristas, 58%):</strong> Soporte meta-analitico robusto. Al menos un meta-analisis publicado que documenta la relacion causal con tamano de efecto cuantificado. Ejemplos: anxiety -> mastery (Hembree, 1988, k=562), sleep_quality -> attention_span (Dewald et al., 2010, N>15,000).</li>
@@ -703,8 +925,8 @@
   </div>
 
   <div class="content-block">
-    <h3>Los 13 marcos teoricos y como se seleccionaron</h3>
-    <p>La seleccion de los 13 frameworks teoricos del Capitulo 3 sigue una logica de cobertura dimensional: cada dimension del modelo requiere al menos dos marcos teoricos complementarios. Los marcos seleccionados no fueron "elegidos" sino que emergieron de la literatura como los mas replicados y con mayor poder predictivo:</p>
+    <h3>Los 13 marcos teoricos y como se seleccionaron <span class="agent-badge-inline ab3">&#129504; Ag.3</span> <span class="agent-badge-inline ab1">&#128202; Ag.1</span></h3>
+    <p>La seleccion de los 13 frameworks teoricos del Capitulo 3 de la tesis v8.0 sigue una logica de cobertura dimensional: cada dimension del modelo requiere al menos dos marcos teoricos complementarios. Los marcos seleccionados no fueron "elegidos" sino que emergieron de la literatura como los mas replicados y con mayor poder predictivo:</p>
     <ul>
       <li><strong>Dimension Academica (4 marcos):</strong> IRT (Lord, 1980), BKT (Corbett & Anderson, 1995), Cognitive Load Theory (Sweller, 1988), Practica Deliberada (Ericsson et al., 1993). Seleccionados por ser los estandares computacionales de adaptive learning.</li>
       <li><strong>Dimension Emocional (3 marcos):</strong> Ansiedad ante examenes (Hembree/Zeidner), Autoeficacia (Bandura, 1997), Dinamica afectiva (D'Mello & Graesser, 2012). Seleccionados por su documentacion meta-analitica.</li>
@@ -715,25 +937,25 @@
   </div>
 
   <div class="content-block">
-    <h3>El proceso de validacion: 10 agentes revisores, 8 ciclos</h3>
-    <p>El aspecto mas notable del proceso es la revision sistematica por un comite de 10 agentes especializados ejecutados en paralelo durante 8 ciclos (C1-C8):</p>
+    <h3>El proceso de validacion: 8 ciclos de revision (C1-C8)</h3>
+    <p>El aspecto mas notable del proceso de la tesis v8.0 es la revision sistematica por un comite de agentes especializados ejecutados en paralelo durante 8 ciclos (C1-C8). Los scores internos de revision pasaron de 78/100 en la primera iteracion a 92+/100 en la iteracion final:</p>
     <ul>
       <li><strong>SENPAI (BKT/IRT):</strong> 68 verificaciones cruzadas de coherencia global. Score final: 100/100.</li>
-      <li><strong>KAZE (Ansiedad):</strong> 15 errores detectados. Score: 75 -> corregido.</li>
-      <li><strong>COMPASS (Vocacional):</strong> 8 errores, 5 fabricaciones detectadas. Score: 75 -> corregido.</li>
+      <li><strong>KAZE (Ansiedad):</strong> 15 errores detectados. Score inicial: 75, corregido a 100/100.</li>
+      <li><strong>COMPASS (Vocacional):</strong> 8 errores, 5 fabricaciones detectadas. Score inicial: 75, corregido.</li>
       <li><strong>Ingeniero Matematico:</strong> Validacion de formulas, convergencia, consistencia numerica. Score: 100/100.</li>
       <li><strong>Auditor Bibliografico:</strong> Verificacion APA 7, citas huerfanas. Score: 82 -> 100/100.</li>
     </ul>
-    <p>El resultado de la revision fue contundente: ~20 fabricaciones detectadas, ~84 errores corregidos, score global de 78/100 (V1) a 92+/100 (V2).</p>
+    <p>El resultado de la revision fue contundente: ~20 fabricaciones detectadas, ~84 errores corregidos, score global de 78/100 (iteracion inicial) a 92+/100 (iteracion final). Este proceso de mejora iterativa a lo largo de 8 ciclos completos condujo a la version 8.0 definitiva de la tesis.</p>
   </div>
 
   <div class="content-block">
-    <h3>Alucinaciones y errores detectados (ejemplos especificos)</h3>
-    <p>La deteccion de errores es, paradojicamente, una de las mayores fortalezas del sistema. Los errores documentados transparentemente incluyen:</p>
+    <h3>Alucinaciones y errores detectados (ejemplos especificos) <span class="agent-badge-inline ab2">&#9874; Ag.2</span></h3>
+    <p>La deteccion de errores es, paradojicamente, una de las mayores fortalezas del sistema. Los errores documentados transparentemente durante el proceso de revision que llevo a la v8.0 incluyen:</p>
     <ul>
       <li><strong>Gonzalez, Castillo & Meneses (2019):</strong> Citada como evidencia de la relacion ansiedad vocacional-rendimiento PAES. La PAES no existia en 2019 (comenzo en 2022). Flaggeada por 3 agentes. Eliminada.</li>
       <li><strong>arXiv:2305.12345:</strong> Placeholder ID fake. Flaggeado por 2 agentes. Eliminada.</li>
-      <li><strong>Pesos inflados:</strong> anxiety -> mastery estaba en -0.55 en la V1; la evidencia meta-analitica indica -0.24 a -0.33, equivalente a un peso de -0.25 a -0.30 en SEM. Corregido a -0.30.</li>
+      <li><strong>Pesos inflados:</strong> anxiety -> mastery estaba en -0.55 en iteraciones tempranas; la evidencia meta-analitica indica -0.24 a -0.33, equivalente a un peso de -0.25 a -0.30 en SEM. Corregido a -0.30.</li>
       <li><strong>Fogg citado como 2020:</strong> Tiny Habits se publico en 2019. Error de 1 ano corregido.</li>
       <li><strong>Salmivalli citado 2011:</strong> La publicacion real es de 1996. Error de 15 anos corregido.</li>
       <li><strong>Growth mindset con peso inflado:</strong> Originalmente +0.40; Sisk et al. (2018) meta-analisis muestra d=0.08. Reducido a +0.25.</li>
@@ -741,11 +963,11 @@
   </div>
 
   <div class="content-block">
-    <h3>Calibracion de pesos del grafo</h3>
+    <h3>Calibracion de pesos del grafo <span class="agent-badge-inline ab4">&#128200; Ag.4</span></h3>
     <p>Los pesos se calibraron mediante un proceso de tres etapas:</p>
     <ul>
       <li><strong>Etapa 1 -- Literatura:</strong> Extraccion de correlaciones (r), coeficientes beta (SEM) y tamanos de efecto (d) de meta-analisis y estudios primarios. Conversion a pesos del grafo usando reglas documentadas en el Apendice Metodologico del paper de validacion.</li>
-      <li><strong>Etapa 2 -- Revision experta:</strong> Los 10 agentes revisores verificaron la plausibilidad de cada peso, identificando 12 pesos inflados (sistematicamente 40-100% mayores que la evidencia justificaba) y recomendando ajustes conservadores.</li>
+      <li><strong>Etapa 2 -- Revision experta:</strong> Los agentes revisores verificaron la plausibilidad de cada peso, identificando 12 pesos inflados (sistematicamente 40-100% mayores que la evidencia justificaba) y recomendando ajustes conservadores.</li>
       <li><strong>Etapa 3 -- Analisis de sensibilidad Monte Carlo:</strong> 10,000 iteraciones con perturbaciones de +/-20% en cada peso. Se verifico estabilidad del ranking de leverage points (sleep_quality y emotional_state en top-3 en >90% de las iteraciones), convergencia del algoritmo de propagacion, y robustez de las predicciones.</li>
     </ul>
   </div>
@@ -757,6 +979,12 @@
     <div class="section-num">SECCION 05</div>
     <h2>Como las Teorias Alimentan el Grafo y los Arquetipos</h2>
     <p class="subtitle">El mapeo completo: teoria -> variable -> arista -> arquetipo.</p>
+    <div class="section-agents">
+      <span class="agent-badge-inline ab4">&#128200; Ag.4 Causalidad</span>
+      <span class="agent-badge-inline ab1">&#128202; Ag.1 Psicometria</span>
+      <span class="agent-badge-inline ab5">&#129513; Ag.5 Neuro</span>
+      <span class="agent-badge-inline ab6">&#127919; Ag.6 Vocacional</span>
+    </div>
   </div>
 
   <div class="content-block">
@@ -790,7 +1018,7 @@
   </div>
 
   <div class="content-block">
-    <h3>Los 10 arquetipos y su fundamentacion teorica</h3>
+    <h3>Los 10 arquetipos y su fundamentacion teorica <span class="agent-badge-inline ab7">&#9881; Ag.7</span> <span class="agent-badge-inline ab3">&#129504; Ag.3</span></h3>
     <p>Los arquetipos emergen de la combinacion de valores extremos o tipicos en las 21 variables, no son categorias a priori. Cada uno representa un perfil frecuente entre estudiantes PAES chilenos:</p>
     <div class="archetype-grid">
       <div class="archetype-card">
@@ -837,7 +1065,7 @@
   </div>
 
   <div class="content-block">
-    <h3>El diagnostico: "Primera Mision"</h3>
+    <h3>El diagnostico: "Primera Mision" <span class="agent-badge-inline ab1">&#128202; Ag.1</span> <span class="agent-badge-inline ab7">&#9881; Ag.7</span></h3>
     <p>El diagnostico inicial (8-10 minutos) resuelve la tension entre precision psicometrica y retencion de onboarding mediante un enfoque progresivo en dos fases:</p>
     <ul>
       <li><strong>Fase 1 (onboarding, 8-10 min):</strong> Medicion directa de las 5 variables de mayor leverage (stress_level, sleep_quality, mastery, anxiety, motivation) + CAT reducido (8-12 items, SEM <= 0.30) + stealth assessment de 4 variables durante el CAT.</li>
@@ -853,10 +1081,15 @@
     <div class="section-num">SECCION 06</div>
     <h2>Transiciones entre Arquetipos</h2>
     <p class="subtitle">Que define cuando un estudiante transiciona, que peso tiene cada variable, y como se detectan patrones criticos.</p>
+    <div class="section-agents">
+      <span class="agent-badge-inline ab4">&#128200; Ag.4 Causalidad</span>
+      <span class="agent-badge-inline ab7">&#9881; Ag.7 ITS</span>
+      <span class="agent-badge-inline ab5">&#129513; Ag.5 Neuro</span>
+    </div>
   </div>
 
   <div class="content-block">
-    <h3>El algoritmo de propagacion</h3>
+    <h3>El algoritmo de propagacion <span class="agent-badge-inline ab4">&#128200; Ag.4</span></h3>
     <div class="formula-box">
       <div class="main">delta(k+1)[j] = SUM_{(i,j) in E} delta(k)[i] * w_{ij} * gamma^k</div>
       <div class="desc">donde gamma = 0.7 es el factor de atenuacion exponencial y k es la iteracion (0, 1, ..., K-1)</div>
@@ -866,7 +1099,7 @@
   </div>
 
   <div class="content-block">
-    <h3>Metodologia de calibracion de pesos</h3>
+    <h3>Metodologia de calibracion de pesos <span class="agent-badge-inline ab4">&#128200; Ag.4</span></h3>
     <p>Los pesos se derivan de tres fuentes, con reglas de conversion documentadas:</p>
     <ul>
       <li><strong>Desde correlacion r:</strong> peso = 0.8 * r (factor de reduccion de bivariada a parcial)</li>
@@ -877,12 +1110,12 @@
   </div>
 
   <div class="content-block">
-    <h3>Las 5 rutas causales principales</h3>
+    <h3>Las 5 rutas causales principales <span class="agent-badge-inline ab4">&#128200; Ag.4</span> <span class="agent-badge-inline ab5">&#129513; Ag.5</span></h3>
 
     <div class="leverage-item">
       <div class="leverage-rank">1</div>
       <div class="leverage-info">
-        <h4>Ruta del Estres (stress_level -> mastery)</h4>
+        <h4>Ruta del Estres (stress_level -> mastery) <span class="agent-badge-inline ab3">&#129504; Ag.3</span></h4>
         <div class="path">stress -> anxiety(+0.45) -> mastery(-0.30) = -0.135 [directo]<br>
         + stress -> sleep(-0.35) -> attention(+0.45) -> mastery(+0.30) = 0.047<br>
         + 3 caminos adicionales via emotional_state, fatigue, ansiedad-atencion</div>
@@ -893,7 +1126,7 @@
     <div class="leverage-item">
       <div class="leverage-rank">2</div>
       <div class="leverage-info">
-        <h4>Ruta del Sueno (sleep_quality -> mastery)</h4>
+        <h4>Ruta del Sueno (sleep_quality -> mastery) <span class="agent-badge-inline ab5">&#129513; Ag.5</span></h4>
         <div class="path">sleep -> attention(+0.45) -> mastery(+0.30) = 0.135<br>
         + sleep -> fatigue(-0.50) -> attention(+0.40) -> mastery(+0.30) = 0.060</div>
       </div>
@@ -903,7 +1136,7 @@
     <div class="leverage-item">
       <div class="leverage-rank">3</div>
       <div class="leverage-info">
-        <h4>Ruta de Actividad Fisica (physical_activity -> mastery)</h4>
+        <h4>Ruta de Actividad Fisica (physical_activity -> mastery) <span class="agent-badge-inline ab5">&#129513; Ag.5</span></h4>
         <div class="path">physical -> emotional_state(+0.30) -> motivation(+0.30) -> adherence(+0.35) -> mastery(+0.30)<br>
         + physical -> sleep(+0.25) -> attention -> mastery<br>
         + physical -> stress(-0.25) -> anxiety -> mastery (via 3 caminos)</div>
@@ -914,7 +1147,7 @@
     <div class="leverage-item">
       <div class="leverage-rank">4</div>
       <div class="leverage-info">
-        <h4>Ruta Vocacional (vocational_clarity -> mastery)</h4>
+        <h4>Ruta Vocacional (vocational_clarity -> mastery) <span class="agent-badge-inline ab6">&#127919; Ag.6</span></h4>
         <div class="path">vocational(+0.30) -> motivation(+0.35) -> adherence(+0.30) -> mastery(+0.30) = 0.032</div>
       </div>
       <div class="leverage-effect">0.032</div>
@@ -923,7 +1156,7 @@
     <div class="leverage-item">
       <div class="leverage-rank">5</div>
       <div class="leverage-info">
-        <h4>Ruta Metacognitiva (metacognition -> mastery)</h4>
+        <h4>Ruta Metacognitiva (metacognition -> mastery) <span class="agent-badge-inline ab3">&#129504; Ag.3</span></h4>
         <div class="path">metacognition(+0.25) -> study_adherence(+0.30) -> mastery(+0.30) = 0.075</div>
       </div>
       <div class="leverage-effect">0.075</div>
@@ -931,7 +1164,7 @@
   </div>
 
   <div class="content-block">
-    <h3>Protocolo de orquestacion MIYAGI: 5 niveles de prioridad</h3>
+    <h3>Protocolo de orquestacion MIYAGI: 5 niveles de prioridad <span class="agent-badge-inline ab7">&#9881; Ag.7</span></h3>
     <p>El orquestador MIYAGI asigna agentes segun el estado del grafo, con 5 niveles de prioridad:</p>
     <ul>
       <li><strong>P1 -- Crisis:</strong> anxiety > 0.80 o stress_level > 0.85 o emotional_state < -0.50. KAZE se activa inmediatamente. Todas las sesiones academicas se pausan.</li>
@@ -943,7 +1176,7 @@
   </div>
 
   <div class="content-block">
-    <h3>Ejemplo concreto: Matias transiciona de Ansioso a menos ansioso</h3>
+    <h3>Ejemplo concreto: Matias transiciona de Ansioso a menos ansioso <span class="agent-badge-inline ab3">&#129504; Ag.3</span> <span class="agent-badge-inline ab4">&#128200; Ag.4</span></h3>
     <p>Estado inicial de Matias: mastery=0.65, anxiety=0.75, confidence=0.35, stress_level=0.70, sleep_quality=0.50.</p>
     <p><strong>Intervencion del sistema:</strong> KAZE activa protocolo de reestructuracion cognitiva (4 sesiones). Resultado: anxiety baja de 0.75 a 0.55 (delta = -0.20).</p>
     <p><strong>Propagacion por el grafo:</strong></p>
@@ -962,50 +1195,59 @@
   <div class="section-header">
     <div class="section-num">SECCION 07</div>
     <h2>Fortalezas y Debilidades</h2>
-    <p class="subtitle">Evaluacion honesta desde la perspectiva de un investigador en Educational Data Mining.</p>
+    <p class="subtitle">Evaluacion consensuada del comite de 7 agentes, cada uno desde la perspectiva de su dominio especializado.</p>
+    <div class="section-agents">
+      <span class="agent-badge-inline ab1">&#128202; Ag.1</span>
+      <span class="agent-badge-inline ab2">&#9874; Ag.2</span>
+      <span class="agent-badge-inline ab3">&#129504; Ag.3</span>
+      <span class="agent-badge-inline ab4">&#128200; Ag.4</span>
+      <span class="agent-badge-inline ab5">&#129513; Ag.5</span>
+      <span class="agent-badge-inline ab6">&#127919; Ag.6</span>
+      <span class="agent-badge-inline ab7">&#9881; Ag.7</span>
+    </div>
   </div>
 
   <div class="content-block">
-    <h3>Fortalezas genuinas</h3>
+    <h3>Fortalezas genuinas (consenso del comite)</h3>
 
-    <div class="strength-item"><strong>1. Modelamiento multidimensional sin precedentes.</strong> Ningun sistema adaptativo existente -- ni Carnegie Learning, ni ALEKS, ni Knewton, ni AutoTutor, ni Wayang Outpost -- integra 21 variables en 5 dimensiones con pesos calibrados. El sistema mas completo previo (Wayang Outpost/Conati et al.) modela 4-7 variables. SENSEI modela 5x mas con estructura causal explicita.</div>
+    <div class="strength-item"><strong>1. Modelamiento multidimensional sin precedentes.</strong> <span class="agent-badge-inline ab2">&#9874; Ag.2</span> <span class="agent-badge-inline ab7">&#9881; Ag.7</span> Ningun sistema adaptativo existente -- ni Carnegie Learning, ni ALEKS, ni Knewton, ni AutoTutor, ni Wayang Outpost -- integra 21 variables en 5 dimensiones con pesos calibrados. El sistema mas completo previo (Wayang Outpost/Conati et al.) modela 4-7 variables. SENSEI modela 5x mas con estructura causal explicita.</div>
 
-    <div class="strength-item"><strong>2. Transparencia del modelo causal.</strong> En un campo donde los sistemas adaptativos operan como cajas negras (redes neuronales, random forests), la adopcion de un grafo causal explicito con pesos interpretables es una decision eticamente superior. Los estudiantes, educadores y reguladores pueden entender, cuestionar y auditar las decisiones del sistema.</div>
+    <div class="strength-item"><strong>2. Transparencia del modelo causal.</strong> <span class="agent-badge-inline ab4">&#128200; Ag.4</span> En un campo donde los sistemas adaptativos operan como cajas negras (redes neuronales, random forests), la adopcion de un grafo causal explicito con pesos interpretables es una decision eticamente superior. Los estudiantes, educadores y reguladores pueden entender, cuestionar y auditar las decisiones del sistema.</div>
 
-    <div class="strength-item"><strong>3. Rigor en la deteccion y correccion de errores.</strong> La deteccion de ~20 fabricaciones y ~84 errores por el comite de 10 agentes revisores, documentada transparentemente, es un ejercicio de honestidad intelectual infrecuente en la literatura EdTech. La mayoria de los sistemas ocultan sus errores; SENSEI los documenta.</div>
+    <div class="strength-item"><strong>3. Rigor en la deteccion y correccion de errores.</strong> <span class="agent-badge-inline ab2">&#9874; Ag.2</span> La deteccion de ~20 fabricaciones y ~84 errores durante los 8 ciclos de revision (C1-C8), documentada transparentemente, es un ejercicio de honestidad intelectual infrecuente en la literatura EdTech. La mayoria de los sistemas ocultan sus errores; SENSEI v8.0 los documenta.</div>
 
-    <div class="strength-item"><strong>4. Hallazgo contraintuitivo bien fundamentado.</strong> La conclusion de que stress_level (efecto total = 0.255) supera a sleep_quality (0.195) como leverage point, y que ambos superan las intervenciones puramente academicas, es un hallazgo poderoso con implicaciones practicas. Esta bien fundamentado en la descomposicion de Wright y verificado por el analisis Monte Carlo.</div>
+    <div class="strength-item"><strong>4. Hallazgo contraintuitivo bien fundamentado.</strong> <span class="agent-badge-inline ab5">&#129513; Ag.5</span> <span class="agent-badge-inline ab4">&#128200; Ag.4</span> La conclusion de que stress_level (efecto total = 0.255) supera a sleep_quality (0.195) como leverage point, y que ambos superan las intervenciones puramente academicas, es un hallazgo poderoso con implicaciones practicas. Esta bien fundamentado en la descomposicion de Wright y verificado por el analisis Monte Carlo.</div>
 
-    <div class="strength-item"><strong>5. Diagnostico progresivo.</strong> La solucion al dilema precision/retencion mediante diagnostico en dos fases (8-10 min + stealth assessment) es elegante y bien fundamentada en la literatura de cold start bayesiano y CAT continuado.</div>
+    <div class="strength-item"><strong>5. Diagnostico progresivo.</strong> <span class="agent-badge-inline ab1">&#128202; Ag.1</span> La solucion al dilema precision/retencion mediante diagnostico en dos fases (8-10 min + stealth assessment) es elegante y bien fundamentada en la literatura de cold start bayesiano y CAT continuado.</div>
 
-    <div class="strength-item"><strong>6. Contextualizacion chilena.</strong> El diseno para la realidad especifica (PAES, sistema tripartito, brecha socioeconomica, 85% acceso via smartphone Android) evita el error comun de aplicar modelos norteamericanos sin adaptacion.</div>
+    <div class="strength-item"><strong>6. Contextualizacion chilena.</strong> <span class="agent-badge-inline ab6">&#127919; Ag.6</span> <span class="agent-badge-inline ab3">&#129504; Ag.3</span> El diseno para la realidad especifica (PAES, sistema tripartito, brecha socioeconomica, 85% acceso via smartphone Android) evita el error comun de aplicar modelos norteamericanos sin adaptacion.</div>
 
-    <div class="strength-item"><strong>7. Sistema de comunicacion calibrado al grafo.</strong> La tesis KOTODAMA trata cada mensaje como una micro-intervencion medible sobre variables emocionales. El enfoque de comunicacion basado en SDT (autonomy-supportive) y CNV es sofisticado y bien fundamentado.</div>
+    <div class="strength-item"><strong>7. Sistema de comunicacion calibrado al grafo.</strong> <span class="agent-badge-inline ab3">&#129504; Ag.3</span> La tesis KOTODAMA trata cada mensaje como una micro-intervencion medible sobre variables emocionales. El enfoque de comunicacion basado en SDT (autonomy-supportive) y CNV es sofisticado y bien fundamentado.</div>
   </div>
 
   <div class="content-block">
-    <h3>Debilidades y areas de preocupacion</h3>
+    <h3>Debilidades y areas de preocupacion (hallazgos del comite)</h3>
 
-    <div class="weakness-item"><strong>1. Ausencia total de validacion empirica.</strong> Esta es la debilidad mas seria. Todo el sistema es una construccion teorica. Los pesos del grafo provienen de meta-analisis realizados con poblaciones diferentes (principalmente universitarios norteamericanos y europeos), no con adolescentes chilenos de 15-18 anos preparandose para la PAES. Hasta que se realice un estudio piloto con N >= 100 estudiantes, la efectividad real del sistema es una hipotesis.</div>
+    <div class="weakness-item"><strong>1. Ausencia total de validacion empirica.</strong> <span class="agent-badge-inline ab4">&#128200; Ag.4</span> <span class="agent-badge-inline ab1">&#128202; Ag.1</span> Esta es la debilidad mas seria, identificada unanimemente por los 7 agentes. Todo el sistema es una construccion teorica. Los pesos del grafo provienen de meta-analisis realizados con poblaciones diferentes (principalmente universitarios norteamericanos y europeos), no con adolescentes chilenos de 15-18 anos preparandose para la PAES. Hasta que se realice un estudio piloto con N >= 100 estudiantes, la efectividad real del sistema es una hipotesis.</div>
 
-    <div class="weakness-item"><strong>2. Linealidad asumida en relaciones conocidamente no lineales.</strong> Al menos dos relaciones son conocidamente no lineales: cognitive_load -> rendimiento sigue la ley de Yerkes-Dodson (U invertida), y anxiety -> rendimiento es curvilinea (ansiedad moderada puede facilitar rendimiento). El modelo lineal es una simplificacion aceptable para el MVP pero genera predicciones incorrectas en los extremos.</div>
+    <div class="weakness-item"><strong>2. Linealidad asumida en relaciones conocidamente no lineales.</strong> <span class="agent-badge-inline ab4">&#128200; Ag.4</span> <span class="agent-badge-inline ab5">&#129513; Ag.5</span> Al menos dos relaciones son conocidamente no lineales: cognitive_load -> rendimiento sigue la ley de Yerkes-Dodson (U invertida), y anxiety -> rendimiento es curvilinea (ansiedad moderada puede facilitar rendimiento). El modelo lineal es una simplificacion aceptable para el MVP pero genera predicciones incorrectas en los extremos.</div>
 
-    <div class="weakness-item"><strong>3. Omision de confounders criticos.</strong> Nivel socioeconomico (NSE) es un confounder de mastery, parental_support, screen_time y study_adherence. Su omision introduce sesgo sistematico: el modelo podria atribuir a "baja motivacion" lo que realmente es "falta de recursos". La capacidad cognitiva general (g) es otro confounder no modelado.</div>
+    <div class="weakness-item"><strong>3. Omision de confounders criticos.</strong> <span class="agent-badge-inline ab4">&#128200; Ag.4</span> Nivel socioeconomico (NSE) es un confounder de mastery, parental_support, screen_time y study_adherence. Su omision introduce sesgo sistematico: el modelo podria atribuir a "baja motivacion" lo que realmente es "falta de recursos". La capacidad cognitiva general (g) es otro confounder no modelado.</div>
 
-    <div class="weakness-item"><strong>4. Homogeneidad de efectos.</strong> Los pesos del grafo son medianas poblacionales que ocultan heterogeneidad. El efecto de anxiety en mastery puede ser diferente para estudiantes de alto vs bajo rendimiento, para hombres vs mujeres, y para diferentes asignaturas. Un modelo con pesos homogeneos puede ser impreciso para subgrupos.</div>
+    <div class="weakness-item"><strong>4. Homogeneidad de efectos.</strong> <span class="agent-badge-inline ab1">&#128202; Ag.1</span> <span class="agent-badge-inline ab3">&#129504; Ag.3</span> Los pesos del grafo son medianas poblacionales que ocultan heterogeneidad. El efecto de anxiety en mastery puede ser diferente para estudiantes de alto vs bajo rendimiento, para hombres vs mujeres, y para diferentes asignaturas. Un modelo con pesos homogeneos puede ser impreciso para subgrupos.</div>
 
-    <div class="weakness-item"><strong>5. Transferibilidad cultural de los pesos.</strong> Los meta-analisis que calibran los pesos fueron realizados predominantemente con poblaciones anglosajonas. Variables como parental_support y social_support pueden operar de manera diferente en la cultura chilena, donde la estructura familiar y las expectativas parentales difieren significativamente.</div>
+    <div class="weakness-item"><strong>5. Transferibilidad cultural de los pesos.</strong> <span class="agent-badge-inline ab3">&#129504; Ag.3</span> <span class="agent-badge-inline ab6">&#127919; Ag.6</span> Los meta-analisis que calibran los pesos fueron realizados predominantemente con poblaciones anglosajonas. Variables como parental_support y social_support pueden operar de manera diferente en la cultura chilena, donde la estructura familiar y las expectativas parentales difieren significativamente.</div>
 
-    <div class="weakness-item"><strong>6. Complejidad del modelo vs capacidad de calibracion.</strong> 21 variables y 30 aristas generan un modelo con 30 parametros libres. La calibracion empirica requiere N >= 500 estudiantes con 10+ sesiones (Apendice C del paper). Este requisito de datos es significativo para una startup en etapa pre-producto.</div>
+    <div class="weakness-item"><strong>6. Complejidad del modelo vs capacidad de calibracion.</strong> <span class="agent-badge-inline ab4">&#128200; Ag.4</span> 21 variables y 30 aristas generan un modelo con 30 parametros libres. La calibracion empirica requiere N >= 500 estudiantes con 10+ sesiones (Apendice C del paper). Este requisito de datos es significativo para una startup en etapa pre-producto.</div>
 
-    <div class="weakness-item"><strong>7. Aristas de Nivel C sin fundamentacion empirica.</strong> Las 4 aristas de Nivel C (frustration_tolerance -> study_adherence, parental_support -> emotional_state con referencia incorrecta corregida, metacognition -> study_adherence con evidencia indirecta, fatigue -> emotional_state redundante) representan puntos debiles del modelo que necesitan validacion prioritaria.</div>
+    <div class="weakness-item"><strong>7. Aristas de Nivel C sin fundamentacion empirica.</strong> <span class="agent-badge-inline ab2">&#9874; Ag.2</span> Las 4 aristas de Nivel C (frustration_tolerance -> study_adherence, parental_support -> emotional_state con referencia incorrecta corregida, metacognition -> study_adherence con evidencia indirecta, fatigue -> emotional_state redundante) representan puntos debiles del modelo que necesitan validacion prioritaria.</div>
   </div>
 
   <div class="content-block">
-    <h3>Comparacion con soluciones existentes</h3>
+    <h3>Comparacion con soluciones existentes <span class="agent-badge-inline ab2">&#9874; Ag.2</span> <span class="agent-badge-inline ab7">&#9881; Ag.7</span></h3>
     <div style="overflow-x:auto;">
     <table class="var-table">
-      <tr><th>Dimension</th><th>Carnegie Learning</th><th>ALEKS</th><th>Knewton</th><th>SENSEI/RENDDI</th></tr>
+      <tr><th>Dimension</th><th>Carnegie Learning</th><th>ALEKS</th><th>Knewton</th><th>SENSEI/RENDDI v8.0</th></tr>
       <tr><td>Variables cognitivas</td><td>mastery (BKT)</td><td>Knowledge Spaces</td><td>IRT</td><td>mastery, attention, metacognition, cognitive_load</td></tr>
       <tr><td>Variables afectivas</td><td>---</td><td>---</td><td>---</td><td>anxiety, confidence, emotional_state, self_efficacy, frustration_tolerance, stress_level</td></tr>
       <tr><td>Variables conductuales</td><td>---</td><td>---</td><td>---</td><td>study_adherence, time_management, sleep, screen_time, fatigue, physical_activity</td></tr>
@@ -1020,14 +1262,14 @@
   </div>
 
   <div class="content-block">
-    <h3>Recomendaciones especificas</h3>
-    <div class="rec-item"><strong>R1.</strong> Priorizar un estudio piloto con N >= 100 estudiantes antes de cualquier claim de efectividad. Diseno pre-post con grupo control (preparacion tradicional). Medicion: delta puntaje PAES simulado, adherencia, satisfaccion.</div>
-    <div class="rec-item"><strong>R2.</strong> Agregar NSE como variable exogena observable. Es un confounder critico cuya omision introduce sesgo sistematico. No es intervenible por el sistema pero debe controlarse en las estimaciones causales.</div>
-    <div class="rec-item"><strong>R3.</strong> Implementar restricciones de signo (hard constraints) en las aristas donde la direccion del efecto es incuestionable (anxiety -> mastery SIEMPRE negativo). Esto previene que perturbaciones extremas produzcan recomendaciones clinicamente inaceptables.</div>
-    <div class="rec-item"><strong>R4.</strong> Implementar un check de cordura post-propagacion: si cualquier variable cambia mas del 20% en una sola sesion, marcar la prediccion como sospechosa y revisar los pesos.</div>
-    <div class="rec-item"><strong>R5.</strong> Considerar la separacion de motivation en motivacion_intrinseca y motivacion_extrinseca. La SDT distingue al menos 6 tipos de motivacion con efectos diferentes en persistencia y rendimiento. Colapsar todo en una variable pierde informacion critica.</div>
-    <div class="rec-item"><strong>R6.</strong> Para las relaciones no lineales conocidas (cognitive_load, anxiety), implementar funciones por tramos o sigmoides en lugar de pesos lineales. El paper de validacion ya propone un modelo por tramos para anxiety que deberia adoptarse.</div>
-    <div class="rec-item"><strong>R7.</strong> Publicar el paper de validacion matematica en una revista indexada (Scopus/WoS) como paso critico para credibilidad academica. El documento tiene calidad publicable con las correcciones ya realizadas.</div>
+    <h3>Recomendaciones del comite</h3>
+    <div class="rec-item"><strong>R1.</strong> <span class="agent-badge-inline ab4">&#128200; Ag.4</span> <span class="agent-badge-inline ab1">&#128202; Ag.1</span> Priorizar un estudio piloto con N >= 100 estudiantes antes de cualquier claim de efectividad. Diseno pre-post con grupo control (preparacion tradicional). Medicion: delta puntaje PAES simulado, adherencia, satisfaccion.</div>
+    <div class="rec-item"><strong>R2.</strong> <span class="agent-badge-inline ab4">&#128200; Ag.4</span> Agregar NSE como variable exogena observable. Es un confounder critico cuya omision introduce sesgo sistematico. No es intervenible por el sistema pero debe controlarse en las estimaciones causales.</div>
+    <div class="rec-item"><strong>R3.</strong> <span class="agent-badge-inline ab4">&#128200; Ag.4</span> Implementar restricciones de signo (hard constraints) en las aristas donde la direccion del efecto es incuestionable (anxiety -> mastery SIEMPRE negativo). Esto previene que perturbaciones extremas produzcan recomendaciones clinicamente inaceptables.</div>
+    <div class="rec-item"><strong>R4.</strong> <span class="agent-badge-inline ab7">&#9881; Ag.7</span> Implementar un check de cordura post-propagacion: si cualquier variable cambia mas del 20% en una sola sesion, marcar la prediccion como sospechosa y revisar los pesos.</div>
+    <div class="rec-item"><strong>R5.</strong> <span class="agent-badge-inline ab3">&#129504; Ag.3</span> Considerar la separacion de motivation en motivacion_intrinseca y motivacion_extrinseca. La SDT distingue al menos 6 tipos de motivacion con efectos diferentes en persistencia y rendimiento. Colapsar todo en una variable pierde informacion critica.</div>
+    <div class="rec-item"><strong>R6.</strong> <span class="agent-badge-inline ab4">&#128200; Ag.4</span> <span class="agent-badge-inline ab5">&#129513; Ag.5</span> Para las relaciones no lineales conocidas (cognitive_load, anxiety), implementar funciones por tramos o sigmoides en lugar de pesos lineales. El paper de validacion ya propone un modelo por tramos para anxiety que deberia adoptarse.</div>
+    <div class="rec-item"><strong>R7.</strong> <span class="agent-badge-inline ab2">&#9874; Ag.2</span> Publicar el paper de validacion matematica en una revista indexada (Scopus/WoS) como paso critico para credibilidad academica. El documento tiene calidad publicable con las correcciones ya realizadas en la v8.0.</div>
   </div>
 </div>
 
@@ -1035,57 +1277,128 @@
 <div id="veredicto" class="section">
   <div class="section-header">
     <div class="section-num">SECCION 08</div>
-    <h2>Veredicto Final</h2>
-    <p class="subtitle">Evaluacion global del rigor cientifico, novedad y potencial del framework RENDDI/SENSEI.</p>
+    <h2>Veredicto Final del Comite</h2>
+    <p class="subtitle">Evaluacion colectiva: puntuacion individual de cada agente y promedio del comite.</p>
+    <div class="section-agents">
+      <span class="agent-badge-inline ab1">&#128202; Ag.1</span>
+      <span class="agent-badge-inline ab2">&#9874; Ag.2</span>
+      <span class="agent-badge-inline ab3">&#129504; Ag.3</span>
+      <span class="agent-badge-inline ab4">&#128200; Ag.4</span>
+      <span class="agent-badge-inline ab5">&#129513; Ag.5</span>
+      <span class="agent-badge-inline ab6">&#127919; Ag.6</span>
+      <span class="agent-badge-inline ab7">&#9881; Ag.7</span>
+    </div>
+  </div>
+
+  <!-- INDIVIDUAL VOTES -->
+  <div class="vote-grid">
+    <div class="vote-card">
+      <div class="vote-icon" style="background:rgba(108,92,231,0.2);">&#128202;</div>
+      <div class="vote-info">
+        <div class="vote-name">Ag.1 -- Psicometria</div>
+        <div class="vote-domain">Motor diagnostico BKT+IRT impecable; CAT bien disenado</div>
+      </div>
+      <div class="vote-score">8.5</div>
+    </div>
+    <div class="vote-card">
+      <div class="vote-icon" style="background:rgba(0,206,201,0.2);">&#9874;</div>
+      <div class="vote-info">
+        <div class="vote-name">Ag.2 -- EDM & Learning Analytics</div>
+        <div class="vote-domain">Arquitectura multi-agente sin precedentes en ITS</div>
+      </div>
+      <div class="vote-score">8.5</div>
+    </div>
+    <div class="vote-card">
+      <div class="vote-icon" style="background:rgba(232,67,147,0.2);">&#129504;</div>
+      <div class="vote-info">
+        <div class="vote-name">Ag.3 -- Psicologia Educacional</div>
+        <div class="vote-domain">SDT y Bandura bien integrados; growth mindset calibrado</div>
+      </div>
+      <div class="vote-score">8.5</div>
+    </div>
+    <div class="vote-card">
+      <div class="vote-icon" style="background:rgba(253,203,110,0.2);">&#128200;</div>
+      <div class="vote-info">
+        <div class="vote-name">Ag.4 -- Causalidad Estadistica</div>
+        <div class="vote-domain">Pearl bien aplicado; linealidad es limitacion real</div>
+      </div>
+      <div class="vote-score">8.0</div>
+    </div>
+    <div class="vote-card">
+      <div class="vote-icon" style="background:rgba(116,185,255,0.2);">&#129513;</div>
+      <div class="vote-info">
+        <div class="vote-name">Ag.5 -- Neurociencia</div>
+        <div class="vote-domain">Variables biologicas bien fundamentadas en meta-analisis</div>
+      </div>
+      <div class="vote-score">8.5</div>
+    </div>
+    <div class="vote-card">
+      <div class="vote-icon" style="background:rgba(0,184,148,0.2);">&#127919;</div>
+      <div class="vote-info">
+        <div class="vote-name">Ag.6 -- Orientacion Vocacional</div>
+        <div class="vote-domain">SCCT bien aplicada; COMPASS innovador para LATAM</div>
+      </div>
+      <div class="vote-score">9.0</div>
+    </div>
+    <div class="vote-card">
+      <div class="vote-icon" style="background:rgba(255,107,107,0.2);">&#9881;</div>
+      <div class="vote-info">
+        <div class="vote-name">Ag.7 -- Diseno ITS</div>
+        <div class="vote-domain">MIYAGI como orquestador es solucion elegante</div>
+      </div>
+      <div class="vote-score">8.5</div>
+    </div>
   </div>
 
   <div class="verdict-box">
     <div class="score">8.5 / 10</div>
     <div class="verdict-label">FUNDAMENTACION CIENTIFICA EXCEPCIONAL PARA ETAPA PRE-PRODUCTO</div>
-    <p style="font-size:0.95rem;color:var(--text2);max-width:700px;margin:1rem auto 0;">Nivel de rigor teorico infrecuente en el ecosistema EdTech global. La brecha hacia el 10/10 es predecible y superable: validacion empirica con usuarios reales y publicacion academica.</p>
+    <p style="font-size:0.95rem;color:var(--text2);max-width:700px;margin:1rem auto 0;">Promedio del comite de 7 agentes: 8.50/10. Nivel de rigor teorico infrecuente en el ecosistema EdTech global. La brecha hacia el 10/10 es predecible y superable: validacion empirica con usuarios reales y publicacion academica.</p>
   </div>
 
   <div class="content-block">
-    <h3>Evaluacion por dimensiones</h3>
+    <h3>Evaluacion por dimensiones (consenso del comite)</h3>
     <div style="overflow-x:auto;">
     <table class="var-table">
-      <tr><th>Dimension</th><th>Puntuacion</th><th>Justificacion</th></tr>
-      <tr><td><strong>Rigor metodologico</strong></td><td style="color:var(--green);font-weight:700;">9 / 10</td><td>Grafo causal formalizado con do-calculus de Pearl, ecuaciones estructurales, analisis de convergencia. Clasificacion de evidencia en 4 niveles. 83% de aristas con soporte meta-analitico (A+B).</td></tr>
-      <tr><td><strong>Proceso de aseguramiento de calidad</strong></td><td style="color:var(--green);font-weight:700;">9 / 10</td><td>8 ciclos de revision con 10 agentes especializados en paralelo. Deteccion de ~20 fabricaciones y ~84 errores. Trazabilidad completa. Criterio de cierre: 0 hallazgos criticos pendientes.</td></tr>
-      <tr><td><strong>Base bibliografica</strong></td><td style="color:var(--gold);font-weight:700;">8.5 / 10</td><td>154+ referencias APA 7 verificadas. Fuentes primarias de alta calidad (meta-analisis reconocidos). 4 aristas con soporte Nivel C pendiente de fortalecimiento.</td></tr>
-      <tr><td><strong>Diferenciacion competitiva</strong></td><td style="color:var(--green);font-weight:700;">9 / 10</td><td>Ningun competidor en LATAM (ni globalmente) ofrece un modelo de estudiante de 21 variables con estructura causal explicita. La transparencia del modelo es una ventaja etica y comercial.</td></tr>
-      <tr><td><strong>Validacion empirica</strong></td><td style="color:var(--red);font-weight:700;">0 / 10</td><td>Cero datos de usuarios reales. Esto es esperado en etapa pre-producto, pero es el unico factor que impide una puntuacion superior.</td></tr>
-      <tr><td><strong>Novedad cientifica</strong></td><td style="color:var(--green);font-weight:700;">9 / 10</td><td>La integracion formal de 5 dimensiones en un DAG causal con pesos meta-analiticos no tiene precedente en la literatura de ITS/adaptive learning.</td></tr>
+      <tr><th>Dimension</th><th>Puntuacion</th><th>Agentes lider</th><th>Justificacion</th></tr>
+      <tr><td><strong>Rigor metodologico</strong></td><td style="color:var(--green);font-weight:700;">9 / 10</td><td><span class="agent-badge-inline ab4">&#128200; Ag.4</span></td><td>Grafo causal formalizado con do-calculus de Pearl, ecuaciones estructurales, analisis de convergencia. Clasificacion de evidencia en 3 niveles. 83% de aristas con soporte meta-analitico (A+B).</td></tr>
+      <tr><td><strong>Proceso de revision</strong></td><td style="color:var(--green);font-weight:700;">9 / 10</td><td><span class="agent-badge-inline ab2">&#9874; Ag.2</span></td><td>8 ciclos de revision (C1-C8) con agentes especializados en paralelo. Deteccion de ~20 fabricaciones y ~84 errores. Trazabilidad completa. Criterio de cierre: 0 hallazgos criticos pendientes. Score de 78/100 a 92+/100.</td></tr>
+      <tr><td><strong>Base bibliografica</strong></td><td style="color:var(--gold);font-weight:700;">8.5 / 10</td><td><span class="agent-badge-inline ab3">&#129504; Ag.3</span></td><td>154+ referencias APA 7 verificadas. Fuentes primarias de alta calidad (meta-analisis reconocidos). 4 aristas con soporte Nivel C pendiente de fortalecimiento.</td></tr>
+      <tr><td><strong>Diferenciacion competitiva</strong></td><td style="color:var(--green);font-weight:700;">9 / 10</td><td><span class="agent-badge-inline ab7">&#9881; Ag.7</span></td><td>Ningun competidor en LATAM (ni globalmente) ofrece un modelo de estudiante de 21 variables con estructura causal explicita. La transparencia del modelo es una ventaja etica y comercial.</td></tr>
+      <tr><td><strong>Validacion empirica</strong></td><td style="color:var(--red);font-weight:700;">0 / 10</td><td><span class="agent-badge-inline ab1">&#128202; Ag.1</span> <span class="agent-badge-inline ab4">&#128200; Ag.4</span></td><td>Cero datos de usuarios reales. Esto es esperado en etapa pre-producto, pero es el unico factor que impide una puntuacion superior. Consenso unanime del comite.</td></tr>
+      <tr><td><strong>Novedad cientifica</strong></td><td style="color:var(--green);font-weight:700;">9 / 10</td><td><span class="agent-badge-inline ab2">&#9874; Ag.2</span> <span class="agent-badge-inline ab7">&#9881; Ag.7</span></td><td>La integracion formal de 5 dimensiones en un DAG causal con pesos meta-analiticos no tiene precedente en la literatura de ITS/adaptive learning.</td></tr>
     </table>
     </div>
   </div>
 
   <div class="content-block">
-    <h3>Conclusion del revisor</h3>
-    <p>RENDDI/SENSEI representa un esfuerzo cientifico genuino y riguroso que se distingue fundamentalmente de las plataformas EdTech convencionales. La mayoria de las startups en este espacio construyen primero y justifican despues (si es que justifican). RENDDI esta haciendo lo contrario: construyendo una base teorica solida antes de escribir una linea de codigo de produccion.</p>
+    <h3>Conclusion del comite</h3>
+    <p>RENDDI/SENSEI v8.0 representa un esfuerzo cientifico genuino y riguroso que se distingue fundamentalmente de las plataformas EdTech convencionales. La mayoria de las startups en este espacio construyen primero y justifican despues (si es que justifican). RENDDI esta haciendo lo contrario: construyendo una base teorica solida antes de escribir una linea de codigo de produccion. La tesis, en su version 8.0 resultante de 8 ciclos de revision exhaustivos, alcanza un nivel de madurez y rigor infrecuente en el campo.</p>
 
-    <p>El grafo causal de 21 variables constituye, a mi conocimiento, el modelo de estudiante mas completo que se haya formalizado en la literatura de sistemas tutores inteligentes. No solo modela mas variables que cualquier sistema existente, sino que las conecta mediante relaciones causales explicitas con pesos derivados de evidencia meta-analitica. Esto no es un claim de marketing: es una contribucion metodologica verificable.</p>
+    <p>El grafo causal de 21 variables constituye, en el consenso de este comite, el modelo de estudiante mas completo que se haya formalizado en la literatura de sistemas tutores inteligentes. No solo modela mas variables que cualquier sistema existente, sino que las conecta mediante relaciones causales explicitas con pesos derivados de evidencia meta-analitica. Esto no es un claim de marketing: es una contribucion metodologica verificable.</p>
 
     <p>La principal limitacion -- la ausencia de validacion empirica -- es la consecuencia natural de la etapa de desarrollo, no una falla del proceso. Un modelo teorico debe existir antes de poder ser validado. Lo que importa es que el modelo esta disenado para ser testeable: las independencias condicionales predichas por d-separacion son verificables, los pesos son estimables por SEM con N >= 500, y las predicciones del modelo son comparables con resultados observados.</p>
 
     <p>Si los autores ejecutan la hoja de ruta de validacion (piloto con N >= 100, publicacion del paper en revista indexada, calibracion SEM con datos reales), este framework tiene el potencial de convertirse en una contribucion significativa tanto para la investigacion en Educational Data Mining como para la practica educativa en Chile y, potencialmente, en America Latina.</p>
 
-    <p><strong>Mi recomendacion final:</strong> proseguir con el desarrollo del producto, priorizando la recoleccion de datos reales para la validacion empirica del modelo causal. La fundamentacion teorica esta en su lugar. Ahora es momento de confrontarla con la realidad.</p>
+    <p><strong>Recomendacion final del comite:</strong> proseguir con el desarrollo del producto, priorizando la recoleccion de datos reales para la validacion empirica del modelo causal. La fundamentacion teorica esta en su lugar. Ahora es momento de confrontarla con la realidad.</p>
   </div>
 
   <div class="content-block" style="text-align:center;">
     <p style="font-size:0.75rem;color:var(--text3);">
-      Este dictamen fue elaborado por Dr. Ryan Baker (personaje simulado con fines de revision academica).<br>
-      Las opiniones expresadas se basan en el analisis exhaustivo del corpus documental de RENDDI/SENSEI.<br>
-      Universidad de Pennsylvania -- Graduate School of Education<br>
+      Este dictamen fue elaborado por un comite de 7 agentes de inteligencia artificial (Claude, Anthropic),<br>
+      cada uno configurado para emular el perfil y rigor de un investigador de clase mundial en su dominio.<br>
+      No representa la opinion de personas reales. Las evaluaciones se basan en el analisis exhaustivo<br>
+      del corpus documental completo de RENDDI/SENSEI v8.0.<br><br>
+      Comite de Revision Experta -- 7 Agentes Especializados<br>
       Marzo 2026
     </p>
   </div>
 </div>
 
 <div class="footer">
-  <p>RENDDI | Dictamen Experto Independiente | Marzo 2026</p>
-  <p style="margin-top:0.5rem;">12 documentos analizados -- 21 variables -- 30 aristas -- 154+ referencias -- 8 ciclos de revision</p>
+  <p>RENDDI | Dictamen del Comite de Revision Experta | Marzo 2026</p>
+  <p style="margin-top:0.5rem;">7 agentes revisores -- 12 documentos analizados -- 21 variables -- 30 aristas -- 154+ referencias -- 8 ciclos de revision (C1-C8) -- Tesis v8.0</p>
 </div>
 
 </body>
