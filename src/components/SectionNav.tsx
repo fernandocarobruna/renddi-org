@@ -4,6 +4,7 @@ const NAV_LINKS = [
   { key: "grafo", href: "/grafo", label: "Grafo", icon: "📊" },
   { key: "marco-teorico", href: "/marco-teorico", label: "Marco Teorico", icon: "📐" },
   { key: "dictamen-experto", href: "/dictamen-experto", label: "Dictamen Experto", icon: "🎓" },
+  { key: "paper-validacion", href: "/paper-validacion", label: "Paper Validacion", icon: "📄" },
   { key: "comercial", href: "/comercial", label: "Comercial", icon: "💼" },
 ];
 

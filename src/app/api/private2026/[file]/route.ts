@@ -3,12 +3,13 @@ import { NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import { join } from "path";
 
-const ALLOWED_FILES: Record<string, string> = {
-  "grafo": "grafo-interactivo-v8.html",
-  "agentes": "ecosistema-agentes-animacion.html",
-  "simulador": "simulador-interactivo.html",
-  "marco-teorico": "marco-teorico.html",
-  "dictamen-experto": "dictamen-experto.html",
+const ALLOWED_FILES: Record<string, { filename: string; contentType: string }> = {
+  "grafo": { filename: "grafo-interactivo-v8.html", contentType: "text/html; charset=utf-8" },
+  "agentes": { filename: "ecosistema-agentes-animacion.html", contentType: "text/html; charset=utf-8" },
+  "simulador": { filename: "simulador-interactivo.html", contentType: "text/html; charset=utf-8" },
+  "marco-teorico": { filename: "marco-teorico.html", contentType: "text/html; charset=utf-8" },
+  "dictamen-experto": { filename: "dictamen-experto.html", contentType: "text/html; charset=utf-8" },
+  "paper-validacion": { filename: "Paper-Validacion-Matematica-Grafo-SENSEI.pdf", contentType: "application/pdf" },
 };
 
 export async function GET(
@@ -26,19 +27,19 @@ export async function GET(
   }
 
   const { file } = await params;
-  const filename = ALLOWED_FILES[file];
+  const entry = ALLOWED_FILES[file];
 
-  if (!filename) {
+  if (!entry) {
     return NextResponse.json({ error: "Archivo no encontrado" }, { status: 404 });
   }
 
   try {
-    const filePath = join(process.cwd(), "fuente-definitiva", filename);
-    const content = await readFile(filePath, "utf-8");
+    const filePath = join(process.cwd(), "fuente-definitiva", entry.filename);
+    const content = await readFile(filePath);
 
     return new NextResponse(content, {
       headers: {
-        "Content-Type": "text/html; charset=utf-8",
+        "Content-Type": entry.contentType,
         "X-Frame-Options": "SAMEORIGIN",
         "Cache-Control": "private, no-cache, no-store, must-revalidate",
         "X-Content-Type-Options": "nosniff",

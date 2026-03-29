@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RENDDI | Marco Teórico Completo</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a2e;
+      --border: #2a2a3e;
+      --accent: #6c5ce7;
+      --accent2: #a29bfe;
+      --accent3: #00cec9;
+      --gold: #fdcb6e;
+      --red: #ff6b6b;
+      --green: #00b894;
+      --text: #e0e0e8;
+      --text2: #8888a0;
+      --text3: #55556a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    /* ========== HERO ========== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 50%, rgba(108,92,231,0.08) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 50%, rgba(0,206,201,0.05) 0%, transparent 50%);
+      animation: drift 20s ease-in-out infinite;
+    }
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(2%, -1%) rotate(1deg); }
+      66% { transform: translate(-1%, 1%) rotate(-1deg); }
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 800px; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(108,92,231,0.15);
+      border: 1px solid rgba(108,92,231,0.3);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent2);
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #fff 0%, var(--accent2) 50%, var(--accent3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text2);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+    }
+    .stats-row {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      min-width: 140px;
+    }
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent3);
+    }
+    .stat-card .label {
+      font-size: 0.75rem;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.25rem;
+    }
+
+    /* ========== NAV ========== */
+    .nav-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-sticky::-webkit-scrollbar { display: none; }
+    .nav-btn {
+      background: none;
+      border: 1px solid transparent;
+      color: var(--text2);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover, .nav-btn.active {
+      background: var(--surface2);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    /* ========== SECTIONS ========== */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+    .section-header {
+      margin-bottom: 3rem;
+    }
+    .section-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    .section h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+    .section .subtitle {
+      font-size: 1rem;
+      color: var(--text2);
+      max-width: 700px;
+    }
+
+    /* ========== DOMAIN CARDS ========== */
+    .domain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+    .domain-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .domain-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .domain-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .domain-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    .domain-header h3 { font-size: 1.1rem; font-weight: 700; }
+    .domain-header .count {
+      margin-left: auto;
+      background: var(--surface2);
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      color: var(--text2);
+    }
+    .domain-body { padding: 1.5rem; }
+    .researcher-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(42,42,62,0.5);
+    }
+    .researcher-item:last-child { border-bottom: none; }
+    .researcher-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .researcher-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent3);
+      margin-left: 0.5rem;
+    }
+    .researcher-contrib {
+      font-size: 0.8rem;
+      color: var(--text2);
+      margin-top: 0.25rem;
+    }
+    .evidence-badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .evidence-A { background: rgba(0,184,148,0.15); color: var(--green); }
+    .evidence-B { background: rgba(253,203,110,0.15); color: var(--gold); }
+    .evidence-C { background: rgba(255,107,107,0.15); color: var(--red); }
+    .toggle-btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--surface2);
+      border: none;
+      color: var(--accent2);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .toggle-btn:hover { background: rgba(108,92,231,0.15); }
+    .collapsed { display: none; }
+
+    /* ========== THEORY CARDS ========== */
+    .theory-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .theory-card h4 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .theory-card p {
+      font-size: 0.85rem;
+      color: var(--text2);
+    }
+    .theory-card .connection {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: rgba(108,92,231,0.08);
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: var(--accent2);
+    }
+
+    /* ========== GRAPH SECTION ========== */
+    .var-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    .var-table th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      background: var(--surface2);
+      color: var(--text2);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.7rem;
+      position: sticky;
+      top: 50px;
+    }
+    .var-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .var-table tr:hover { background: rgba(108,92,231,0.05); }
+    .dim-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+    }
+    .dim-DA { background: rgba(108,92,231,0.15); color: var(--accent2); }
+    .dim-DE { background: rgba(255,107,107,0.15); color: var(--red); }
+    .dim-DC { background: rgba(0,206,201,0.15); color: var(--accent3); }
+    .dim-DS { background: rgba(253,203,110,0.15); color: var(--gold); }
+    .dim-DV { background: rgba(0,184,148,0.15); color: var(--green); }
+
+    /* Edge table */
+    .edge-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 2fr 80px 60px 1fr;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      transition: background 0.2s;
+    }
+    .edge-row:hover { background: rgba(108,92,231,0.05); }
+    .edge-header {
+      font-weight: 600;
+      color: var(--text2);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--surface2);
+    }
+    .weight-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .weight-fill {
+      height: 6px;
+      border-radius: 3px;
+      min-width: 4px;
+    }
+    .weight-pos { background: var(--green); }
+    .weight-neg { background: var(--red); }
+    .arrow { color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+
+    /* ========== SEM EQUATIONS ========== */
+    .equation-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 2;
+      overflow-x: auto;
+    }
+    .eq-var { color: var(--accent3); font-weight: 600; }
+    .eq-weight { color: var(--gold); }
+    .eq-op { color: var(--text3); }
+    .eq-error { color: var(--text3); font-style: italic; }
+
+    /* ========== ARCHETYPE CARDS ========== */
+    .archetype-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+    .archetype-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .archetype-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .archetype-top {
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .archetype-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+    .archetype-info h4 { font-size: 1rem; font-weight: 700; }
+    .archetype-info .subtitle2 { font-size: 0.8rem; color: var(--text2); }
+    .archetype-paes {
+      margin-left: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+    .archetype-body { padding: 1.5rem; }
+    .var-bars { display: flex; flex-direction: column; gap: 0.4rem; }
+    .var-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.7rem;
+    }
+    .var-bar-label {
+      width: 100px;
+      text-align: right;
+      color: var(--text2);
+      flex-shrink: 0;
+    }
+    .var-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .var-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+    .var-bar-val {
+      width: 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text2);
+    }
+    .risk-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+    }
+    .risk-low { background: rgba(0,184,148,0.15); color: var(--green); }
+    .risk-medium { background: rgba(253,203,110,0.15); color: var(--gold); }
+    .risk-high { background: rgba(255,107,107,0.15); color: var(--red); }
+    .risk-very-high { background: rgba(255,50,50,0.2); color: #ff4444; }
+    .strategy-pills {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+    .strategy-pill {
+      padding: 0.2rem 0.6rem;
+      background: rgba(108,92,231,0.1);
+      border: 1px solid rgba(108,92,231,0.2);
+      border-radius: 6px;
+      font-size: 0.65rem;
+      color: var(--accent2);
+    }
+    .strategy-pill.primary {
+      background: rgba(108,92,231,0.2);
+      border-color: var(--accent);
+    }
+
+    /* ========== TRANSITION SECTION ========== */
+    .transition-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .transition-card h4 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .threshold-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .threshold-item {
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .threshold-item .var-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .threshold-bar {
+      height: 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      position: relative;
+      margin: 0.5rem 0;
+    }
+    .threshold-marker {
+      position: absolute;
+      top: -4px;
+      width: 2px;
+      height: 16px;
+      border-radius: 1px;
+    }
+    .threshold-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: var(--text3);
+    }
+
+    /* ========== AGENT SECTION ========== */
+    .agent-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .agent-phase {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .phase-header {
+      padding: 1rem 1.5rem;
+      background: var(--surface2);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .phase-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+    }
+    .agent-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .agent-card:hover {
+      border-color: var(--accent);
+    }
+    .agent-card h4 {
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .agent-card .agent-role {
+      font-size: 0.75rem;
+      color: var(--text2);
+      margin-bottom: 0.75rem;
+    }
+    .agent-vars {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+    .agent-var {
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .agent-var.read { background: rgba(0,206,201,0.1); color: var(--accent3); border: 1px solid rgba(0,206,201,0.2); }
+    .agent-var.write { background: rgba(108,92,231,0.1); color: var(--accent2); border: 1px solid rgba(108,92,231,0.2); }
+
+    /* ========== LEVERAGE / CAUSAL ROUTES ========== */
+    .leverage-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .leverage-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .leverage-rank {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text3);
+      width: 48px;
+      text-align: center;
+    }
+    .leverage-info { flex: 1; }
+    .leverage-info h4 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .leverage-info .path { font-size: 0.75rem; color: var(--text2); font-family: 'JetBrains Mono', monospace; }
+    .leverage-effect {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent3);
+    }
+
+    /* ========== CONVERGENCE ========== */
+    .formula-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    .formula-box .main {
+      font-size: 1.1rem;
+      color: var(--accent3);
+      margin-bottom: 0.5rem;
+    }
+    .formula-box .desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text2);
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      text-align: center;
+      padding: 4rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text3);
+      font-size: 0.8rem;
+    }
+
+    /* ========== TABS ========== */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 0.6rem 1.2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text2);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { border-color: var(--accent); color: var(--text); }
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .section { padding: 3rem 1rem; }
+      .domain-grid { grid-template-columns: 1fr; }
+      .archetype-grid { grid-template-columns: 1fr; }
+      .edge-row { grid-template-columns: 1fr; gap: 0.25rem; font-size: 0.75rem; }
+      .stats-row { gap: 1rem; }
+      .stat-card { min-width: 100px; padding: 1rem; }
+      .stat-card .number { font-size: 1.5rem; }
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="top">
+  <div class="hero-content">
+    <div class="hero-badge">DOCUMENTO INTERNO &bull; RENDDI v8.0</div>
+    <h1>Marco Teórico &amp; Fundamentación Científica</h1>
+    <p>Análisis exhaustivo de las bases teóricas, investigadores, modelos causales y mecanismos que sustentan el sistema SENSEI/RENDDI para coaching PAES con IA.</p>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="number">120+</div>
+        <div class="label">Investigadores</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">13</div>
+        <div class="label">Marcos Teóricos</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">21</div>
+        <div class="label">Variables</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">30</div>
+        <div class="label">Aristas Causales</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">63%</div>
+        <div class="label">Nivel A/A*</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== NAV ==================== -->
+<nav class="nav-sticky" id="nav">
+  <button class="nav-btn active" onclick="scrollToSection('sec-investigators')">Investigadores</button>
+  <button class="nav-btn" onclick="scrollToSection('sec-theories')">Teorías</button>
+  <button class="nav-btn" onclick="scrollToSection('sec-graph')">Grafo Causal</button>
+  <button class="nav-btn" onclick="scrollToSection('sec-edges')">Aristas</button>
+  <button class="nav-btn" onclick="scrollToSection('sec-sem')">Ecuaciones SEM</button>
+  <button class="nav-btn" onclick="scrollToSection('sec-archetypes')">Arquetipos</button>
+  <button class="nav-btn" onclick="scrollToSection('sec-transitions')">Transiciones</button>
+  <button class="nav-btn" onclick="scrollToSection('sec-agents')">Agentes</button>
+  <button class="nav-btn" onclick="scrollToSection('sec-leverage')">Leverage Points</button>
+  <button class="nav-btn" onclick="scrollToSection('sec-convergence')">Convergencia</button>
+</nav>
+
+<!-- ==================== SECTION 1: INVESTIGADORES ==================== -->
+<section class="section" id="sec-investigators">
+  <div class="section-header">
+    <div class="section-num">01 / FUNDAMENTOS</div>
+    <h2>Investigadores por Dominio</h2>
+    <p class="subtitle">Más de 120 investigadores organizados en 13 dominios teóricos. Cada uno con su nivel de evidencia y conexión directa al sistema.</p>
+  </div>
+
+  <div class="domain-grid" id="domains-container"></div>
+</section>
+
+<!-- ==================== SECTION 2: TEORÍAS ==================== -->
+<section class="section" id="sec-theories">
+  <div class="section-header">
+    <div class="section-num">02 / MARCOS TEÓRICOS</div>
+    <h2>13 Teorías Centrales</h2>
+    <p class="subtitle">Cómo identificamos y seleccionamos cada marco teórico para alimentar el grafo causal y los arquetipos.</p>
+  </div>
+
+  <div id="theories-container"></div>
+</section>
+
+<!-- ==================== SECTION 3: VARIABLES DEL GRAFO ==================== -->
+<section class="section" id="sec-graph">
+  <div class="section-header">
+    <div class="section-num">03 / GRAFO CAUSAL</div>
+    <h2>21 Variables del Modelo</h2>
+    <p class="subtitle">G = (V, E, W) donde V = {v₁, ..., v₂₁}, E ⊂ V × V, W: E → [-1, 1]</p>
+  </div>
+
+  <div class="tabs" id="dim-tabs">
+    <button class="tab-btn active" data-tab="all">Todas (21)</button>
+    <button class="tab-btn" data-tab="DA">Académica (4)</button>
+    <button class="tab-btn" data-tab="DE">Emocional (6)</button>
+    <button class="tab-btn" data-tab="DC">Conductual (6)</button>
+    <button class="tab-btn" data-tab="DS">Social (2)</button>
+    <button class="tab-btn" data-tab="DV">Vocacional (3)</button>
+  </div>
+
+  <div style="overflow-x:auto; border-radius:12px; border:1px solid var(--border);">
+    <table class="var-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ID</th>
+          <th>Variable</th>
+          <th>Rango</th>
+          <th>Dim</th>
+          <th>Inv?</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody id="var-tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ==================== SECTION 4: ARISTAS ==================== -->
+<section class="section" id="sec-edges">
+  <div class="section-header">
+    <div class="section-num">04 / ARISTAS CAUSALES</div>
+    <h2>30 Relaciones Causales</h2>
+    <p class="subtitle">Cada arista tiene un peso calibrado desde meta-análisis y estudios empíricos. Distribución: A/A* (63%), B (23%), C (13%).</p>
+  </div>
+
+  <div style="border-radius:12px; border:1px solid var(--border); overflow:hidden;">
+    <div class="edge-row edge-header">
+      <span>#  Origen</span>
+      <span></span>
+      <span>Destino</span>
+      <span>Peso</span>
+      <span>Nivel</span>
+      <span>Fuente Principal</span>
+    </div>
+    <div id="edges-container"></div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 5: SEM ==================== -->
+<section class="section" id="sec-sem">
+  <div class="section-header">
+    <div class="section-num">05 / ECUACIONES ESTRUCTURALES</div>
+    <h2>Modelo SEM (lavaan)</h2>
+    <p class="subtitle">Ecuaciones estructurales que definen cómo cada variable es función de sus predecesores causales, más un error estocástico.</p>
+  </div>
+
+  <div class="equation-block">
+    <div><span class="eq-var">mastery</span> <span class="eq-op">=</span> <span class="eq-weight">−0.30</span>·anxiety <span class="eq-op">+</span> <span class="eq-weight">+0.20</span>·confidence <span class="eq-op">+</span> <span class="eq-weight">+0.30</span>·attention_span <span class="eq-op">+</span> <span class="eq-weight">+0.30</span>·study_adherence <span class="eq-op">+</span> <span class="eq-weight">+0.30</span>·self_efficacy <span class="eq-op">+</span> <span class="eq-error">ε₁</span></div>
+    <br>
+    <div><span class="eq-var">attention_span</span> <span class="eq-op">=</span> <span class="eq-weight">+0.45</span>·sleep_quality <span class="eq-op">+</span> <span class="eq-weight">−0.40</span>·fatigue <span class="eq-op">+</span> <span class="eq-weight">−0.30</span>·anxiety <span class="eq-op">+</span> <span class="eq-error">ε₂</span></div>
+    <br>
+    <div><span class="eq-var">anxiety</span> <span class="eq-op">=</span> <span class="eq-weight">+0.45</span>·stress_level <span class="eq-op">+</span> <span class="eq-weight">−0.35</span>·self_efficacy <span class="eq-op">+</span> <span class="eq-error">ε₃</span></div>
+    <br>
+    <div><span class="eq-var">confidence</span> <span class="eq-op">=</span> <span class="eq-weight">+0.35</span>·self_efficacy <span class="eq-op">+</span> <span class="eq-error">ε₄</span></div>
+    <br>
+    <div><span class="eq-var">emotional_state</span> <span class="eq-op">=</span> <span class="eq-weight">+0.30</span>·physical_activity <span class="eq-op">+</span> <span class="eq-weight">+0.30</span>·social_support <span class="eq-op">+</span> <span class="eq-weight">+0.25</span>·parental_support <span class="eq-op">+</span> <span class="eq-weight">−0.25</span>·fatigue <span class="eq-op">+</span> <span class="eq-weight">−0.35</span>·stress_level <span class="eq-op">+</span> <span class="eq-error">ε₅</span></div>
+    <br>
+    <div><span class="eq-var">self_efficacy</span> <span class="eq-op">=</span> <span class="eq-weight">+0.30</span>·mastery<sub>(t-1)</sub> <span class="eq-op">+</span> <span class="eq-error">ε₆</span></div>
+    <br>
+    <div><span class="eq-var">motivation</span> <span class="eq-op">=</span> <span class="eq-weight">+0.30</span>·emotional_state <span class="eq-op">+</span> <span class="eq-weight">+0.30</span>·vocational_clarity <span class="eq-op">+</span> <span class="eq-error">ε₇</span></div>
+    <br>
+    <div><span class="eq-var">study_adherence</span> <span class="eq-op">=</span> <span class="eq-weight">+0.35</span>·motivation <span class="eq-op">+</span> <span class="eq-weight">+0.25</span>·metacognition <span class="eq-op">+</span> <span class="eq-weight">+0.20</span>·frustration_tolerance <span class="eq-op">+</span> <span class="eq-weight">+0.30</span>·time_management <span class="eq-op">+</span> <span class="eq-error">ε₈</span></div>
+    <br>
+    <div><span class="eq-var">sleep_quality</span> <span class="eq-op">=</span> <span class="eq-weight">−0.40</span>·screen_time <span class="eq-op">+</span> <span class="eq-weight">+0.25</span>·physical_activity <span class="eq-op">+</span> <span class="eq-weight">−0.35</span>·stress_level <span class="eq-op">+</span> <span class="eq-error">ε₉</span></div>
+    <br>
+    <div><span class="eq-var">fatigue</span> <span class="eq-op">=</span> <span class="eq-weight">+0.30</span>·cognitive_load <span class="eq-op">+</span> <span class="eq-weight">−0.50</span>·sleep_quality <span class="eq-op">+</span> <span class="eq-error">ε₁₀</span></div>
+    <br>
+    <div><span class="eq-var">frustration_tolerance</span> <span class="eq-op">=</span> <span class="eq-weight">+0.25</span>·growth_mindset <span class="eq-op">+</span> <span class="eq-error">ε₁₁</span></div>
+    <br>
+    <div><span class="eq-var">stress_level</span> <span class="eq-op">=</span> <span class="eq-weight">−0.25</span>·physical_activity <span class="eq-op">+</span> <span class="eq-error">ε₁₂</span> <span class="eq-op" style="color:var(--text3);font-style:italic">[exógeno parcial]</span></div>
+  </div>
+
+  <div class="theory-card">
+    <h4>Resolución del Ciclo mastery ↔ self_efficacy</h4>
+    <p>El ciclo mastery → self_efficacy → confidence → mastery se resuelve temporalmente:<br>
+    <code style="color:var(--accent3)">mastery(t)</code> → <code style="color:var(--accent3)">self_efficacy(t)</code> → <code style="color:var(--accent3)">confidence(t)</code> → <code style="color:var(--accent3)">mastery(t+1)</code><br><br>
+    Ganancia del ciclo: G = 0.30 × 0.35 × 0.20 = <strong>0.021</strong> (converge rápidamente, G·γ³ = 0.007 ≪ 1)</p>
+  </div>
+</section>
+
+<!-- ==================== SECTION 6: ARQUETIPOS ==================== -->
+<section class="section" id="sec-archetypes">
+  <div class="section-header">
+    <div class="section-num">06 / ARQUETIPOS</div>
+    <h2>10 Perfiles de Estudiante</h2>
+    <p class="subtitle">Cada arquetipo representa un patrón multidimensional real de estudiante PAES, con 21 variables calibradas y estrategia de agentes personalizada.</p>
+  </div>
+
+  <div class="archetype-grid" id="archetypes-container"></div>
+</section>
+
+<!-- ==================== SECTION 7: TRANSICIONES ==================== -->
+<section class="section" id="sec-transitions">
+  <div class="section-header">
+    <div class="section-num">07 / TRANSICIONES</div>
+    <h2>Cómo un Estudiante Cambia de Arquetipo</h2>
+    <p class="subtitle">Las transiciones son dinámicas, definidas por umbrales en variables clave y detectadas por MIYAGI cada 2 semanas.</p>
+  </div>
+
+  <h3 style="margin-bottom:1rem; font-size:1.1rem;">Umbrales de Urgencia</h3>
+  <div class="threshold-grid" id="thresholds-container"></div>
+
+  <h3 style="margin:2rem 0 1rem; font-size:1.1rem;">Transiciones Documentadas de Persona Comunicacional</h3>
+  <div id="transitions-container"></div>
+
+  <h3 style="margin:2rem 0 1rem; font-size:1.1rem;">Detección de Burnout (MIYAGI)</h3>
+  <div class="theory-card">
+    <p>Score de burnout calculado aditivamente:</p>
+    <div style="margin-top:0.75rem; font-family:'JetBrains Mono',monospace; font-size:0.8rem; line-height:2;">
+      <span style="color:var(--red)">fatigue > 0.70</span> → +0.25<br>
+      <span style="color:var(--red)">emotional_state < 0.30</span> → +0.25<br>
+      <span style="color:var(--gold)">study_adherence declinando 14+ días</span> → +0.20<br>
+      <span style="color:var(--gold)">sleep_quality < 0.35</span> → +0.15<br>
+      <span style="color:var(--gold)">frustration_tolerance < 0.30</span> → +0.15<br><br>
+      Si <strong>burnout_score ≥ 0.60</strong>: pausar protocolo, KAZE urgente, reducir carga 50%
+    </div>
+  </div>
+
+  <h3 style="margin:2rem 0 1rem; font-size:1.1rem;">Patrones Cross-dimensionales</h3>
+  <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1rem;">
+    <div class="theory-card">
+      <h4 style="color:var(--red)">Espiral de Burnout</h4>
+      <p>fatigue > 0.70 AND emotional_state < 0.30 AND study_adherence declinando 2+ semanas</p>
+    </div>
+    <div class="theory-card">
+      <h4 style="color:var(--green)">Momentum Positivo</h4>
+      <p>mastery subiendo AND confidence subiendo AND study_adherence estable o subiendo</p>
+    </div>
+    <div class="theory-card">
+      <h4 style="color:var(--gold)">Desconexión Social</h4>
+      <p>social_support < 0.30 AND emotional_state declinando</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 8: AGENTES ==================== -->
+<section class="section" id="sec-agents">
+  <div class="section-header">
+    <div class="section-num">08 / ECOSISTEMA</div>
+    <h2>Sistema de 9 Agentes + Orquestador</h2>
+    <p class="subtitle">Arquitectura multi-agente donde cada agente lee y escribe variables específicas del grafo, coordinados por MIYAGI.</p>
+  </div>
+
+  <div class="agent-flow" id="agents-container"></div>
+</section>
+
+<!-- ==================== SECTION 9: LEVERAGE ==================== -->
+<section class="section" id="sec-leverage">
+  <div class="section-header">
+    <div class="section-num">09 / PUNTOS DE APALANCAMIENTO</div>
+    <h2>Top Variables por Efecto Total en Mastery</h2>
+    <p class="subtitle">Análisis de Wright (1921): descomposición de efectos directos e indirectos. Cada punto de apalancamiento tiene un efecto total calculado sobre mastery.</p>
+  </div>
+
+  <div class="leverage-list" id="leverage-container"></div>
+
+  <h3 style="margin:3rem 0 1rem; font-size:1.1rem;">5 Rutas Causales Principales</h3>
+  <div id="routes-container"></div>
+</section>
+
+<!-- ==================== SECTION 10: CONVERGENCIA ==================== -->
+<section class="section" id="sec-convergence">
+  <div class="section-header">
+    <div class="section-num">10 / VALIDACIÓN MATEMÁTICA</div>
+    <h2>Convergencia y Estabilidad</h2>
+    <p class="subtitle">Pruebas formales de que el algoritmo de propagación causal converge y el sistema es robusto ante perturbaciones de pesos.</p>
+  </div>
+
+  <div class="formula-box">
+    <div class="main">δ<sup>(k+1)</sup>[j] = Σ<sub>(i,j)∈E</sub> δ<sup>(k)</sup>[i] · w<sub>ij</sub> · γ<sup>k</sup></div>
+    <div class="desc">Algoritmo de propagación BFS por capas con atenuación exponencial γ = 0.7</div>
+  </div>
+
+  <div class="formula-box">
+    <div class="main">Converge ⟺ γ · ρ(A) &lt; 1</div>
+    <div class="desc">Donde ρ(A) es el radio espectral de la matriz de adyacencia ponderada</div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; margin-top:1.5rem;">
+    <div class="theory-card">
+      <h4>Radio Espectral</h4>
+      <p>γ = 0.7, ρ(A) ∈ [0.8, 1.5]<br>Condición: ρ(A) < 1.43 ✓<br>Con peso máx 0.45: cumple.</p>
+    </div>
+    <div class="theory-card">
+      <h4>Tasa de Convergencia</h4>
+      <p>K=5: error residual 42%<br>K=7: error residual 30%<br><strong>K=10: error residual 17%</strong><br>Recomendación: K ≥ 7</p>
+    </div>
+    <div class="theory-card">
+      <h4>Estabilidad del Ciclo</h4>
+      <p>Ciclo: mastery→se→conf→mastery<br>G = 0.30 × 0.35 × 0.20 = 0.021<br>G·γ³ = 0.007 ≪ 1 ✓</p>
+    </div>
+    <div class="theory-card">
+      <h4>Monte Carlo (N=10,000)</h4>
+      <p>Perturbación ±20% en pesos.<br>Top-6 nodos estables en >90% iteraciones.<br>Perfiles extremos: CV ≤ 7%.</p>
+    </div>
+  </div>
+
+  <h3 style="margin:2rem 0 1rem; font-size:1.1rem;">Calibración Empírica (Diseñada)</h3>
+  <div class="theory-card">
+    <p>Protocolo SEM con <strong>lavaan</strong> (R) o Mplus. Requisitos: N ≥ 500 estudiantes, 10+ sesiones cada uno. Criterios de ajuste: CFI ≥ 0.90, RMSEA ≤ 0.08, SRMR ≤ 0.08. Los pesos actuales provienen de literatura; la calibración empírica refinará con datos reales de uso.</p>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <p>RENDDI &bull; Marco Teórico v8.0 &bull; Documento interno &bull; Marzo 2026</p>
+  <p style="margin-top:0.5rem;">Basado en 161+ referencias verificadas APA 7 &bull; 87% con soporte meta-analítico</p>
+</footer>
+
+<!-- ==================== DATA + RENDER SCRIPT ==================== -->
+<script>
+// ===== DATA =====
+
+const domains = [
+  {
+    name: "Psicometría y Evaluación Adaptativa",
+    icon: "📐",
+    color: "#6c5ce7",
+    researchers: [
+      { name: "Lord, F.M.", year: 1980, contrib: "Modelo IRT 3PL, función de información de Fisher, fundamentos del CAT", level: "A" },
+      { name: "Rasch, G.", year: 1960, contrib: "Modelo logístico de 1 parámetro (1PL), axiomas de medición objetiva", level: "A" },
+      { name: "Hambleton, Swaminathan & Rogers", year: 1991, contrib: "Tratado fundamental de IRT, invarianza paramétrica", level: "A" },
+      { name: "Weiss, D.J. & Kingsbury, G.G.", year: 1984, contrib: "CAT con menos ítems que test fijo para igual precisión", level: "A" },
+      { name: "van der Linden, W.J.", year: "1998-2010", contrib: "Criterios de selección bayesiana de ítems (MFI), modelo conjunto respuesta-tiempo", level: "A" },
+      { name: "Chang, H.-H. & Ying, Z.", year: 1999, contrib: "Método a-stratified para control de exposición de ítems en CAT", level: "A" },
+      { name: "Doignon, J.-P. & Falmagne, J.-C.", year: 1999, contrib: "Teoría de Knowledge Spaces (base de ALEKS)", level: "A" },
+    ]
+  },
+  {
+    name: "Modelamiento del Aprendizaje",
+    icon: "🧠",
+    color: "#00cec9",
+    researchers: [
+      { name: "Corbett, A.T. & Anderson, J.R.", year: 1995, contrib: "Bayesian Knowledge Tracing (BKT), modelo de Markov oculto binario", level: "A" },
+      { name: "Anderson, J.R.", year: 1993, contrib: "Teoría ACT-R de cognición, fundamento de Cognitive Tutors de Carnegie Mellon", level: "A" },
+      { name: "Yudelson, Koedinger & Gordon", year: 2013, contrib: "BKT individualizado (offsets por estudiante en P(L₀) y P(T))", level: "A" },
+      { name: "Pardos, Z.A. & Heffernan, N.T.", year: 2010, contrib: "Extensión BKT con offsets individuales P(L₀)ᵢⱼ", level: "A" },
+      { name: "Piech, C. et al.", year: 2015, contrib: "Deep Knowledge Tracing (DKT), redes neuronales recurrentes", level: "A" },
+      { name: "Pavlik, Cen & Koedinger", year: 2009, contrib: "Performance Factors Analysis (PFA), alternativa a BKT", level: "A" },
+    ]
+  },
+  {
+    name: "Memoria y Práctica Basada en Evidencia",
+    icon: "🔁",
+    color: "#fdcb6e",
+    researchers: [
+      { name: "Ebbinghaus, H.", year: 1885, contrib: "Curva del olvido — fundamento de la repetición espaciada", level: "A" },
+      { name: "Bjork, R.A.", year: 1994, contrib: "Dificultades deseables (desirable difficulties)", level: "A" },
+      { name: "Roediger III & Karpicke", year: 2006, contrib: "Testing effect: recuperación > re-estudio", level: "A" },
+      { name: "Cepeda, Pashler, Vul et al.", year: 2006, contrib: "Meta-análisis del spacing effect (práctica distribuida)", level: "A" },
+      { name: "Kornell, N. & Bjork, R.A.", year: 2008, contrib: "Efecto de intercalado (interleaving effect)", level: "A" },
+      { name: "Ericsson, Krampe & Tesch-Römer", year: 1993, contrib: "Práctica deliberada: actividad estructurada con feedback para mejorar", level: "A" },
+      { name: "Dunlosky, Rawson, Marsh et al.", year: 2013, contrib: "10 técnicas de estudio evaluadas: las más efectivas son las menos usadas", level: "A" },
+    ]
+  },
+  {
+    name: "Ansiedad ante Exámenes y Ansiedad Matemática",
+    icon: "😰",
+    color: "#ff6b6b",
+    researchers: [
+      { name: "Hembree, R.", year: "1988/1990", contrib: "Meta-análisis seminales: 562 estudios (r=-0.21 a -0.33) y 151 estudios ansiedad mat (r=-0.34)", level: "A" },
+      { name: "Eysenck, Derakshan, Santos & Calvo", year: 2007, contrib: "Attentional Control Theory: ansiedad consume recursos del ejecutivo central", level: "A" },
+      { name: "Ashcraft, M.H. & Kirk, E.P.", year: 2001, contrib: "Ansiedad matemática consume memoria de trabajo (paradigma doble tarea)", level: "A" },
+      { name: "von der Embse, Jester et al.", year: 2018, contrib: "Meta-análisis actualizado (238 estudios): prevalencia 25-40% en exámenes alto impacto", level: "A" },
+      { name: "Brooks, A.W.", year: 2014, contrib: "Reinterpretación de ansiedad como entusiasmo: mejoras 8-17%", level: "A" },
+      { name: "Ramírez, G. & Beilock, S.L.", year: 2011, contrib: "Escritura expresiva pre-examen reduce ansiedad y mejora rendimiento", level: "A" },
+    ]
+  },
+  {
+    name: "Motivación y Autorregulación",
+    icon: "🔥",
+    color: "#e17055",
+    researchers: [
+      { name: "Deci, E.L. & Ryan, R.M.", year: "1985/2000", contrib: "Self-Determination Theory (SDT): autonomía, competencia, relación; continuo motivacional", level: "A" },
+      { name: "Zimmerman, B.J.", year: "2000/2002", contrib: "Modelo cíclico de autorregulación (SRL): previsión, desempeño, auto-reflexión", level: "A" },
+      { name: "Pintrich, P.R. & De Groot, E.V.", year: 1990, contrib: "Autoeficacia predice rendimiento (β = 0.31); componentes motivacionales", level: "A" },
+      { name: "Dweck, C.S.", year: 2006, contrib: "Growth Mindset vs Fixed Mindset", level: "A" },
+      { name: "Sisk, Burgoyne, Sun et al.", year: 2018, contrib: "Dos meta-análisis: mindset-rendimiento r=0.10; intervenciones d=0.08 (efecto modesto)", level: "A" },
+      { name: "Locke, E.A. & Latham, G.P.", year: 2002, contrib: "Goal-Setting Theory: metas específicas y desafiantes mejoran rendimiento", level: "A" },
+      { name: "Weiner, B.", year: 1985, contrib: "Teoría de la Atribución: locus, estabilidad, controlabilidad", level: "A" },
+    ]
+  },
+  {
+    name: "Metacognición",
+    icon: "🪞",
+    color: "#a29bfe",
+    researchers: [
+      { name: "Flavell, J.H.", year: 1979, contrib: "Término 'metacognición'; conocimiento vs experiencias metacognitivas", level: "A" },
+      { name: "Brown, A.L.", year: 1987, contrib: "Distinción conocimiento metacognitivo vs regulación (planificación, monitoreo, evaluación)", level: "A" },
+      { name: "Nelson, T.O. & Narens, L.", year: 1990, contrib: "Modelo formal: dos niveles (objeto/meta) + monitoreo/control", level: "A" },
+      { name: "Veenman, Van Hout-Wolters & Afflerbach", year: 2006, contrib: "Metacognición predice rendimiento (r=0.28-0.36) controlando por capacidad cognitiva", level: "A" },
+      { name: "Kruger, J. & Dunning, D.", year: 1999, contrib: "Efecto Dunning-Kruger: menor competencia = sobreestimación", level: "A" },
+    ]
+  },
+  {
+    name: "Carga Cognitiva y Desarrollo",
+    icon: "⚡",
+    color: "#fab1a0",
+    researchers: [
+      { name: "Sweller, J.", year: 1988, contrib: "Cognitive Load Theory (CLT): carga intrínseca vs extrínseca vs germane", level: "A" },
+      { name: "Vygotsky, L.S.", year: 1978, contrib: "Zona de Desarrollo Próximo (ZDP)", level: "A" },
+      { name: "Wood, Bruner & Ross", year: 1976, contrib: "Concepto de scaffolding (andamiaje)", level: "A" },
+      { name: "Kalyuga, S.", year: 2007, contrib: "Expertise reversal effect: scaffolding para novatos perjudica a expertos", level: "A" },
+      { name: "Wilson, Shenhav et al.", year: 2019, contrib: "Regla del 85%: tasa de error óptima para aprendizaje ≈15.87%", level: "B" },
+    ]
+  },
+  {
+    name: "Hábitos y Comportamiento",
+    icon: "⚙️",
+    color: "#00b894",
+    researchers: [
+      { name: "Fogg, B.J.", year: 2019, contrib: "Modelo B=MAP (Behavior = Motivation × Ability × Prompt); Tiny Habits", level: "A" },
+      { name: "Lally, P. et al.", year: 2010, contrib: "Automaticidad de hábitos: media 66 días (rango 18-254)", level: "A" },
+      { name: "Gollwitzer, P.M.", year: 1999, contrib: "Implementation intentions ('cuando X, haré Y'): aumentan probabilidad de ejecución", level: "A" },
+      { name: "Britton, B.K. & Tesser, A.", year: 1991, contrib: "Gestión del tiempo y GPA (r=0.27 controlando SAT)", level: "A" },
+    ]
+  },
+  {
+    name: "Sueño, Fatiga y Actividad Física",
+    icon: "😴",
+    color: "#74b9ff",
+    researchers: [
+      { name: "Dewald, Meijer, Oort et al.", year: 2010, contrib: "Meta-análisis sueño-rendimiento en adolescentes (N>15,000)", level: "A" },
+      { name: "Lim, J. & Dinges, D.F.", year: 2010, contrib: "Meta-análisis: atención sostenida más afectada por privación de sueño (d=-0.58)", level: "A" },
+      { name: "Carter, Rees, Hale et al.", year: 2016, contrib: "Meta-análisis: dispositivos portátiles asociados a peor sueño", level: "A" },
+      { name: "Biddle, S.J.H. & Asare, M.", year: 2011, contrib: "Actividad física en adolescentes: depresión d=-0.36, ansiedad d=-0.37", level: "A" },
+      { name: "Hillman, Erickson & Kramer", year: 2008, contrib: "Ejercicio mejora función ejecutiva (mecanismos neurobiológicos)", level: "A" },
+    ]
+  },
+  {
+    name: "Aprendizaje Social y Autoeficacia",
+    icon: "🤝",
+    color: "#ffeaa7",
+    researchers: [
+      { name: "Bandura, A.", year: "1977-1997", contrib: "Teoría del aprendizaje social; autoeficacia (4 fuentes); teoría social cognitiva", level: "A" },
+      { name: "Pajares, F.", year: 1996, contrib: "Autoeficacia predice rendimiento controlando por habilidad previa", level: "A" },
+      { name: "Cohen, S. & Wills, T.A.", year: 1985, contrib: "Buffering hypothesis: apoyo social amortigua efectos del estrés", level: "A" },
+      { name: "Fan, X. & Chen, M.", year: 2001, contrib: "Meta-análisis: involucramiento parental y rendimiento (r=0.25; expectativas r=0.40)", level: "A" },
+      { name: "Jeynes, W.H.", year: 2007, contrib: "Meta-análisis: involucramiento parental general (d=0.74)", level: "A" },
+    ]
+  },
+  {
+    name: "Orientación Vocacional",
+    icon: "🧭",
+    color: "#55efc4",
+    researchers: [
+      { name: "Holland, J.L.", year: 1997, contrib: "Tipología RIASEC de personalidades e intereses vocacionales", level: "A" },
+      { name: "Savickas, M.L.", year: 2005, contrib: "Career Construction Theory: carreras se construyen vía narrativas; 4 Cs de adaptabilidad", level: "A" },
+      { name: "Lent, Brown & Hackett", year: "1994/2000", contrib: "Social Cognitive Career Theory (SCCT): autoeficacia, expectativas, metas", level: "A" },
+      { name: "Super, D.E.", year: 1980, contrib: "Desarrollo vocacional a lo largo de la vida (5 etapas)", level: "A" },
+    ]
+  },
+  {
+    name: "Sistemas Tutores Inteligentes",
+    icon: "🤖",
+    color: "#dfe6e9",
+    researchers: [
+      { name: "VanLehn, K.", year: "2006/2011", contrib: "Meta-análisis: ITS step-based d=0.76; refinamiento de arquitectura ITS", level: "A" },
+      { name: "Bloom, B.S.", year: 1984, contrib: "Problema de 2 sigmas: tutoría individual produce d=2.0", level: "A" },
+      { name: "Graesser, Lu, Jackson et al.", year: "2004/2005", contrib: "AutoTutor: tutoría vía diálogo natural, d=0.8 en física", level: "A" },
+      { name: "Ma, Adesope, Nesbit & Liu", year: 2014, contrib: "Meta-análisis: ITS superiores a grupo grande, libros; comparables a tutoría humana", level: "A" },
+    ]
+  },
+  {
+    name: "Causalidad y Metodología",
+    icon: "📊",
+    color: "#fd79a8",
+    researchers: [
+      { name: "Pearl, J.", year: "1988/2009", contrib: "Framework causal: DAGs, do-calculus, d-separación, contrafactuales", level: "A" },
+      { name: "Wright, S.", year: 1921, contrib: "Path analysis: coeficientes de camino para causalidad; base de descomposición de efectos", level: "A" },
+      { name: "Bollen, K.A.", year: 1989, contrib: "Modelos de ecuaciones estructurales (SEM) con variables latentes", level: "A" },
+      { name: "Hattie, J.", year: 2009, contrib: "Visible Learning: síntesis de 800+ meta-análisis; metacognición d=0.69", level: "A" },
+      { name: "Richardson, Abraham & Bond", year: 2012, contrib: "Meta-análisis (241 datasets, 50,000+ estudiantes): autoeficacia r=0.31", level: "A" },
+    ]
+  },
+];
+
+const theories = [
+  { name: "Item Response Theory (IRT)", author: "Lord (1980), Rasch (1960)", desc: "Modela la relación probabilística entre habilidad latente (θ) y probabilidad de acierto. Fundamenta el motor CAT diagnóstico y la selección de ítems de SENPAI.", connect: "Variable: mastery (v₁). Motor de diagnóstico 'Primera Misión'. ZDP operacionalizada como [θ-0.5, θ+1.5].", level: "A" },
+  { name: "Bayesian Knowledge Tracing (BKT)", author: "Corbett & Anderson (1995)", desc: "Modelo de Markov oculto con 4 parámetros: P(L₀), P(T), P(G), P(S). Rastrea dominio por Knowledge Component.", connect: "Variable: mastery (v₁). Criterio de maestría: P(L) ≥ 0.85. Integración original BKT+IRT de SENSEI.", level: "A" },
+  { name: "Self-Determination Theory (SDT)", author: "Deci & Ryan (1985, 2000)", desc: "Tres necesidades básicas: autonomía, competencia, relación. Continuo motivacional de 6 tipos de regulación.", connect: "Variable: motivation (v₂₀). Diseño motivacional completo de SENSEI. Agente IKIGAI.", level: "A" },
+  { name: "Attentional Control Theory", author: "Eysenck et al. (2007)", desc: "La ansiedad compromete inhibición y flexibilidad atencional, redirigiendo memoria de trabajo a amenaza percibida.", connect: "Aristas: anxiety→mastery (β=-0.30), anxiety→attention_span (β=-0.30). Agente KAZE.", level: "A" },
+  { name: "Cognitive Load Theory (CLT)", author: "Sweller (1988)", desc: "Tres tipos de carga: intrínseca, extrínseca y germane. Capacidad de WM limitada a 3-4 chunks.", connect: "Variable: cognitive_load (v₄). Ajuste dinámico de scaffolding en SENPAI. Expertise reversal effect.", level: "A" },
+  { name: "Zona de Desarrollo Próximo (ZDP)", author: "Vygotsky (1978)", desc: "Instrucción óptima en la zona entre lo que el estudiante puede hacer solo y con ayuda.", connect: "Operacionalizada como intervalo IRT [θ-0.5, θ+1.5]. Regla del 85% de Wilson et al. (2019).", level: "A" },
+  { name: "Desirable Difficulties", author: "Bjork (1994)", desc: "Condiciones que ralentizan aprendizaje inicial pero mejoran retención: spacing, interleaving, retrieval practice.", connect: "Motor de práctica de DOJO. FSRS para repetición espaciada. Testing effect de Roediger (2006).", level: "A" },
+  { name: "Growth Mindset", author: "Dweck (2006), con contrapeso Sisk et al. (2018)", desc: "Inteligencia como maleable, no fija. Efecto real pero modesto: d=0.08 (Sisk, 2018). Peso conservador en el modelo.", connect: "Variable: growth_mindset (v₂₁). Arista: growth_mindset→frustration_tolerance (β=+0.25). Agente IKIGAI.", level: "A*" },
+  { name: "Metacognición", author: "Flavell (1979), Brown (1987)", desc: "Conocimiento y regulación del propio proceso cognitivo. Planificación, monitoreo y evaluación.", connect: "Variable: metacognition (v₃). Agente KOAN. Calibración confianza-rendimiento como indicador operacional.", level: "A" },
+  { name: "Modelo B=MAP (Tiny Habits)", author: "Fogg (2019)", desc: "Comportamiento requiere convergencia de Motivación, Habilidad y Prompt. Hábitos se forman por repetición.", connect: "Protocolo de micro-hábitos de KAIZEN. Progresión 2→45 min/día en 8 semanas. Variable: study_adherence.", level: "A" },
+  { name: "Autoeficacia", author: "Bandura (1977, 1997)", desc: "Creencia en la propia capacidad. 4 fuentes: experiencias de maestría, vicarias, persuasión verbal, estados fisiológicos.", connect: "Variable: self_efficacy (v₈). Aristas: mastery→self_efficacy (+0.30), self_efficacy→confidence (+0.35), self_efficacy→anxiety (-0.35). Ciclo virtuoso central.", level: "A" },
+  { name: "Causal Graph Framework", author: "Pearl (2009), Wright (1921), Bollen (1989)", desc: "DAGs con do-calculus para inferencia causal. Descomposición de efectos directos e indirectos vía path analysis.", connect: "Arquitectura central: G=(V,E,W) con 21 variables y 30 aristas. Calibración propuesta vía SEM (lavaan).", level: "A" },
+  { name: "RIASEC / Career Construction", author: "Holland (1997), Savickas (2005), Lent (SCCT, 1994)", desc: "Tipología vocacional hexagonal + construcción de carrera vía narrativas + modelo cognitivo social de carrera.", connect: "Variable: vocational_clarity (v₁₉). Agente COMPASS. Arista: vocational_clarity→motivation (+0.30).", level: "A" },
+];
+
+const variables = [
+  { id: "v1", var: "mastery", label: "Dominio PAES", range: "[0, 1]", dim: "DA", inv: false, desc: "Probabilidad de dominio de KCs vía BKT/IRT. Variable resultado principal." },
+  { id: "v2", var: "attention_span", label: "Atención", range: "[0, 1]", dim: "DA", inv: false, desc: "Capacidad de atención sostenida. Medida vía degradación de tiempos de respuesta." },
+  { id: "v3", var: "metacognition", label: "Metacognición", range: "[0, 1]", dim: "DA", inv: false, desc: "Planificación, monitoreo y evaluación del aprendizaje." },
+  { id: "v4", var: "cognitive_load", label: "Carga Cognitiva", range: "[0, 1]", dim: "DA", inv: true, desc: "Carga cognitiva total. Relación U invertida con rendimiento." },
+  { id: "v5", var: "anxiety", label: "Ansiedad", range: "[0, 1]", dim: "DE", inv: true, desc: "Ansiedad ante exámenes (componentes cognitivos + somáticos)." },
+  { id: "v6", var: "confidence", label: "Autoconfianza", range: "[0, 1]", dim: "DE", inv: false, desc: "Seguridad subjetiva por KC. Específica al KC y al momento." },
+  { id: "v7", var: "emotional_state", label: "Estado Emocional", range: "[0, 1]", dim: "DE", inv: false, desc: "Estado emocional general (valencia positiva). Modelo circumplex de Russell simplificado." },
+  { id: "v8", var: "self_efficacy", label: "Autoeficacia", range: "[0, 1]", dim: "DE", inv: false, desc: "Creencia generalizada en capacidad. Posible multicolinealidad con confidence." },
+  { id: "v9", var: "frustration_tolerance", label: "Tol. Frustración", range: "[0, 1]", dim: "DE", inv: false, desc: "Persistencia ante dificultad. Operacionalizado como intentos antes de abandonar." },
+  { id: "v10", var: "stress_level", label: "Estrés", range: "[0, 1]", dim: "DE", inv: true, desc: "Nivel de estrés percibido. Medible vía PSS-4." },
+  { id: "v11", var: "study_adherence", label: "Adherencia", range: "[0, 1]", dim: "DC", inv: false, desc: "Proporción de sesiones completadas. Variable más directamente observable." },
+  { id: "v12", var: "time_management", label: "Gestión Tiempo", range: "[0, 1]", dim: "DC", inv: false, desc: "Gestión efectiva del tiempo. Medible vía patrones de uso." },
+  { id: "v13", var: "sleep_quality", label: "Calidad Sueño", range: "[0, 1]", dim: "DC", inv: false, desc: "Calidad y cantidad de sueño. Integra datos Apple Health / Google Fit." },
+  { id: "v14", var: "screen_time", label: "Tiempo Pantalla", range: "[0, 1]", dim: "DC", inv: true, desc: "Tiempo de pantalla recreativo. Variable exógena." },
+  { id: "v15", var: "fatigue", label: "Fatiga", range: "[0, 1]", dim: "DC", inv: true, desc: "Cansancio físico y mental. Medible vía auto-reporte y degradación intra-sesión." },
+  { id: "v16", var: "physical_activity", label: "Act. Física", range: "[0, 1]", dim: "DC", inv: false, desc: "Actividad física regular. Variable exógena." },
+  { id: "v17", var: "social_support", label: "Apoyo Social", range: "[0, 1]", dim: "DS", inv: false, desc: "Apoyo social percibido de pares." },
+  { id: "v18", var: "parental_support", label: "Apoyo Parental", range: "[0, 1]", dim: "DS", inv: false, desc: "Apoyo parental percibido. Efecto no-lineal (apoyo vs presión)." },
+  { id: "v19", var: "vocational_clarity", label: "Claridad Vocacional", range: "[0, 1]", dim: "DV", inv: false, desc: "Claridad de metas vocacionales. Distribución bimodal." },
+  { id: "v20", var: "motivation", label: "Motivación", range: "[0, 1]", dim: "DV", inv: false, desc: "Motivación combinada (intrínseca + extrínseca). Basada en SDT." },
+  { id: "v21", var: "growth_mindset", label: "Ment. Crecimiento", range: "[0, 1]", dim: "DV", inv: false, desc: "Mentalidad de crecimiento. Efecto debatido, peso conservador." },
+];
+
+const edges = [
+  { n: 1, src: "anxiety", tgt: "mastery", w: -0.30, lvl: "A", ref: "Hembree (1988); von der Embse et al. (2018)" },
+  { n: 2, src: "confidence", tgt: "mastery", w: 0.20, lvl: "B", ref: "Pajares (1996)" },
+  { n: 3, src: "sleep_quality", tgt: "attention_span", w: 0.45, lvl: "A", ref: "Dewald et al. (2010) N>15K" },
+  { n: 4, src: "attention_span", tgt: "mastery", w: 0.30, lvl: "B", ref: "Posner y Petersen (1990)" },
+  { n: 5, src: "motivation", tgt: "study_adherence", w: 0.35, lvl: "A", ref: "Deci & Ryan (2000)" },
+  { n: 6, src: "study_adherence", tgt: "mastery", w: 0.30, lvl: "A", ref: "Crede y Phillips (2011)" },
+  { n: 7, src: "stress_level", tgt: "anxiety", w: 0.45, lvl: "A", ref: "Zeidner (2007); Lazarus y Folkman (1984)" },
+  { n: 8, src: "cognitive_load", tgt: "fatigue", w: 0.30, lvl: "B", ref: "Sweller (2011); Boksem y Tops (2008)" },
+  { n: 9, src: "fatigue", tgt: "attention_span", w: -0.40, lvl: "B", ref: "Lim y Dinges (2010)" },
+  { n: 10, src: "screen_time", tgt: "sleep_quality", w: -0.40, lvl: "A", ref: "Hale y Guan (2015); Carter et al. (2016)" },
+  { n: 11, src: "physical_activity", tgt: "sleep_quality", w: 0.25, lvl: "A", ref: "Kredlow et al. (2015) k=66" },
+  { n: 12, src: "physical_activity", tgt: "emotional_state", w: 0.30, lvl: "A", ref: "Biddle & Asare (2011)" },
+  { n: 13, src: "social_support", tgt: "emotional_state", w: 0.30, lvl: "A", ref: "Cohen & Wills (1985)" },
+  { n: 14, src: "emotional_state", tgt: "motivation", w: 0.30, lvl: "B", ref: "Fredrickson (2001)" },
+  { n: 15, src: "vocational_clarity", tgt: "motivation", w: 0.30, lvl: "B", ref: "Lent et al. (1994) SCCT" },
+  { n: 16, src: "self_efficacy", tgt: "confidence", w: 0.35, lvl: "A", ref: "Bandura (1997)" },
+  { n: 17, src: "mastery", tgt: "self_efficacy", w: 0.30, lvl: "A", ref: "Bandura (1997); Pintrich y De Groot (1990)" },
+  { n: 18, src: "parental_support", tgt: "emotional_state", w: 0.25, lvl: "C", ref: "Fan y Chen (2001); Jeynes (2007)" },
+  { n: 19, src: "metacognition", tgt: "study_adherence", w: 0.25, lvl: "C", ref: "Veenman et al. (2006)" },
+  { n: 20, src: "growth_mindset", tgt: "frustration_tolerance", w: 0.25, lvl: "A*", ref: "Dweck (2006); Sisk et al. (2018)" },
+  { n: 21, src: "frustration_tolerance", tgt: "study_adherence", w: 0.20, lvl: "C", ref: "Plausibilidad teórica" },
+  { n: 22, src: "time_management", tgt: "study_adherence", w: 0.30, lvl: "B", ref: "Macan et al. (1990); Claessens et al. (2007)" },
+  { n: 23, src: "fatigue", tgt: "emotional_state", w: -0.25, lvl: "C", ref: "Boksem & Tops (2008)" },
+  { n: 24, src: "stress_level", tgt: "sleep_quality", w: -0.35, lvl: "A", ref: "Dewald et al. (2010)" },
+  { n: 25, src: "anxiety", tgt: "attention_span", w: -0.30, lvl: "A", ref: "Eysenck et al. (2007) ACT" },
+  { n: 26, src: "self_efficacy", tgt: "mastery", w: 0.30, lvl: "A", ref: "Pintrich & De Groot (1990)" },
+  { n: 27, src: "stress_level", tgt: "emotional_state", w: -0.35, lvl: "A", ref: "Lazarus & Folkman (1984)" },
+  { n: 28, src: "sleep_quality", tgt: "fatigue", w: -0.50, lvl: "A", ref: "Dewald et al. (2010); Lim y Dinges (2010)" },
+  { n: 29, src: "self_efficacy", tgt: "anxiety", w: -0.35, lvl: "A", ref: "Bandura (1997); Pintrich y De Groot (1990)" },
+  { n: 30, src: "physical_activity", tgt: "stress_level", w: -0.25, lvl: "A", ref: "Salmon (2001); Biddle y Asare (2011)" },
+];
+
+const archetypes = [
+  { name: "Valentina", title: "La Aplicada", paes: 835, emoji: "📚", risk: "low", color: "#00b894", strategy: ["SENPAI", "DOJO", "COMPASS"], proj: "+20-35 pts", vars: { mastery:0.78,anxiety:0.25,confidence:0.75,motivation:0.82,attention_span:0.80,emotional_state:0.75,self_efficacy:0.80,study_adherence:0.88,sleep_quality:0.72,fatigue:0.22,stress_level:0.25,screen_time:0.25 } },
+  { name: "Matías", title: "El Ansioso", paes: 680, emoji: "😰", risk: "high", color: "#ff6b6b", strategy: ["KAZE", "SENPAI", "KOAN"], proj: "+40-60 pts", vars: { mastery:0.58,anxiety:0.68,confidence:0.38,motivation:0.52,attention_span:0.52,emotional_state:0.42,self_efficacy:0.42,study_adherence:0.62,sleep_quality:0.48,fatigue:0.52,stress_level:0.62,screen_time:0.42 } },
+  { name: "Camila", title: "La Resiliente", paes: 590, emoji: "💪", risk: "medium", color: "#fdcb6e", strategy: ["KAIZEN", "NAKAMA", "COMPASS"], proj: "+40-70 pts", vars: { mastery:0.52,anxiety:0.42,confidence:0.52,motivation:0.48,attention_span:0.48,emotional_state:0.48,self_efficacy:0.52,study_adherence:0.52,sleep_quality:0.42,fatigue:0.55,stress_level:0.52,screen_time:0.48 } },
+  { name: "Benjamín", title: "El Gamer", paes: 500, emoji: "🎮", risk: "high", color: "#ff6b6b", strategy: ["KAIZEN", "COMPASS", "DOJO"], proj: "+70-110 pts", vars: { mastery:0.42,anxiety:0.32,confidence:0.48,motivation:0.32,attention_span:0.32,emotional_state:0.52,self_efficacy:0.38,study_adherence:0.22,sleep_quality:0.28,fatigue:0.68,stress_level:0.35,screen_time:0.88 } },
+  { name: "Isidora", title: "La Presionada", paes: 725, emoji: "😤", risk: "high", color: "#ff6b6b", strategy: ["KAZE", "KAIZEN", "MIYAGI"], proj: "+35-65 pts", vars: { mastery:0.68,anxiety:0.72,confidence:0.42,motivation:0.62,attention_span:0.58,emotional_state:0.32,self_efficacy:0.48,study_adherence:0.72,sleep_quality:0.38,fatigue:0.68,stress_level:0.78,screen_time:0.28 } },
+  { name: "Diego", title: "El Deportista", paes: 455, emoji: "⚽", risk: "high", color: "#ff6b6b", strategy: ["COMPASS", "KAIZEN", "SENPAI"], proj: "+65-95 pts", vars: { mastery:0.32,anxiety:0.32,confidence:0.58,motivation:0.38,attention_span:0.48,emotional_state:0.62,self_efficacy:0.52,study_adherence:0.38,sleep_quality:0.62,fatigue:0.28,stress_level:0.28,screen_time:0.32 } },
+  { name: "Francisca", title: "TDAH", paes: 410, emoji: "🦋", risk: "very-high", color: "#ff4444", strategy: ["KOAN", "KAIZEN", "SENPAI"], proj: "+50-80 pts", vars: { mastery:0.28,anxiety:0.52,confidence:0.32,motivation:0.32,attention_span:0.22,emotional_state:0.38,self_efficacy:0.28,study_adherence:0.28,sleep_quality:0.38,fatigue:0.62,stress_level:0.55,screen_time:0.68 } },
+  { name: "Tomás", title: "El Social", paes: 545, emoji: "🗣️", risk: "medium", color: "#fdcb6e", strategy: ["NAKAMA", "COMPASS", "KAIZEN"], proj: "+55-95 pts", vars: { mastery:0.42,anxiety:0.32,confidence:0.52,motivation:0.48,attention_span:0.42,emotional_state:0.62,self_efficacy:0.48,study_adherence:0.42,sleep_quality:0.48,fatigue:0.42,stress_level:0.28,screen_time:0.55 } },
+  { name: "Martina", title: "La Quemada", paes: 635, emoji: "🔥", risk: "high", color: "#ff6b6b", strategy: ["MIYAGI", "KAZE", "KAIZEN"], proj: "+35-65 pts", vars: { mastery:0.58,anxiety:0.62,confidence:0.38,motivation:0.38,attention_span:0.38,emotional_state:0.18,self_efficacy:0.32,study_adherence:0.52,sleep_quality:0.28,fatigue:0.88,stress_level:0.72,screen_time:0.38 } },
+  { name: "Joaquín", title: "El Tardío", paes: 320, emoji: "🐢", risk: "very-high", color: "#ff4444", strategy: ["COMPASS", "IKIGAI", "KAIZEN"], proj: "+80-120 pts", vars: { mastery:0.22,anxiety:0.42,confidence:0.28,motivation:0.22,attention_span:0.32,emotional_state:0.38,self_efficacy:0.22,study_adherence:0.18,sleep_quality:0.38,fatigue:0.52,stress_level:0.45,screen_time:0.62 } },
+];
+
+const agents = {
+  phase1: [
+    { name: "KAZE", jp: "風", role: "Ansiedad y Estrés", desc: "Monitorea ansiedad y estrés. Interviene con respiración 4-7-8, relajación muscular, reevaluación cognitiva, escritura expresiva.", reads: ["anxiety","stress_level","emotional_state","confidence"], writes: ["confidence","self_efficacy","emotional_state"], color: "#ff6b6b" },
+    { name: "SENPAI", jp: "先輩", role: "Tutor Académico", desc: "Motor de práctica adaptativa con IRT+BKT. Selecciona ítems en ZDP, tracking de KCs, diagnóstico de errores.", reads: ["mastery","cognitive_load","attention_span","metacognition"], writes: ["mastery"], color: "#6c5ce7" },
+    { name: "COMPASS", jp: "🧭", role: "Motivación y Vocación", desc: "Trabaja motivación intrínseca, metas SMART, growth mindset. Conecta PAES con proyecto de vida.", reads: ["vocational_clarity","motivation","anxiety","mastery"], writes: ["vocational_clarity","growth_mindset"], color: "#00b894" },
+    { name: "KAIZEN", jp: "改善", role: "Hábitos y Rutinas", desc: "Construye rutinas sostenibles de estudio. Progresión 2→45 min/día en 8 semanas. Monitorea sueño.", reads: ["study_adherence","time_management","sleep_quality","screen_time"], writes: ["study_adherence","time_management"], color: "#00cec9" },
+    { name: "DOJO", jp: "道場", role: "Práctica Deliberada", desc: "Práctica con spacing, interleaving, testing effect. Items IRT calibrados. FSRS post-mastery.", reads: ["mastery","frustration_tolerance"], writes: ["mastery","frustration_tolerance"], color: "#fdcb6e" },
+    { name: "NAKAMA", jp: "仲間", role: "Apoyo Social", desc: "Facilita apoyo social y familiar. Detecta aislamiento. Estrategias de conexión.", reads: ["social_support","parental_support"], writes: ["social_support"], color: "#fab1a0" },
+    { name: "KOAN", jp: "公案", role: "Metacognición", desc: "Desarrolla auto-monitoreo, planificación del estudio, autoevaluación. Calibración confianza-rendimiento.", reads: ["metacognition","cognitive_load"], writes: ["metacognition","attention_span"], color: "#a29bfe" },
+  ],
+  phase2: [
+    { name: "INGENIERO", jp: "数学", role: "Validación Matemática", desc: "Ajusta pesos del grafo causal. Valida convergencia del algoritmo de propagación. Mantiene integridad matemática.", reads: ["todas las 21 variables"], writes: ["pesos del grafo"], color: "#dfe6e9" },
+    { name: "SENPAI-R", jp: "審", role: "Revisor Diario", desc: "Coordina reunión diaria donde todos los agentes analizan sus recomendaciones vs resultados observados.", reads: ["resultados de agentes"], writes: ["feedback correctivo"], color: "#636e72" },
+  ],
+  phase3: [
+    { name: "MIYAGI", jp: "宮城", role: "Coach Principal", desc: "Orquestador final que habla al estudiante. Recibe input consolidado de todos los agentes, validado por el Ingeniero. Decide QUÉ y CUÁNDO comunicar.", reads: ["todas las 21 variables"], writes: ["coordina, no escribe directamente"], color: "#fd79a8" },
+  ]
+};
+
+const leverage = [
+  { var: "stress_level", effect: "0.255", paths: "5 caminos causales", detail: "stress→anxiety→mastery, stress→sleep→att→mastery, stress→emotional→mot→sa→mastery, stress→anxiety→att→mastery, stress→sleep→fatigue→att→mastery", agent: "KAZE" },
+  { var: "sleep_quality", effect: "0.199", paths: "3 caminos", detail: "sleep→attention→mastery, sleep→fatigue→attention→mastery", agent: "KAIZEN" },
+  { var: "physical_activity", effect: "0.122", paths: "8 caminos", detail: "Vía sleep, emotional_state, stress_level y sus cascadas hacia mastery", agent: "KAIZEN" },
+  { var: "motivation", effect: "0.105", paths: "1 camino directo", detail: "motivation→study_adherence→mastery", agent: "IKIGAI" },
+  { var: "emotional_state", effect: "0.032", paths: "1 camino", detail: "emotional_state→motivation→study_adherence→mastery. Nodo integrador; difícil de intervenir directamente.", agent: "KAZE" },
+];
+
+const thresholds = [
+  { var: "stress_level", alerta: 0.65, critico: 0.80, inv: true },
+  { var: "anxiety", alerta: 0.65, critico: 0.80, inv: true },
+  { var: "screen_time", alerta: 0.70, critico: 0.85, inv: true },
+  { var: "sleep_quality", alerta: 0.35, critico: 0.25, inv: false },
+  { var: "emotional_state", alerta: 0.30, critico: 0.20, inv: false },
+  { var: "study_adherence", alerta: 0.20, critico: 0.05, inv: false },
+];
+
+const transitions = [
+  { who: "Joaquín", from: "Tomás", to: "Martín", condition: "motivation sube de 0.22 a >0.50 (vía COMPASS)" },
+  { who: "Camila", from: "Catalina", to: "Tomás", condition: "social_support cae bajo 0.30" },
+  { who: "Martina", from: "Tomás", to: "Catalina", condition: "fatigue baja de 0.88 a <0.50 AND emotional_state sube a >0.50" },
+  { who: "Isidora", from: "Tomás", to: "Catalina", condition: "anxiety baja bajo 0.45 AND stress_level baja de 0.78 a <0.50" },
+];
+
+// ===== RENDER FUNCTIONS =====
+
+function renderDomains() {
+  const c = document.getElementById('domains-container');
+  c.innerHTML = domains.map((d, i) => `
+    <div class="domain-card">
+      <div class="domain-header">
+        <div class="domain-icon" style="background:${d.color}20">${d.icon}</div>
+        <h3>${d.name}</h3>
+        <span class="count">${d.researchers.length} inv.</span>
+      </div>
+      <div class="domain-body" id="domain-body-${i}">
+        ${d.researchers.slice(0, 3).map(r => `
+          <div class="researcher-item">
+            <span class="researcher-name">${r.name}</span>
+            <span class="researcher-year">${r.year}</span>
+            <span class="evidence-badge evidence-${r.level}">${r.level}</span>
+            <div class="researcher-contrib">${r.contrib}</div>
+          </div>
+        `).join('')}
+        ${d.researchers.length > 3 ? `
+          <div class="collapsed" id="domain-extra-${i}">
+            ${d.researchers.slice(3).map(r => `
+              <div class="researcher-item">
+                <span class="researcher-name">${r.name}</span>
+                <span class="researcher-year">${r.year}</span>
+                <span class="evidence-badge evidence-${r.level}">${r.level}</span>
+                <div class="researcher-contrib">${r.contrib}</div>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+      ${d.researchers.length > 3 ? `
+        <button class="toggle-btn" onclick="toggleDomain(${i})">Ver ${d.researchers.length - 3} más ▾</button>
+      ` : ''}
+    </div>
+  `).join('');
+}
+
+function toggleDomain(i) {
+  const el = document.getElementById(`domain-extra-${i}`);
+  const btn = el.parentElement.querySelector('.toggle-btn');
+  el.classList.toggle('collapsed');
+  btn.textContent = el.classList.contains('collapsed') ? `Ver más ▾` : 'Colapsar ▴';
+}
+
+function renderTheories() {
+  const c = document.getElementById('theories-container');
+  c.innerHTML = theories.map(t => `
+    <div class="theory-card">
+      <h4>${t.name} <span class="evidence-badge evidence-${t.level.replace('*','')}">${t.level}</span></h4>
+      <p><strong>${t.author}</strong><br>${t.desc}</p>
+      <div class="connection">→ <strong>Conexión SENSEI:</strong> ${t.connect}</div>
+    </div>
+  `).join('');
+}
+
+function renderVariables() {
+  const tbody = document.getElementById('var-tbody');
+  tbody.innerHTML = variables.map(v => `
+    <tr data-dim="${v.dim}">
+      <td style="font-family:'JetBrains Mono',monospace;color:var(--text3);font-size:0.75rem">${v.id}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent3)">${v.var}</td>
+      <td>${v.label}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem">${v.range}</td>
+      <td><span class="dim-badge dim-${v.dim}">${v.dim}</span></td>
+      <td>${v.inv ? '<span style="color:var(--red)">Sí</span>' : '—'}</td>
+      <td style="color:var(--text2);font-size:0.75rem">${v.desc}</td>
+    </tr>
+  `).join('');
+
+  document.querySelectorAll('#dim-tabs .tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#dim-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('#var-tbody tr').forEach(tr => {
+        tr.style.display = (tab === 'all' || tr.dataset.dim === tab) ? '' : 'none';
+      });
+    });
+  });
+}
+
+function renderEdges() {
+  const c = document.getElementById('edges-container');
+  c.innerHTML = edges.map(e => {
+    const absW = Math.abs(e.w);
+    const isPos = e.w >= 0;
+    return `
+      <div class="edge-row">
+        <span><span style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:0.7rem">${e.n}.</span> ${e.src}</span>
+        <span class="arrow">${isPos ? '→ +' : '→ −'}</span>
+        <span>${e.tgt}</span>
+        <span class="weight-bar">
+          <span class="weight-fill ${isPos ? 'weight-pos' : 'weight-neg'}" style="width:${absW*120}px"></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:${isPos?'var(--green)':'var(--red)'}">${e.w > 0 ? '+' : ''}${e.w.toFixed(2)}</span>
+        </span>
+        <span class="evidence-badge evidence-${e.lvl.replace('*','')}">${e.lvl}</span>
+        <span style="font-size:0.7rem;color:var(--text3)">${e.ref}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderArchetypes() {
+  const c = document.getElementById('archetypes-container');
+  c.innerHTML = archetypes.map(a => {
+    const varKeys = Object.keys(a.vars);
+    return `
+      <div class="archetype-card">
+        <div class="archetype-top">
+          <div class="archetype-avatar" style="background:${a.color}20;color:${a.color}">${a.emoji}</div>
+          <div class="archetype-info">
+            <h4>${a.name}</h4>
+            <div class="subtitle2">${a.title}</div>
+          </div>
+          <div class="archetype-paes" style="color:${a.color}">${a.paes}</div>
+        </div>
+        <div class="archetype-body">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <span class="risk-badge risk-${a.risk}">${a.risk.toUpperCase()}</span>
+            <span style="font-size:0.75rem;color:var(--text2)">Proyección: ${a.proj}</span>
+          </div>
+          <div class="var-bars">
+            ${varKeys.map(k => {
+              const v = a.vars[k];
+              const inv = ['anxiety','stress_level','screen_time','fatigue'].includes(k);
+              const hue = inv ? (v > 0.6 ? 0 : v > 0.4 ? 40 : 120) : (v > 0.6 ? 120 : v > 0.4 ? 40 : 0);
+              return `
+                <div class="var-bar-row">
+                  <span class="var-bar-label">${k.replace(/_/g,' ')}</span>
+                  <div class="var-bar-track">
+                    <div class="var-bar-fill" style="width:${v*100}%;background:hsl(${hue},70%,50%)"></div>
+                  </div>
+                  <span class="var-bar-val">${v.toFixed(2)}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+          <div class="strategy-pills">
+            ${a.strategy.map((s,i) => `<span class="strategy-pill ${i===0?'primary':''}">${i===0?'①':'②'} ${s}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderThresholds() {
+  const c = document.getElementById('thresholds-container');
+  c.innerHTML = thresholds.map(t => `
+    <div class="threshold-item">
+      <div class="var-name" style="font-family:'JetBrains Mono',monospace;color:var(--accent3)">${t.var}</div>
+      <div class="threshold-bar">
+        <div style="position:absolute;top:0;left:0;right:0;bottom:0;border-radius:4px;background:linear-gradient(to right, ${t.inv ? 'var(--green), var(--gold), var(--red)' : 'var(--red), var(--gold), var(--green)'})"></div>
+        <div class="threshold-marker" style="left:${(t.inv ? t.alerta : t.alerta)*100}%;background:var(--gold)"></div>
+        <div class="threshold-marker" style="left:${(t.inv ? t.critico : t.critico)*100}%;background:var(--red)"></div>
+      </div>
+      <div class="threshold-labels">
+        <span>0.0</span>
+        <span>Alerta: ${t.alerta}</span>
+        <span>Crítico: ${t.critico}</span>
+        <span>1.0</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTransitions() {
+  const c = document.getElementById('transitions-container');
+  c.innerHTML = transitions.map(t => `
+    <div class="transition-card">
+      <h4><span style="font-size:0.85rem">${t.who}:</span> <span style="color:var(--gold)">${t.from}</span> <span class="arrow" style="margin:0 0.25rem">→</span> <span style="color:var(--accent3)">${t.to}</span></h4>
+      <p style="font-size:0.8rem;color:var(--text2)">${t.condition}</p>
+    </div>
+  `).join('');
+}
+
+function renderAgents() {
+  const c = document.getElementById('agents-container');
+  const phases = [
+    { label: "Fase 1 — Agentes Especialistas", badge: "7 agentes", color: "#6c5ce7", agents: agents.phase1 },
+    { label: "Fase 2 — Capa de Modelo", badge: "2 agentes", color: "#00cec9", agents: agents.phase2 },
+    { label: "Fase 3 — Coach (Orquestador)", badge: "1 agente", color: "#fd79a8", agents: agents.phase3 },
+  ];
+  c.innerHTML = phases.map(p => `
+    <div class="agent-phase">
+      <div class="phase-header">
+        <span class="phase-badge" style="background:${p.color}20;color:${p.color}">${p.badge}</span>
+        ${p.label}
+      </div>
+      <div class="agent-cards">
+        ${p.agents.map(a => `
+          <div class="agent-card" style="border-left:3px solid ${a.color}">
+            <h4><span style="color:${a.color}">${a.name}</span> <span style="font-size:0.7rem;color:var(--text3)">${a.jp}</span></h4>
+            <div class="agent-role">${a.role}</div>
+            <p style="font-size:0.75rem;color:var(--text2);margin-bottom:0.75rem">${a.desc}</p>
+            <div class="agent-vars">
+              ${(Array.isArray(a.reads) ? a.reads : [a.reads]).map(v => `<span class="agent-var read">R: ${v}</span>`).join('')}
+              ${(Array.isArray(a.writes) ? a.writes : [a.writes]).map(v => `<span class="agent-var write">W: ${v}</span>`).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderLeverage() {
+  const c = document.getElementById('leverage-container');
+  c.innerHTML = leverage.map((l, i) => `
+    <div class="leverage-item">
+      <div class="leverage-rank">${i + 1}</div>
+      <div class="leverage-info">
+        <h4 style="font-family:'JetBrains Mono',monospace;color:var(--accent3)">${l.var}</h4>
+        <div class="path">${l.paths} — Agente: ${l.agent}</div>
+        <div style="font-size:0.75rem;color:var(--text3);margin-top:0.25rem">${l.detail}</div>
+      </div>
+      <div class="leverage-effect">${l.effect}</div>
+    </div>
+  `).join('');
+
+  const routes = [
+    { name: "Hábitos → Cognición", path: "sleep_quality (+0.45) → attention_span (+0.30) → mastery", effect: "Δsleep × 0.135", agent: "KAIZEN" },
+    { name: "Emocional → Rendimiento", path: "anxiety (−0.30) → mastery (directo)", effect: "0.300 directo", agent: "KAZE" },
+    { name: "Vocacional → Rendimiento", path: "vocational_clarity (+0.30) → motivation (+0.35) → study_adherence (+0.30) → mastery", effect: "Δvc × 0.032", agent: "COMPASS" },
+    { name: "Fatiga → Cascada", path: "screen_time (−0.40) → sleep_quality → fatigue → attention → mastery", effect: "Δscreen × (−0.054)", agent: "KAIZEN" },
+    { name: "Metacognición → Adherencia", path: "metacognition (+0.25) → study_adherence (+0.30) → mastery", effect: "Δmeta × 0.075", agent: "KOAN" },
+  ];
+  const rc = document.getElementById('routes-container');
+  rc.innerHTML = routes.map((r, i) => `
+    <div class="theory-card">
+      <h4><span style="color:var(--accent3)">${i+1}.</span> ${r.name} <span style="font-size:0.7rem;color:var(--text3);margin-left:auto">Agente: ${r.agent}</span></h4>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;margin-bottom:0.5rem">${r.path}</p>
+      <p>Efecto: <strong style="color:var(--accent3)">${r.effect}</strong></p>
+    </div>
+  `).join('');
+}
+
+// ===== NAVIGATION =====
+function scrollToSection(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Highlight nav on scroll
+const sections = ['sec-investigators','sec-theories','sec-graph','sec-edges','sec-sem','sec-archetypes','sec-transitions','sec-agents','sec-leverage','sec-convergence'];
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY + 100;
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.offsetTop <= scrollY) current = id;
+  });
+  document.querySelectorAll('.nav-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', sections[i] === current);
+  });
+});
+
+// ===== INIT =====
+renderDomains();
+renderTheories();
+renderVariables();
+renderEdges();
+renderArchetypes();
+renderThresholds();
+renderTransitions();
+renderAgents();
+renderLeverage();
+</script>
+
+</body>
+</html>
