@@ -18,7 +18,7 @@ const STATS = [
   { value: "9", label: "Agentes Especializados" },
   { value: "21", label: "Variables del Grafo" },
   { value: "30", label: "Aristas Causales" },
-  { value: "12", label: "Arquetipos" },
+  { value: "10", label: "Arquetipos" },
   { value: "3", label: "Tesis Validadas" },
   { value: "1000+", label: "Simulaciones" },
 ];
