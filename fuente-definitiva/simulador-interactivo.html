@@ -108,7 +108,7 @@ tr:hover td{background:rgba(243,156,18,.05)}
   <h1>RENDDI — <span>Motor de Simulacion Causal</span></h1>
   <div class="header-right">
     <button class="btn btn-outline btn-sm" onclick="togglePresentation()" title="Oculta sidebar, tabs y footer para presentaciones. Solo queda el contenido principal.">Presentacion</button>
-    <button class="btn btn-outline btn-sm" onclick="exportCSV()" title="Exporta todos los resultados de la ultima simulacion en formato CSV. Incluye las 21 variables finales de cada estudiante simulado.">Exportar CSV</button>
+    <button class="btn btn-outline btn-sm" onclick="exportCSV()" title="Exporta todos los resultados de la ultima simulacion en formato CSV. Incluye las 22 variables finales de cada estudiante simulado.">Exportar CSV</button>
     <button class="btn btn-outline btn-sm" onclick="shareConfig()" title="Copia al portapapeles una URL con la configuracion actual (sims, dias, escenario, arquetipo) para compartir o reproducir.">Compartir</button>
   </div>
 </div>
@@ -137,7 +137,7 @@ tr:hover td{background:rgba(243,156,18,.05)}
         <option value="E" title="Renddi con eventos de crisis inyectados (semana examenes, conflicto familiar, burnout). Mide resiliencia del sistema ante adversidad.">E - Con Crisis</option>
       </select>
     </div>
-    <div data-tip="Selecciona un arquetipo especifico o 'Todos' para simular los 10 perfiles de la tesis. Cada arquetipo tiene un perfil de 21 variables, PAES inicial y adherencia distintos." data-tip-pos="right">
+    <div data-tip="Selecciona un arquetipo especifico o 'Todos' para simular los 10 perfiles de la tesis. Cada arquetipo tiene un perfil de 22 variables, PAES inicial y adherencia distintos." data-tip-pos="right">
       <label>Arquetipo</label>
       <select id="arquetipo">
         <option value="Todos">Todos</option>
@@ -145,11 +145,11 @@ tr:hover td{background:rgba(243,156,18,.05)}
     </div>
     <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
       <button class="btn btn-primary" onclick="runSimulation()" id="btnSimular" title="Ejecuta la simulacion con los parametros configurados. Genera N estudiantes por arquetipo y simula dia a dia la intervencion.">Simular</button>
-      <button class="btn btn-outline" onclick="runIndividual()" id="btnIndividual" title="Abre la tab Caso Individual con el primer arquetipo cargado. Permite ajustar las 21 variables con sliders.">Simular Caso Individual</button>
+      <button class="btn btn-outline" onclick="runIndividual()" id="btnIndividual" title="Abre la tab Caso Individual con el primer arquetipo cargado. Permite ajustar las 22 variables con sliders.">Simular Caso Individual</button>
     </div>
     <div style="margin-top:auto;padding-top:12px;border-top:1px solid var(--border)">
       <div style="font-size:.72em;color:var(--text2)">
-        <div data-tip="El grafo causal tiene 21 variables que representan dimensiones del estudiante (academicas, emocionales, conductuales, contextuales) y 30 aristas con pesos calibrados desde la literatura." data-tip-pos="right">21 variables, 30 aristas</div>
+        <div data-tip="El grafo causal tiene 22 variables que representan dimensiones del estudiante (academicas, emocionales, conductuales, contextuales) y 34 aristas con pesos calibrados desde la literatura." data-tip-pos="right">22 variables, 34 aristas</div>
         <div>Grafo causal SENSEI v2.0</div>
         <div style="margin-top:4px;color:var(--accent)" data-tip="El motor propaga efectos causales por capas BFS con atenuacion gamma=0.7, evitando doble conteo. La funcion PAES usa solo mastery (sigmoid)." data-tip-pos="right">Motor corregido (sin doble conteo)</div>
       </div>
@@ -161,7 +161,7 @@ tr:hover td{background:rgba(243,156,18,.05)}
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="switchTab('tab-resumen')" data-tip="Vista general de resultados por arquetipo. Delta PAES, intervalos de confianza, tasa de rescate y distribucion." data-tip-pos="bottom">Resumen</button>
       <button class="nav-tab" onclick="switchTab('tab-evolucion')" data-tip="Grafico temporal semana a semana de cualquier variable del grafo. Muestra como evoluciona cada variable a lo largo del tiempo para cada arquetipo." data-tip-pos="bottom">Evolucion</button>
-      <button class="nav-tab" onclick="switchTab('tab-individual')" data-tip="Simula UN estudiante con perfil personalizado. Ajusta las 21 variables con sliders, ve propagacion causal en tiempo real y el impacto de intervenciones especificas." data-tip-pos="bottom">Caso Individual</button>
+      <button class="nav-tab" onclick="switchTab('tab-individual')" data-tip="Simula UN estudiante con perfil personalizado. Ajusta las 22 variables con sliders, ve propagacion causal en tiempo real y el impacto de intervenciones especificas." data-tip-pos="bottom">Caso Individual</button>
       <button class="nav-tab" onclick="switchTab('tab-comparador')" data-tip="Compara 2 escenarios lado a lado para ver diferencias en impacto. Util para cuantificar el valor incremental de cada capa de Renddi." data-tip-pos="bottom">Comparador</button>
       <button class="nav-tab" onclick="switchTab('tab-sensibilidad')" data-tip="Analiza que variables tienen mas impacto en el resultado PAES. Mapa de calor de la propagacion causal entre variables." data-tip-pos="bottom">Sensibilidad</button>
       <button class="nav-tab" onclick="switchTab('tab-filtro')" data-tip="Filtra casos por multiples criterios (PAES inicial/final, delta, arquetipo, variable > umbral). Combina filtros con AND/OR y ve estadisticas del subgrupo." data-tip-pos="bottom">Filtro</button>
@@ -218,7 +218,7 @@ tr:hover td{background:rgba(243,156,18,.05)}
           <h3>Perfil del Estudiante</h3>
           <div class="profile-actions">
             <button class="btn btn-outline btn-sm" onclick="loadRandomProfile()" title="Genera un perfil aleatorio coherente: si anxiety es alta, confidence tiende a ser baja, etc.">Aleatorio</button>
-            <button class="btn btn-outline btn-sm" onclick="importProfile()" title="Pega un JSON con las 21 variables (valores 0-1) para cargar un perfil personalizado.">Importar JSON</button>
+            <button class="btn btn-outline btn-sm" onclick="importProfile()" title="Pega un JSON con las 22 variables (valores 0-1) para cargar un perfil personalizado.">Importar JSON</button>
             <button class="btn btn-outline btn-sm" onclick="exportProfile()" title="Exporta el perfil actual de los sliders como JSON. Puedes guardarlo y reimportarlo despues.">Exportar JSON</button>
             <button class="btn btn-outline btn-sm" onclick="resetSliders()" title="Resetea todas las variables a 0.50 (perfil neutro).">Reset</button>
           </div>
@@ -384,14 +384,14 @@ tr:hover td{background:rgba(243,156,18,.05)}
 
 <div class="footer">
   <span id="footerStats">Sin simulaciones ejecutadas</span>
-  <span>SENSEI v2.0 | Grafo causal 21v/30a</span>
+  <span>SENSEI v2.0 | Grafo causal 22v/34a</span>
 </div>
 
 <!-- Modal para importar JSON -->
 <div id="importModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:9999;display:none;align-items:center;justify-content:center">
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;width:500px;max-width:90vw">
     <h3 style="color:var(--accent);margin-bottom:12px">Importar Perfil JSON</h3>
-    <p style="font-size:.82em;color:var(--text2);margin-bottom:10px">Pega un JSON con las 21 variables (valores 0-1). Ejemplo: {"mastery": 0.50, "anxiety": 0.30, ...}</p>
+    <p style="font-size:.82em;color:var(--text2);margin-bottom:10px">Pega un JSON con las 22 variables (valores 0-1). Ejemplo: {"mastery": 0.50, "anxiety": 0.30, ...}</p>
     <textarea id="importJsonText" style="width:100%;height:150px;background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px;font-family:monospace;font-size:.82em" placeholder='{"mastery": 0.50, "attention_span": 0.60, ...}'></textarea>
     <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
       <button class="btn btn-outline btn-sm" onclick="closeImportModal()">Cancelar</button>
@@ -406,12 +406,12 @@ tr:hover td{background:rgba(243,156,18,.05)}
 // Replica exacta del motor Python corregido
 // ============================================================
 
-// --- 1. VARIABLES (21) ---
+// --- 1. VARIABLES (22) ---
 const VARIABLES = [
   'mastery','attention_span','metacognition','cognitive_load','anxiety','confidence',
   'emotional_state','self_efficacy','frustration_tolerance','stress_level','study_adherence',
   'time_management','sleep_quality','screen_time','fatigue','physical_activity',
-  'social_support','parental_support','vocational_clarity','motivation','growth_mindset'
+  'social_support','parental_support','vocational_clarity','motivation','growth_mindset','nse'
 ];
 const VAR_IDX = {};
 VARIABLES.forEach((v,i) => VAR_IDX[v] = i);
@@ -424,7 +424,8 @@ const VAR_LABELS = {
   time_management:'Gestion Tiempo',sleep_quality:'Calidad Sueno',screen_time:'Tiempo Pantalla',
   fatigue:'Fatiga',physical_activity:'Actividad Fisica',social_support:'Soporte Social',
   parental_support:'Soporte Parental',vocational_clarity:'Claridad Vocacional',motivation:'Motivacion',
-  growth_mindset:'Mentalidad Crecimiento'
+  growth_mindset:'Mentalidad Crecimiento',
+  nse:'NSE'
 };
 
 const VAR_TOOLTIPS = {
@@ -448,7 +449,8 @@ const VAR_TOOLTIPS = {
   parental_support:'Calidad del soporte familiar. Rango: 0-1. Intervenida por NAKAMA (tips para padres). Variable exogena. Impacta emotional_state (+0.25).',
   vocational_clarity:'Claridad sobre vocacion y metas futuras. Rango: 0-1. Intervenida por COMPASS (exploracion vocacional). Variable exogena. Impacta motivation (+0.30).',
   motivation:'Motivacion intrinseca hacia el estudio. Rango: 0-1. Intervenida por IKIGAI (coaching motivacional). Impacta study_adherence (+0.35). Alimentada por emotional_state y vocational_clarity.',
-  growth_mindset:'Creencia en que las habilidades se desarrollan con esfuerzo. Rango: 0-1. Intervenida por IKIGAI (intervencion mindset). Variable exogena. Impacta frustration_tolerance (+0.25).'
+  growth_mindset:'Creencia en que las habilidades se desarrollan con esfuerzo. Rango: 0-1. Intervenida por IKIGAI (intervencion mindset). Variable exogena. Impacta frustration_tolerance (+0.25).',
+  nse:'Nivel socioeconomico del estudiante. Rango: 0-1 (mayor = mejor). Variable exogena. Impacta mastery (+0.20), screen_time (-0.15), parental_support (+0.25), study_adherence (+0.15).'
 };
 
 const ARCHETYPE_TOOLTIPS = {
@@ -464,7 +466,7 @@ const ARCHETYPE_TOOLTIPS = {
   Joaquin:'PAES 320. Inicio tardio con growth_mindset alto (0.78): todo bajo excepto mentalidad de crecimiento. Relevante para medir el techo de mejora maxima desde el nivel mas bajo.'
 };
 
-// --- 2. ARISTAS (30) con pesos exactos de la tesis ---
+// --- 2. ARISTAS (34) con pesos exactos de la tesis ---
 const ARISTAS = [
   ['anxiety','mastery',-0.30],
   ['confidence','mastery',+0.20],
@@ -495,12 +497,16 @@ const ARISTAS = [
   ['stress_level','emotional_state',-0.35],
   ['sleep_quality','fatigue',-0.50],
   ['self_efficacy','anxiety',-0.35],
-  ['physical_activity','stress_level',-0.25]
+  ['physical_activity','stress_level',-0.25],
+  ['nse','mastery',+0.20],
+  ['nse','screen_time',-0.15],
+  ['nse','parental_support',+0.25],
+  ['nse','study_adherence',+0.15]
 ];
 
 const EXOGENAS = new Set([
   'metacognition','cognitive_load','screen_time','physical_activity',
-  'social_support','parental_support','vocational_clarity','growth_mindset','time_management'
+  'social_support','parental_support','vocational_clarity','growth_mindset','time_management','nse'
 ]);
 
 const INVERTIDAS = new Set(['anxiety','stress_level','screen_time','cognitive_load','fatigue']);
@@ -510,7 +516,7 @@ const EFECTO_TOTAL_MASTERY = {
   time_management:0.090,screen_time:0.078,metacognition:0.075,cognitive_load:0.036,
   emotional_state:0.032,vocational_clarity:0.032,growth_mindset:0.015,anxiety:0.390,
   self_efficacy:0.300,study_adherence:0.300,confidence:0.200,attention_span:0.300,
-  frustration_tolerance:0.060,fatigue:0.120,social_support:0.010,parental_support:0.008,mastery:1.000
+  frustration_tolerance:0.060,fatigue:0.120,social_support:0.010,parental_support:0.008,mastery:1.000,nse:0.200
 };
 
 const INTERVENIBILIDAD = {
@@ -518,31 +524,31 @@ const INTERVENIBILIDAD = {
   screen_time:0.75,motivation:0.70,metacognition:0.70,growth_mindset:0.65,
   frustration_tolerance:0.60,attention_span:0.55,confidence:0.55,self_efficacy:0.50,
   stress_level:0.50,emotional_state:0.45,anxiety:0.45,fatigue:0.40,cognitive_load:0.40,
-  social_support:0.35,vocational_clarity:0.30,parental_support:0.25,mastery:0.20
+  social_support:0.35,vocational_clarity:0.30,parental_support:0.25,mastery:0.20,nse:0.10
 };
 
 // --- 3. ARQUETIPOS (10 perfiles) ---
 const ARQUETIPOS = {
   Valentina:{nombre:'Valentina',paes_inicial:835,etiqueta:'La Aplicada',adherencia_base:0.85,
-    perfil:{mastery:.78,attention_span:.80,metacognition:.70,cognitive_load:.32,anxiety:.25,confidence:.75,emotional_state:.75,self_efficacy:.80,frustration_tolerance:.72,stress_level:.25,study_adherence:.88,time_management:.78,sleep_quality:.72,screen_time:.25,fatigue:.22,physical_activity:.55,social_support:.68,parental_support:.72,vocational_clarity:.82,motivation:.82,growth_mindset:.68}},
+    perfil:{mastery:.78,attention_span:.80,metacognition:.70,cognitive_load:.32,anxiety:.25,confidence:.75,emotional_state:.75,self_efficacy:.80,frustration_tolerance:.72,stress_level:.25,study_adherence:.88,time_management:.78,sleep_quality:.72,screen_time:.25,fatigue:.22,physical_activity:.55,social_support:.68,parental_support:.72,vocational_clarity:.82,motivation:.82,growth_mindset:.68,nse:.70}},
   Matias:{nombre:'Matias',paes_inicial:680,etiqueta:'El Ansioso',adherencia_base:0.60,
-    perfil:{mastery:.58,attention_span:.52,metacognition:.52,cognitive_load:.58,anxiety:.68,confidence:.38,emotional_state:.42,self_efficacy:.42,frustration_tolerance:.38,stress_level:.62,study_adherence:.62,time_management:.52,sleep_quality:.48,screen_time:.42,fatigue:.52,physical_activity:.38,social_support:.52,parental_support:.58,vocational_clarity:.48,motivation:.52,growth_mindset:.48}},
+    perfil:{mastery:.58,attention_span:.52,metacognition:.52,cognitive_load:.58,anxiety:.68,confidence:.38,emotional_state:.42,self_efficacy:.42,frustration_tolerance:.38,stress_level:.62,study_adherence:.62,time_management:.52,sleep_quality:.48,screen_time:.42,fatigue:.52,physical_activity:.38,social_support:.52,parental_support:.58,vocational_clarity:.48,motivation:.52,growth_mindset:.48,nse:.55}},
   Camila:{nombre:'Camila',paes_inicial:590,etiqueta:'La Resiliente',adherencia_base:0.55,
-    perfil:{mastery:.52,attention_span:.48,metacognition:.42,cognitive_load:.55,anxiety:.42,confidence:.52,emotional_state:.48,self_efficacy:.52,frustration_tolerance:.68,stress_level:.52,study_adherence:.52,time_management:.42,sleep_quality:.42,screen_time:.48,fatigue:.55,physical_activity:.32,social_support:.38,parental_support:.32,vocational_clarity:.38,motivation:.48,growth_mindset:.62}},
+    perfil:{mastery:.52,attention_span:.48,metacognition:.42,cognitive_load:.55,anxiety:.42,confidence:.52,emotional_state:.48,self_efficacy:.52,frustration_tolerance:.68,stress_level:.52,study_adherence:.52,time_management:.42,sleep_quality:.42,screen_time:.48,fatigue:.55,physical_activity:.32,social_support:.38,parental_support:.32,vocational_clarity:.38,motivation:.48,growth_mindset:.62,nse:.35}},
   Benjamin:{nombre:'Benjamin',paes_inicial:500,etiqueta:'El Gamer',adherencia_base:0.35,
-    perfil:{mastery:.42,attention_span:.32,metacognition:.28,cognitive_load:.62,anxiety:.32,confidence:.48,emotional_state:.52,self_efficacy:.38,frustration_tolerance:.58,stress_level:.35,study_adherence:.22,time_management:.18,sleep_quality:.28,screen_time:.88,fatigue:.68,physical_activity:.18,social_support:.58,parental_support:.48,vocational_clarity:.28,motivation:.32,growth_mindset:.52}},
+    perfil:{mastery:.42,attention_span:.32,metacognition:.28,cognitive_load:.62,anxiety:.32,confidence:.48,emotional_state:.52,self_efficacy:.38,frustration_tolerance:.58,stress_level:.35,study_adherence:.22,time_management:.18,sleep_quality:.28,screen_time:.88,fatigue:.68,physical_activity:.18,social_support:.58,parental_support:.48,vocational_clarity:.28,motivation:.32,growth_mindset:.52,nse:.50}},
   Isidora:{nombre:'Isidora',paes_inicial:725,etiqueta:'La Presionada',adherencia_base:0.70,
-    perfil:{mastery:.68,attention_span:.58,metacognition:.58,cognitive_load:.58,anxiety:.72,confidence:.42,emotional_state:.32,self_efficacy:.48,frustration_tolerance:.32,stress_level:.78,study_adherence:.72,time_management:.68,sleep_quality:.38,screen_time:.28,fatigue:.68,physical_activity:.28,social_support:.42,parental_support:.28,vocational_clarity:.52,motivation:.62,growth_mindset:.38}},
+    perfil:{mastery:.68,attention_span:.58,metacognition:.58,cognitive_load:.58,anxiety:.72,confidence:.42,emotional_state:.32,self_efficacy:.48,frustration_tolerance:.32,stress_level:.78,study_adherence:.72,time_management:.68,sleep_quality:.38,screen_time:.28,fatigue:.68,physical_activity:.28,social_support:.42,parental_support:.28,vocational_clarity:.52,motivation:.62,growth_mindset:.38,nse:.65}},
   Diego:{nombre:'Diego',paes_inicial:455,etiqueta:'El Deportista',adherencia_base:0.45,
-    perfil:{mastery:.32,attention_span:.48,metacognition:.28,cognitive_load:.55,anxiety:.32,confidence:.58,emotional_state:.62,self_efficacy:.52,frustration_tolerance:.62,stress_level:.28,study_adherence:.38,time_management:.32,sleep_quality:.62,screen_time:.32,fatigue:.28,physical_activity:.92,social_support:.68,parental_support:.52,vocational_clarity:.32,motivation:.38,growth_mindset:.48}},
+    perfil:{mastery:.32,attention_span:.48,metacognition:.28,cognitive_load:.55,anxiety:.32,confidence:.58,emotional_state:.62,self_efficacy:.52,frustration_tolerance:.62,stress_level:.28,study_adherence:.38,time_management:.32,sleep_quality:.62,screen_time:.32,fatigue:.28,physical_activity:.92,social_support:.68,parental_support:.52,vocational_clarity:.32,motivation:.38,growth_mindset:.48,nse:.40}},
   Francisca:{nombre:'Francisca',paes_inicial:410,etiqueta:'TDAH',adherencia_base:0.35,
-    perfil:{mastery:.28,attention_span:.22,metacognition:.22,cognitive_load:.72,anxiety:.52,confidence:.32,emotional_state:.38,self_efficacy:.28,frustration_tolerance:.28,stress_level:.55,study_adherence:.28,time_management:.18,sleep_quality:.38,screen_time:.68,fatigue:.62,physical_activity:.22,social_support:.42,parental_support:.52,vocational_clarity:.22,motivation:.32,growth_mindset:.42}},
+    perfil:{mastery:.28,attention_span:.22,metacognition:.22,cognitive_load:.72,anxiety:.52,confidence:.32,emotional_state:.38,self_efficacy:.28,frustration_tolerance:.28,stress_level:.55,study_adherence:.28,time_management:.18,sleep_quality:.38,screen_time:.68,fatigue:.62,physical_activity:.22,social_support:.42,parental_support:.52,vocational_clarity:.22,motivation:.32,growth_mindset:.42,nse:.30}},
   Tomas:{nombre:'Tomas',paes_inicial:545,etiqueta:'El Social',adherencia_base:0.50,
-    perfil:{mastery:.42,attention_span:.42,metacognition:.38,cognitive_load:.48,anxiety:.32,confidence:.52,emotional_state:.62,self_efficacy:.48,frustration_tolerance:.48,stress_level:.28,study_adherence:.42,time_management:.38,sleep_quality:.48,screen_time:.55,fatigue:.42,physical_activity:.42,social_support:.88,parental_support:.62,vocational_clarity:.38,motivation:.48,growth_mindset:.52}},
+    perfil:{mastery:.42,attention_span:.42,metacognition:.38,cognitive_load:.48,anxiety:.32,confidence:.52,emotional_state:.62,self_efficacy:.48,frustration_tolerance:.48,stress_level:.28,study_adherence:.42,time_management:.38,sleep_quality:.48,screen_time:.55,fatigue:.42,physical_activity:.42,social_support:.88,parental_support:.62,vocational_clarity:.38,motivation:.48,growth_mindset:.52,nse:.45}},
   Martina:{nombre:'Martina',paes_inicial:635,etiqueta:'La Quemada',adherencia_base:0.45,
-    perfil:{mastery:.58,attention_span:.38,metacognition:.48,cognitive_load:.68,anxiety:.62,confidence:.38,emotional_state:.18,self_efficacy:.32,frustration_tolerance:.22,stress_level:.72,study_adherence:.52,time_management:.48,sleep_quality:.28,screen_time:.38,fatigue:.88,physical_activity:.12,social_support:.32,parental_support:.42,vocational_clarity:.52,motivation:.38,growth_mindset:.28}},
+    perfil:{mastery:.58,attention_span:.38,metacognition:.48,cognitive_load:.68,anxiety:.62,confidence:.38,emotional_state:.18,self_efficacy:.32,frustration_tolerance:.22,stress_level:.72,study_adherence:.52,time_management:.48,sleep_quality:.28,screen_time:.38,fatigue:.88,physical_activity:.12,social_support:.32,parental_support:.42,vocational_clarity:.52,motivation:.38,growth_mindset:.28,nse:.55}},
   Joaquin:{nombre:'Joaquin',paes_inicial:320,etiqueta:'El Tardio',adherencia_base:0.30,
-    perfil:{mastery:.22,attention_span:.32,metacognition:.18,cognitive_load:.58,anxiety:.42,confidence:.28,emotional_state:.38,self_efficacy:.22,frustration_tolerance:.38,stress_level:.45,study_adherence:.18,time_management:.12,sleep_quality:.38,screen_time:.62,fatigue:.52,physical_activity:.28,social_support:.32,parental_support:.28,vocational_clarity:.12,motivation:.22,growth_mindset:.78}}
+    perfil:{mastery:.22,attention_span:.32,metacognition:.18,cognitive_load:.58,anxiety:.42,confidence:.28,emotional_state:.38,self_efficacy:.22,frustration_tolerance:.38,stress_level:.45,study_adherence:.18,time_management:.12,sleep_quality:.38,screen_time:.62,fatigue:.52,physical_activity:.28,social_support:.32,parental_support:.28,vocational_clarity:.12,motivation:.22,growth_mindset:.78,nse:.25}}
 };
 
 // --- 4. INTERVENCIONES ---
@@ -606,6 +612,10 @@ class PRNG {
 }
 
 // --- 6. PROPAGACION CAUSAL (BFS por capas, sin doble atenuacion) ---
+function sigmaCausal(x) {
+  return 2 / (1 + Math.exp(-5 * x)) - 1;
+}
+
 function propagarCausal(estado, deltaVar, varName, gamma=0.7) {
   const nuevo = {...estado};
   nuevo[varName] = Math.max(0, Math.min(1, nuevo[varName] + deltaVar));
@@ -618,7 +628,7 @@ function propagarCausal(estado, deltaVar, varName, gamma=0.7) {
       visitados.add(varOrig);
       for (const [origen, destino, peso] of ARISTAS) {
         if (origen === varOrig && !visitados.has(destino)) {
-          const dp = deltaO * peso * Math.pow(gamma, capa);
+          const dp = sigmaCausal(deltaO * peso) * Math.pow(gamma, capa);
           nuevosAfectados[destino] = (nuevosAfectados[destino] || 0) + dp;
         }
       }
@@ -977,6 +987,8 @@ function loadRandomProfile() {
   base.social_support = clamp(0.2 + rng.next() * 0.6 + rng.normal(0, 0.1));
   base.parental_support = clamp(0.2 + rng.next() * 0.5 + rng.normal(0, 0.1));
   base.vocational_clarity = clamp(0.1 + rng.next() * 0.6 + rng.normal(0, 0.1));
+  // NSE
+  base.nse = clamp(0.15 + rng.next() * 0.7 + rng.normal(0, 0.1));
 
   for (const v of VARIABLES) {
     const val = base[v] !== undefined ? base[v] : clamp(0.3 + rng.next() * 0.4);

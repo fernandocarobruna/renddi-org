@@ -3084,3 +3084,19 @@ Yeager, D. S., Hanselman, P., Walton, G. M., Murray, J. S., Crosnoe, R., Muller,
 Yerkes, R. M., y Dodson, J. D. (1908). The relation of strength of stimulus to rapidity of habit-formation. *Journal of Comparative Neurology and Psychology*, 18(5), 459–482.
 
 Zimmerman, B. J. (2002). Becoming a self-regulated learner: An overview. *Theory into Practice*, 41(2), 64–70.
+
+---
+
+## Nota de Actualización v8.1 (2026-03-29 02:01 CLT)
+
+### Cambios al modelo que afectan las acciones pedagógicas
+
+**D3 — NSE como variable v22 exógena:**
+NSE se agrega como variable exógena (no intervenible). Ningún agente escribe sobre NSE. Su efecto se propaga automáticamente a mastery (+0.20), screen_time (-0.15), parental_support (+0.25) y study_adherence (+0.15). Los protocolos de intervención de TAKUMI no cambian directamente, pero el sistema ahora puede contextualizar las recomendaciones según el NSE del estudiante.
+
+**D2 — Propagación sigmoide:**
+El cálculo de efectos cascada en las intervenciones ahora usa propagación sigmoidal en vez de lineal. Esto significa que intervenciones de gran magnitud (ej: reducir stress_level en -0.40) producirán efectos más moderados en las variables destino, evitando predicciones infladas. Los protocolos de TAKUMI se benefician: las estimaciones de impacto son más realistas.
+
+Modelo actualizado: 22 variables, 34 aristas, propagación sigmoidal.
+
+---

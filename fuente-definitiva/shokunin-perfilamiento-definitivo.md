@@ -3611,3 +3611,21 @@ Wroblewski, L. (2011). *Mobile first*. A Book Apart.
 ---
 
 *Fin de la tesis SHOKUNIN.*
+
+---
+
+## Nota de Actualización v8.1 (2026-03-29 02:01 CLT)
+
+### Cambios al modelo que afectan al diagnóstico (Primera Misión)
+
+**D3 — NSE como variable v22 exógena:**
+Se agrega un ítem al Bloque 1 (Auto-reporte gamificado) para capturar el nivel socioeconómico del estudiante. Proxy operacional: tipo de establecimiento educacional (municipal = 0.25, subvencionado = 0.50, pagado = 0.75) + indicador de becas. Variable exógena no intervenible por los agentes.
+
+Impacto en Primera Misión: 1 ítem adicional (slider visual). Tiempo adicional estimado: 10-15 segundos. Total Primera Misión: ~8-10 minutos (sin cambio significativo).
+
+**D2 — Propagación sigmoide:**
+El algoritmo de propagación causal cambia de lineal a sigmoidal: δ[j] = Σ σ(δ[i]·wij)·γ^k donde σ(x) = 2/(1+e^(-5x))-1. Esto no afecta el diagnóstico inicial sino la actualización dinámica del perfil durante el uso. Los umbrales de SHOKUNIN se mantienen.
+
+Modelo actualizado: 22 variables, 34 aristas, propagación sigmoidal.
+
+---

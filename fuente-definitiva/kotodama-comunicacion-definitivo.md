@@ -2191,3 +2191,21 @@ Antes de implementar cualquier mensaje nuevo en la app:
 ---
 
 *Documento generado por el equipo KOTODAMA. Todas las referencias son verificables y corresponden a publicaciones academicas reales. Los pesos del grafo causal estan basados en la Tesis v2.0 del sistema SENSEI.*
+
+---
+
+## Nota de Actualización v8.1 (2026-03-29 02:01 CLT)
+
+### Cambios al modelo que afectan la comunicación
+
+**D3 — NSE como variable v22 exógena:**
+La variable NSE permite a KOTODAMA adaptar el registro comunicacional según el contexto socioeconómico. Ejemplo: para estudiantes de NSE bajo (municipal), evitar referencias a recursos pagados (preuniversitarios, tutores privados) y priorizar recursos gratuitos (bibliotecas, becas, programas PACE). Para estudiantes de NSE alto, el tono puede asumir mayor familiaridad con el proceso universitario.
+
+Las 12 personas comunicacionales (10 base + Andrés + Javiera) ya contemplan parcialmente estas diferencias (Andrés y Javiera tienen NSE bajo). La variable v22 formaliza esta distinción en el grafo.
+
+**D2 — Propagación sigmoide:**
+No afecta directamente los protocolos de comunicación. Los mensajes de KOTODAMA se generan a partir del estado del perfil, no del algoritmo de propagación.
+
+Modelo actualizado: 22 variables, 34 aristas, propagación sigmoidal.
+
+---
