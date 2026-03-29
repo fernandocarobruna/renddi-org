@@ -8,6 +8,8 @@ const SECTIONS = [
   { key: "overview", label: "Vision General", icon: "overview" },
   { key: "grafo", label: "Grafo Interactivo", icon: "grafo" },
   { key: "simulador", label: "Simulador", icon: "simulador" },
+  { key: "marco-teorico", label: "Marco Teorico", icon: "marco" },
+  { key: "dictamen", label: "Dictamen Experto", icon: "dictamen" },
   { key: "documentos", label: "Documentos", icon: "docs" },
   { key: "equipo", label: "Equipo & Agentes", icon: "equipo" },
 ];
@@ -229,6 +231,52 @@ export default function Dashboard({ email }: { email: string }) {
               </a>
             </div>
             <GrafoEmbed src="/api/private2026/simulador" title="Simulador de Intervenciones" />
+          </div>
+        )}
+
+        {/* ─── MARCO TEÓRICO ─── */}
+        {activeTab === "marco-teorico" && (
+          <div>
+            <div className="embed-header">
+              <div>
+                <h3 style={{ margin: 0, fontSize: 15 }}>Marco Teorico &amp; Fundamentacion Cientifica</h3>
+                <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>
+                  120+ investigadores, 13 marcos teoricos, 21 variables, 30 aristas causales, 10 arquetipos
+                </p>
+              </div>
+              <a
+                href="/api/private2026/marco-teorico"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary"
+              >
+                Abrir en nueva ventana
+              </a>
+            </div>
+            <GrafoEmbed src="/api/private2026/marco-teorico" title="Marco Teorico RENDDI" />
+          </div>
+        )}
+
+        {/* ─── DICTAMEN EXPERTO ─── */}
+        {activeTab === "dictamen" && (
+          <div>
+            <div className="embed-header">
+              <div>
+                <h3 style={{ margin: 0, fontSize: 15 }}>Dictamen Experto Independiente</h3>
+                <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>
+                  Revision academica del framework por experto en Educational Data Mining y Learning Analytics
+                </p>
+              </div>
+              <a
+                href="/api/private2026/dictamen-experto"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary"
+              >
+                Abrir en nueva ventana
+              </a>
+            </div>
+            <GrafoEmbed src="/api/private2026/dictamen-experto" title="Dictamen Experto" />
           </div>
         )}
 

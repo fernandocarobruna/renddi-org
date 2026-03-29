@@ -7,6 +7,8 @@ const ALLOWED_FILES: Record<string, string> = {
   "grafo": "grafo-interactivo-v8.html",
   "agentes": "ecosistema-agentes-animacion.html",
   "simulador": "simulador-interactivo.html",
+  "marco-teorico": "marco-teorico.html",
+  "dictamen-experto": "dictamen-experto.html",
 };
 
 export async function GET(
