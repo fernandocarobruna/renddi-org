@@ -1,5 +1,6 @@
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { redirect } from "next/navigation";
+import SectionNav from "@/components/SectionNav";
 
 export default async function DictamenExpertoPage() {
   const supabase = await createServerSupabaseClient();
@@ -12,10 +13,13 @@ export default async function DictamenExpertoPage() {
   }
 
   return (
-    <iframe
-      src="/api/private2026/dictamen-experto"
-      style={{ width: "100vw", height: "100vh", border: "none", position: "fixed", top: 0, left: 0 }}
-      title="Dictamen Experto RENDDI"
-    />
+    <>
+      <SectionNav active="dictamen-experto" />
+      <iframe
+        src="/api/private2026/dictamen-experto"
+        style={{ width: "100vw", height: "100vh", border: "none", position: "fixed", top: 0, left: 0 }}
+        title="Dictamen Experto RENDDI"
+      />
+    </>
   );
 }

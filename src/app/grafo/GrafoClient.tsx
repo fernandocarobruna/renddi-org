@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { createBrowserClient } from "@supabase/ssr";
+import SectionNav from "@/components/SectionNav";
 
 interface User {
   id: string;
@@ -110,6 +111,9 @@ export default function GrafoClient({ email, isAdmin }: { email: string; isAdmin
 
   return (
     <>
+      {/* Navigation bar */}
+      <SectionNav active="grafo" />
+
       {/* User menu floating */}
       <div style={{ position: "fixed", top: 12, right: 16, zIndex: 99999, fontFamily: "'Inter', system-ui, sans-serif" }}>
         <button onClick={() => { setMenuOpen(!menuOpen); setAdminOpen(false); }} style={s({ background: "rgba(20,20,30,0.9)", border: "1px solid #F39C12", color: "#F39C12", padding: "8px 16px", borderRadius: 8, cursor: "pointer", fontSize: 13, fontWeight: 600, backdropFilter: "blur(8px)" })}>
