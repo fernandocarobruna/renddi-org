@@ -241,7 +241,7 @@ export default function Dashboard({ email }: { email: string }) {
               <div>
                 <h3 style={{ margin: 0, fontSize: 15 }}>Marco Teorico &amp; Fundamentacion Cientifica</h3>
                 <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>
-                  120+ investigadores, 13 marcos teoricos, 21 variables, 30 aristas causales, 10 arquetipos
+                  120+ investigadores, 13 marcos teoricos, 21 variables, 30 aristas causales, 12 arquetipos
                 </p>
               </div>
               <a

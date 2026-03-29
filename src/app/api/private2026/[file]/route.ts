@@ -10,6 +10,7 @@ const ALLOWED_FILES: Record<string, { filename: string; contentType: string }> =
   "marco-teorico": { filename: "marco-teorico.html", contentType: "text/html; charset=utf-8" },
   "dictamen-experto": { filename: "dictamen-experto.html", contentType: "text/html; charset=utf-8" },
   "paper-validacion": { filename: "Paper-Validacion-Matematica-Grafo-SENSEI.pdf", contentType: "application/pdf" },
+  "addenda-paper": { filename: "addenda-paper-validacion.html", contentType: "text/html; charset=utf-8" },
 };
 
 export async function GET(

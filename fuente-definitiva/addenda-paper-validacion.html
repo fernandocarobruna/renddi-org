@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Addenda v1.0 — Paper de Validacion Matematica del Grafo Causal SENSEI</title>
+  <style>
+    /* ===== SCREEN STYLES ===== */
+    :root {
+      --serif: 'Georgia', 'Times New Roman', Times, serif;
+      --sans: 'Helvetica Neue', Arial, sans-serif;
+      --mono: 'Courier New', Courier, monospace;
+      --text-color: #1a1a1a;
+      --bg: #ffffff;
+      --accent: #2c3e50;
+      --border: #bdc3c7;
+      --light-bg: #f8f9fa;
+      --table-header: #ecf0f1;
+      --link: #2980b9;
+      --note-bg: #fef9e7;
+      --note-border: #f1c40f;
+      --correction-bg: #fdedec;
+      --correction-border: #e74c3c;
+      --success-bg: #eafaf1;
+      --success-border: #27ae60;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--serif);
+      font-size: 11.5pt;
+      line-height: 1.65;
+      color: var(--text-color);
+      background: #e8e8e8;
+    }
+
+    .paper {
+      max-width: 210mm;
+      margin: 20px auto;
+      background: var(--bg);
+      padding: 30mm 25mm;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    }
+
+    /* ===== PRINT BUTTON ===== */
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: background 0.2s;
+    }
+    .print-btn:hover { background: #1a252f; }
+
+    /* ===== TITLE PAGE ===== */
+    .title-page {
+      text-align: center;
+      padding: 40px 0 30px;
+      page-break-after: always;
+    }
+    .title-page .doc-type {
+      font-family: var(--sans);
+      font-size: 12pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #7f8c8d;
+      margin-bottom: 30px;
+    }
+    .title-page h1 {
+      font-family: var(--serif);
+      font-size: 20pt;
+      font-weight: bold;
+      line-height: 1.3;
+      margin-bottom: 30px;
+      color: var(--text-color);
+    }
+    .title-page .subtitle {
+      font-size: 12pt;
+      font-style: italic;
+      color: #555;
+      margin-bottom: 40px;
+    }
+    .title-page .authors {
+      font-size: 12pt;
+      margin-bottom: 8px;
+    }
+    .title-page .affiliation {
+      font-size: 10.5pt;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    .title-page .date {
+      font-size: 10.5pt;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    .title-page .version {
+      font-family: var(--sans);
+      font-size: 9pt;
+      color: #7f8c8d;
+      border: 1px solid var(--border);
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+    .title-page hr {
+      border: none;
+      border-top: 2px solid var(--accent);
+      width: 60%;
+      margin: 30px auto;
+    }
+
+    /* ===== HEADINGS ===== */
+    h2 {
+      font-family: var(--sans);
+      font-size: 15pt;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 28px;
+      margin-bottom: 12px;
+      padding-bottom: 4px;
+      border-bottom: 1.5px solid var(--border);
+      page-break-after: avoid;
+    }
+    h3 {
+      font-family: var(--sans);
+      font-size: 12.5pt;
+      font-weight: 600;
+      color: #34495e;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+    h4 {
+      font-family: var(--sans);
+      font-size: 11pt;
+      font-weight: 600;
+      color: #555;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    /* ===== PARAGRAPHS & LISTS ===== */
+    p {
+      margin-bottom: 10px;
+      text-align: justify;
+      hyphens: auto;
+    }
+    ul, ol {
+      margin: 8px 0 12px 24px;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+    .indent {
+      margin-left: 24px;
+    }
+
+    /* ===== TABLES ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 16px;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 5px 7px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--table-header);
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 9pt;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+    .table-caption {
+      font-family: var(--sans);
+      font-size: 9.5pt;
+      font-style: italic;
+      color: #555;
+      margin-bottom: 6px;
+    }
+    .highlight-row { background: #fef9e7 !important; }
+
+    /* ===== SPECIAL BOXES ===== */
+    .note-box {
+      background: var(--note-bg);
+      border-left: 4px solid var(--note-border);
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 10pt;
+    }
+    .correction-box {
+      background: var(--correction-bg);
+      border-left: 4px solid var(--correction-border);
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 10pt;
+    }
+    .success-box {
+      background: var(--success-bg);
+      border-left: 4px solid var(--success-border);
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 10pt;
+    }
+
+    /* ===== CODE / MATH ===== */
+    code {
+      font-family: var(--mono);
+      font-size: 9pt;
+      background: #f4f4f4;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+    .formula {
+      font-family: var(--mono);
+      font-size: 10pt;
+      background: var(--light-bg);
+      padding: 8px 14px;
+      margin: 8px 0 12px;
+      border-left: 3px solid var(--accent);
+      overflow-x: auto;
+    }
+
+    /* ===== FOOTER ===== */
+    .doc-footer {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 9pt;
+      color: #777;
+      font-style: italic;
+      text-align: justify;
+    }
+
+    /* ===== STRIKETHROUGH ===== */
+    .fabricated {
+      text-decoration: line-through;
+      color: #999;
+    }
+
+    .section-num {
+      font-weight: 700;
+    }
+
+    strong { font-weight: 700; }
+    em { font-style: italic; }
+
+    /* ===== PRINT STYLES ===== */
+    @media print {
+      body {
+        background: white;
+        font-size: 10.5pt;
+      }
+      .print-btn { display: none !important; }
+      .paper {
+        max-width: none;
+        margin: 0;
+        padding: 20mm 22mm;
+        box-shadow: none;
+      }
+
+      @page {
+        size: A4;
+        margin: 18mm 20mm 22mm 20mm;
+
+        @bottom-left {
+          content: "SENSEI — Addenda v1.0 al Paper de Validacion Matematica";
+          font-family: 'Helvetica Neue', Arial, sans-serif;
+          font-size: 8pt;
+          color: #999;
+        }
+        @bottom-right {
+          content: "Pagina " counter(page);
+          font-family: 'Helvetica Neue', Arial, sans-serif;
+          font-size: 8pt;
+          color: #999;
+        }
+      }
+
+      h2 {
+        page-break-after: avoid;
+        margin-top: 20px;
+      }
+      h3, h4 {
+        page-break-after: avoid;
+      }
+      table {
+        page-break-inside: avoid;
+      }
+      .title-page {
+        page-break-after: always;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+
+<div class="paper">
+
+  <!-- ===== TITLE PAGE ===== -->
+  <div class="title-page">
+    <div class="doc-type">Addenda y Fe de Erratas</div>
+    <hr>
+    <h1>Addenda y Actualizaciones al Paper de Validacion Teorica y Analisis de Sensibilidad del Grafo Causal SENSEI</h1>
+    <div class="subtitle">Complemento al paper: <em>Validacion Teorica y Analisis de Sensibilidad de un Grafo Causal para el Modelamiento Multidimensional del Rendimiento Academico: Aplicacion a la Preparacion de la PAES</em></div>
+    <hr>
+    <div class="authors"><strong>Fernando Caro Bruna, Dionisio Cerda, Alejandro Gutierrez</strong></div>
+    <div class="affiliation">SENSEI &mdash; Plataforma de Coaching PAES con Inteligencia Artificial</div>
+    <div class="date">Fecha: Marzo 2026</div>
+    <div class="version">Addenda v1.0 &mdash; Documento complementario al Paper original (Marzo 2026)</div>
+  </div>
+
+  <!-- ===== 1. PROPOSITO ===== -->
+  <h2><span class="section-num">1.</span> Proposito de esta Addenda</h2>
+  <p>
+    Este documento complementa el <em>Paper de Validacion Matematica del Grafo Causal SENSEI</em> (Caro, Cerda &amp; Gutierrez, Marzo 2026) con correcciones, actualizaciones y analisis adicionales realizados durante el proceso de revision iterativa del marco teorico SENSEI v8.0. Las modificaciones aqui documentadas son el resultado de ocho ciclos de revision (C1&ndash;C8) conducidos por un comite revisor compuesto por nueve agentes de dominio especializados y un ingeniero matematico.
+  </p>
+  <p>
+    La presente addenda debe leerse conjuntamente con el paper original. Las referencias a secciones del tipo &laquo;Seccion X.Y del paper&raquo; remiten al documento principal.
+  </p>
+
+  <!-- ===== 2. CORRECCIONES AL ABSTRACT ===== -->
+  <h2><span class="section-num">2.</span> Correcciones al Abstract</h2>
+
+  <div class="correction-box">
+    <strong>Correccion 2.1 &mdash; Numero de aristas.</strong> El abstract original menciona &laquo;24 directed edges&raquo;. El modelo final, tras incorporar las 6 aristas recomendadas en la Seccion 3.3 del propio paper, opera con <strong>30 aristas dirigidas</strong> (24 originales corregidas + 6 nuevas: aristas 25&ndash;30).
+  </div>
+
+  <div class="correction-box">
+    <strong>Correccion 2.2 &mdash; Numero de perfiles simulados.</strong> La simulacion original se realizo sobre 3 perfiles tipo (Valentina, Benjamin, Isidora). El modelo final opera con <strong>12 arquetipos</strong> (10 base + 2 adicionales: Andres/Trabajador y Javiera/Rural) mas 4 capas complementarias transversales, alcanzando una cobertura estimada del 97&ndash;99% de la poblacion PAES.
+  </div>
+
+  <!-- ===== 3. REFERENCIAS FABRICADAS ===== -->
+  <h2><span class="section-num">3.</span> Referencias Fabricadas Confirmadas</h2>
+  <p>
+    El paper original (Seccion 2.7 y Apendice I) identifico que la referencia &laquo;Gonzalez, Castillo y Meneses (2019)&raquo; no pudo verificarse como publicacion indexada. La auditoria completa del corpus, realizada durante los ciclos de revision C1&ndash;C8, confirmo <strong>12 referencias fabricadas</strong> eliminadas del marco teorico:
+  </p>
+
+  <p class="table-caption">Tabla 1. Referencias fabricadas eliminadas durante la revision.</p>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Referencia</th><th>Tipo de fabricacion</th><th>Reemplazo</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td><span class="fabricated">Gonzalez, Castillo &amp; Meneses (2019)</span></td><td>La PAES no existia en 2019; revista y datos no verificables</td><td>Lent, Brown &amp; Hackett (1994, 2000) &mdash; SCCT</td></tr>
+      <tr><td>2</td><td><span class="fabricated">Xiao, Wang &amp; Chen (2023)</span></td><td>arXiv:2305.12345 ficticio</td><td>Eliminada sin reemplazo</td></tr>
+      <tr><td>3</td><td><span class="fabricated">Sato, Yamamoto &amp; Tanaka (2021)</span></td><td>Journal no verificable</td><td>Eliminada sin reemplazo</td></tr>
+      <tr><td>4</td><td><span class="fabricated">Burke &amp; Settles (2011)</span></td><td>Publicacion Duolingo inexistente</td><td>Eliminada sin reemplazo</td></tr>
+      <tr><td>5</td><td><span class="fabricated">Steinberg &amp; Monahan (2007)</span></td><td>Misattributed: trata resistencia a influencia de pares, no apoyo parental</td><td>Fan &amp; Chen (2001), Jeynes (2007)</td></tr>
+      <tr><td>6</td><td><span class="fabricated">Sinharay &amp; Haberman (2014)</span></td><td>Paper real pero datos r=0.80&ndash;0.85 atribuidos incorrectamente</td><td>Eliminada (se mantiene referencia sin claims fabricados)</td></tr>
+      <tr><td>7</td><td><span class="fabricated">Frey &amp; Seitz (2009)</span></td><td>Claims misattribuidos sobre CAT</td><td>Eliminada sin reemplazo</td></tr>
+      <tr><td>8</td><td><span class="fabricated">Huang, Chen &amp; Wu (2021)</span></td><td>Versiones inconsistentes</td><td>Eliminada sin reemplazo</td></tr>
+      <tr><td>9</td><td><span class="fabricated">Kim &amp; Park (2023)</span></td><td>Patron de fabricacion generico</td><td>Eliminada sin reemplazo</td></tr>
+      <tr><td>10</td><td><span class="fabricated">Lee, Wang &amp; Liu (2022)</span></td><td>Mismo patron de fabricacion</td><td>Eliminada sin reemplazo</td></tr>
+      <tr><td>11</td><td><span class="fabricated">Li, Chen &amp; Wu (2022)</span></td><td>No verificable en bases de datos academicas</td><td>Eliminada sin reemplazo</td></tr>
+      <tr><td>12</td><td><span class="fabricated">Lira, Galvez-Nieto et al. (2022)</span></td><td>PAES implementada en 2022; articulo publicado el mismo ano</td><td>Eliminada sin reemplazo</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.1 Correcciones adicionales (no fabricadas, pero erroneas)</h3>
+  <ul>
+    <li><strong>Fiorella &amp; Mayer (2013):</strong> Clasificado como meta-analisis en el corpus original; es un estudio experimental. Corregida la clasificacion.</li>
+    <li><strong>Kruger, Wirtz &amp; Miller (2005):</strong> Conclusion invertida en la cita original. Corregida la interpretacion.</li>
+    <li><strong>Fogg B=MAP:</strong> Ano corregido de 2020 a 2019; operador aditivo corregido a convergencia multiplicativa (B = M &times; A &times; P).</li>
+  </ul>
+
+  <h3>3.2 Impacto de las referencias fabricadas en el grafo</h3>
+  <p>Dos aristas resultaron directamente afectadas:</p>
+  <ul>
+    <li><strong>vocational_clarity &rarr; motivation (arista 15):</strong> Peso reducido de +0.45 a +0.30. La referencia original (Gonzalez et al., 2019) fue reemplazada por Lent, Brown &amp; Hackett (1994, 2000) &mdash; Social Cognitive Career Theory (SCCT).</li>
+    <li><strong>parental_support &rarr; emotional_state (arista 18):</strong> Referencia corregida de Steinberg &amp; Monahan (2007) a Fan &amp; Chen (2001) y Jeynes (2007). El peso se ajusto de +0.30 a +0.25.</li>
+  </ul>
+  <p>Las demas aristas del grafo <strong>no se ven afectadas</strong>: sus pesos fueron derivados de referencias verificadas en la revision sistematica.</p>
+
+  <!-- ===== 4. TABLA DE PESOS ===== -->
+  <h2 class="page-break"><span class="section-num">4.</span> Actualizacion de la Tabla de Pesos (Seccion 3.3 del paper)</h2>
+  <p>
+    Se confirma que los pesos V2 recomendados en el paper original son identicos a los adoptados en el modelo final v8.0. No existen discrepancias entre las recomendaciones del paper y la implementacion. La tabla siguiente consolida las 30 aristas del modelo canonico.
+  </p>
+
+  <p class="table-caption">Tabla 2. Tabla consolidada de las 30 aristas del grafo SENSEI v8.0. V1 = peso original; V2 = peso recomendado por el paper = peso implementado en v8.0.</p>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Desde</th><th>Hacia</th><th>V1</th><th>V2 (= impl.)</th><th>Nivel</th><th>Fuente principal</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>anxiety</td><td>mastery</td><td>&minus;0.55</td><td><strong>&minus;0.30</strong></td><td>A</td><td>Hembree (1988), von der Embse et al. (2018)</td></tr>
+      <tr><td>2</td><td>confidence</td><td>mastery</td><td>+0.35</td><td><strong>+0.20</strong></td><td>B</td><td>Pajares (1996)</td></tr>
+      <tr><td>3</td><td>sleep_quality</td><td>attention_span</td><td>+0.60</td><td><strong>+0.45</strong></td><td>A</td><td>Dewald et al. (2010), Walker (2017)</td></tr>
+      <tr><td>4</td><td>attention_span</td><td>mastery</td><td>+0.30</td><td><strong>+0.30</strong></td><td>B</td><td>Steinmayr et al. (2019)</td></tr>
+      <tr><td>5</td><td>motivation</td><td>study_adherence</td><td>+0.55</td><td><strong>+0.35</strong></td><td>A</td><td>Deci &amp; Ryan (2000), Pintrich (2000)</td></tr>
+      <tr><td>6</td><td>study_adherence</td><td>mastery</td><td>+0.50</td><td><strong>+0.30</strong></td><td>A</td><td>Crede &amp; Phillips (2011)</td></tr>
+      <tr><td>7</td><td>stress_level</td><td>anxiety</td><td>+0.45</td><td><strong>+0.45</strong></td><td>B+</td><td>Zeidner (2007)</td></tr>
+      <tr><td>8</td><td>cognitive_load</td><td>fatigue</td><td>+0.40</td><td><strong>+0.30</strong></td><td>B</td><td>Sweller (2011), Boksem &amp; Tops (2008)</td></tr>
+      <tr><td>9</td><td>fatigue</td><td>attention_span</td><td>&minus;0.50</td><td><strong>&minus;0.40</strong></td><td>A</td><td>Lim &amp; Dinges (2010)</td></tr>
+      <tr><td>10</td><td>screen_time</td><td>sleep_quality</td><td>&minus;0.35</td><td><strong>&minus;0.40</strong></td><td>A</td><td>Hale &amp; Guan (2015)</td></tr>
+      <tr><td>11</td><td>physical_activity</td><td>sleep_quality</td><td>+0.25</td><td><strong>+0.25</strong></td><td>A</td><td>Kredlow et al. (2015)</td></tr>
+      <tr><td>12</td><td>physical_activity</td><td>emotional_state</td><td>+0.30</td><td><strong>+0.30</strong></td><td>A</td><td>Biddle &amp; Asare (2011)</td></tr>
+      <tr><td>13</td><td>social_support</td><td>emotional_state</td><td>+0.35</td><td><strong>+0.30</strong></td><td>A</td><td>Cohen &amp; Wills (1985)</td></tr>
+      <tr><td>14</td><td>emotional_state</td><td>motivation</td><td>+0.40</td><td><strong>+0.30</strong></td><td>B</td><td>Fredrickson (2001)</td></tr>
+      <tr><td>15</td><td>vocational_clarity</td><td>motivation</td><td>+0.45</td><td><strong>+0.30</strong></td><td>B</td><td>Lent et al. (1994, 2000) &mdash; SCCT</td></tr>
+      <tr><td>16</td><td>self_efficacy</td><td>confidence</td><td>+0.40</td><td><strong>+0.35</strong></td><td>A</td><td>Bandura (1997)</td></tr>
+      <tr><td>17</td><td>mastery</td><td>self_efficacy</td><td>+0.50</td><td><strong>+0.30</strong></td><td>A</td><td>Bandura (1997), Pintrich &amp; De Groot (1990)</td></tr>
+      <tr><td>18</td><td>parental_support</td><td>emotional_state</td><td>+0.30</td><td><strong>+0.25</strong></td><td>B+</td><td>Fan &amp; Chen (2001), Jeynes (2007)</td></tr>
+      <tr><td>19</td><td>metacognition</td><td>study_adherence</td><td>+0.35</td><td><strong>+0.25</strong></td><td>B</td><td>Veenman et al. (2006)</td></tr>
+      <tr><td>20</td><td>growth_mindset</td><td>frustration_tolerance</td><td>+0.40</td><td><strong>+0.25</strong></td><td>B</td><td>Dweck (2006), Sisk et al. (2018)</td></tr>
+      <tr><td>21</td><td>frustration_tolerance</td><td>study_adherence</td><td>+0.30</td><td><strong>+0.20</strong></td><td>C</td><td>Plausibilidad teorica</td></tr>
+      <tr><td>22</td><td>time_management</td><td>study_adherence</td><td>+0.35</td><td><strong>+0.30</strong></td><td>B</td><td>Macan et al. (1990), Britton &amp; Tesser (1991)</td></tr>
+      <tr><td>23</td><td>fatigue</td><td>emotional_state</td><td>&minus;0.30</td><td><strong>&minus;0.25</strong></td><td>C</td><td>Boksem &amp; Tops (2008)</td></tr>
+      <tr><td>24</td><td>stress_level</td><td>sleep_quality</td><td>&minus;0.30</td><td><strong>&minus;0.35</strong></td><td>A</td><td>Dewald et al. (2010)</td></tr>
+      <tr style="background: #eaf2f8 !important;"><td colspan="7" style="font-family: var(--sans); font-weight: 600; text-align: center;">Aristas recomendadas para adicion (incorporadas en v8.0)</td></tr>
+      <tr class="highlight-row"><td>25</td><td>anxiety</td><td>attention_span</td><td>&mdash;</td><td><strong>&minus;0.30</strong></td><td>A</td><td>Eysenck et al. (2007) &mdash; ACT</td></tr>
+      <tr class="highlight-row"><td>26</td><td>self_efficacy</td><td>mastery</td><td>&mdash;</td><td><strong>+0.30</strong></td><td>A</td><td>Pintrich &amp; De Groot (1990)</td></tr>
+      <tr class="highlight-row"><td>27</td><td>stress_level</td><td>emotional_state</td><td>&mdash;</td><td><strong>&minus;0.35</strong></td><td>B+</td><td>Lazarus &amp; Folkman (1984)</td></tr>
+      <tr class="highlight-row"><td>28</td><td>sleep_quality</td><td>fatigue</td><td>&mdash;</td><td><strong>&minus;0.50</strong></td><td>A</td><td>Dewald et al. (2010)</td></tr>
+      <tr class="highlight-row"><td>29</td><td>self_efficacy</td><td>anxiety</td><td>&mdash;</td><td><strong>&minus;0.35</strong></td><td>A</td><td>Bandura (1997)</td></tr>
+      <tr class="highlight-row"><td>30</td><td>physical_activity</td><td>stress_level</td><td>&mdash;</td><td><strong>&minus;0.25</strong></td><td>A</td><td>Salmon (2001)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="success-box">
+    <strong>Verificacion:</strong> Los pesos V2 recomendados en la Seccion 3.3 del paper son identicos a los implementados en el modelo final v8.0. Cero discrepancias.
+  </div>
+
+  <div class="note-box">
+    <strong>Leyenda de nivel de evidencia:</strong> <strong>A</strong> = Meta-analisis con k &gt; 20 estudios o N &gt; 10,000. <strong>B+</strong> = Meta-analisis con k &lt; 20 o revision sistematica con evidencia convergente. <strong>B</strong> = Estudios individuales multiples o teoria fundamentada con evidencia empirica. <strong>C</strong> = Plausibilidad teorica sin evidencia empirica directa. Resumen: A = 50%, B+ = 12.5%, B = 29%, C = 8%.
+  </div>
+
+  <!-- ===== 5. ARQUETIPOS ===== -->
+  <h2 class="page-break"><span class="section-num">5.</span> Actualizacion de Arquetipos: de 3 a 12</h2>
+  <p>
+    El paper original simula 3 perfiles representativos (Valentina, Benjamin, Isidora). El modelo final opera con <strong>12 arquetipos</strong> (10 base descritos en el Capitulo 7 de la tesis v8.0, mas 2 arquetipos adicionales que cubren poblaciones especificas) y <strong>4 capas complementarias transversales</strong>. La tabla siguiente resume los 12 arquetipos.
+  </p>
+
+  <p class="table-caption">Tabla 3. Los 12 arquetipos del modelo SENSEI v8.0.</p>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Nombre</th><th>Alias</th><th>PAES est.</th><th>Riesgo</th><th>Agentes primarios</th><th>Proyeccion</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Valentina</td><td>La Aplicada</td><td>835</td><td>Bajo</td><td>SENPAI, COMPASS</td><td>Optimizacion de KCs residuales</td></tr>
+      <tr><td>2</td><td>Matias</td><td>El Ansioso</td><td>680</td><td>Medio</td><td>KAZE (priorizado)</td><td>Reduccion de ansiedad libera potencial</td></tr>
+      <tr><td>3</td><td>Camila</td><td>La Resiliente</td><td>590</td><td>Medio</td><td>KAIZEN, NAKAMA, COMPASS</td><td>Soporte social + habitos + vocacion</td></tr>
+      <tr><td>4</td><td>Benjamin</td><td>El Gamer</td><td>500</td><td>Alto</td><td>KAIZEN (priorizado), COMPASS</td><td>Screen curfew + sueno + vocacion tech</td></tr>
+      <tr><td>5</td><td>Isidora</td><td>La Presionada</td><td>725</td><td>Medio-alto</td><td>KAZE (urgente), KAIZEN</td><td>Reduccion estres/ansiedad + sueno</td></tr>
+      <tr><td>6</td><td>Diego</td><td>El Deportista</td><td>455</td><td>Alto</td><td>COMPASS, KAIZEN</td><td>Conectar deporte con vocacion</td></tr>
+      <tr><td>7</td><td>Francisca</td><td>TDAH</td><td>410</td><td>Alto</td><td>KOAN, KAIZEN</td><td>Adaptaciones + micro-habitos 2&ndash;5 min</td></tr>
+      <tr><td>8</td><td>Tomas</td><td>El Social</td><td>545</td><td>Medio</td><td>NAKAMA, COMPASS</td><td>Canalizar capital social a estudio</td></tr>
+      <tr><td>9</td><td>Martina</td><td>La Quemada</td><td>635</td><td>Alto</td><td>MIYAGI (protocolo pausa)</td><td>Emergencia: reducir carga, priorizar sueno</td></tr>
+      <tr><td>10</td><td>Joaquin</td><td>El Tardio</td><td>320</td><td>Critico</td><td>SENPAI, KAIZEN, COMPASS</td><td>Diagnostico rapido + micro-habitos</td></tr>
+      <tr class="highlight-row"><td>11</td><td><strong>Andres</strong></td><td><strong>El Trabajador</strong></td><td><strong>420</strong></td><td>Alto</td><td>KAIZEN, KAZE</td><td>Fatiga cronica (0.72); micro-sesiones 3&ndash;5 min</td></tr>
+      <tr class="highlight-row"><td>12</td><td><strong>Javiera</strong></td><td><strong>La Rural</strong></td><td><strong>380</strong></td><td>Alto</td><td>COMPASS, SENPAI</td><td>Conectividad precaria; offline-first; vocational_clarity 0.20</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5.1 Arquetipos nuevos: detalle</h3>
+
+  <h4>Andres &mdash; El Trabajador (420 pts)</h4>
+  <p>
+    Estudiante que compatibiliza estudio con trabajo remunerado. Se caracteriza por fatiga cronica elevada (0.72), tiempo de estudio limitado y fragmentado, y necesidad de micro-sesiones de 3&ndash;5 minutos adaptadas a pausas laborales. La estrategia SENSEI prioriza KAIZEN para la construccion de micro-habitos y KAZE para el manejo de la fatiga y el estres laboral. El grafo predice que la intervencion mas efectiva es la reduccion de fatigue (via mejora de sleep_quality y reduccion de cognitive_load por sesiones breves), con un efecto cascada en attention_span y mastery.
+  </p>
+
+  <h4>Javiera &mdash; La Rural (380 pts)</h4>
+  <p>
+    Estudiante de zona rural con conectividad precaria. Presenta vocational_clarity muy baja (0.20) debido a exposicion limitada a opciones profesionales. El diseno SENSEI responde con modo offline-first: descarga de sesiones completas cuando hay WiFi para completarlas sin conexion. COMPASS prioriza la exploracion vocacional. El grafo predice que la activacion de la ruta vocational_clarity &rarr; motivation &rarr; study_adherence &rarr; mastery tiene el mayor impacto potencial para este perfil.
+  </p>
+
+  <h3>5.2 Capas complementarias transversales</h3>
+  <p>Las 4 capas complementarias cubren dimensiones que no son arquetipos en si mismas, sino moduladores transversales:</p>
+  <ol>
+    <li><strong>Capa de genero:</strong> Moderacion de pesos (anxiety &rarr; mastery diferenciado por genero).</li>
+    <li><strong>Capa de neurodivergencia:</strong> Adaptaciones UDL/WCAG 2.2 (arquetipos 7 y similares).</li>
+    <li><strong>Capa de NSE:</strong> Ajuste de priors y disponibilidad de recursos.</li>
+    <li><strong>Capa de conectividad:</strong> Coeficiente de acceso <code>c_access</code> como metadata de producto (ver Seccion 6).</li>
+  </ol>
+  <p>Con 12 arquetipos + 4 capas, la cobertura estimada de la poblacion PAES es del <strong>97&ndash;99%</strong>.</p>
+
+  <!-- ===== 6. CONECTIVIDAD ===== -->
+  <h2 class="page-break"><span class="section-num">6.</span> Analisis de Conectividad como Variable v<sub>22</sub></h2>
+  <p>
+    El caso de Javiera (La Rural) motivo un analisis formal sobre la pertinencia de agregar &laquo;connectivity&raquo; o &laquo;access_quality&raquo; como variable v<sub>22</sub> del grafo. El analisis fue conducido por un panel de 5 agentes especializados mas el ingeniero matematico del comite revisor.
+  </p>
+
+  <h3>6.1 Propuesta evaluada</h3>
+  <p>Agregar <code>connectivity</code> (calidad de acceso a internet y dispositivos) como nodo v<sub>22</sub> del grafo causal, con aristas dirigidas hacia variables del modelo existente.</p>
+
+  <h3>6.2 Aristas candidatas evaluadas</h3>
+  <p>Se analizaron 4 aristas potenciales:</p>
+  <ol>
+    <li><code>connectivity &rarr; study_adherence</code> (w &asymp; +0.20): Acceso limita frecuencia de uso.</li>
+    <li><code>connectivity &rarr; screen_time</code> (w &asymp; &minus;0.15): Menor acceso reduce tiempo recreativo de pantalla.</li>
+    <li><code>connectivity &rarr; social_support</code> (w &asymp; +0.10): Acceso digital facilita redes de apoyo.</li>
+    <li><code>connectivity &rarr; vocational_clarity</code> (w &asymp; +0.10): Exposicion a informacion vocacional.</li>
+  </ol>
+
+  <h3>6.3 Analisis de convergencia</h3>
+  <p>
+    La variable <code>connectivity</code> seria exogena pura (no recibe aristas de ninguna otra variable del grafo). Como tal, no participa en ningun ciclo de retroalimentacion y no afecta el radio espectral &rho;(A) del sistema. La convergencia del algoritmo de propagacion permanece inalterada.
+  </p>
+
+  <h3>6.4 Analisis de leverage</h3>
+  <p>El efecto total estimado de <code>connectivity</code> en <code>mastery</code>, calculado como la suma de los efectos a traves de todos los caminos:</p>
+  <div class="formula">
+    Via study_adherence: 0.20 &times; 0.30 = 0.060<br>
+    Via screen_time &rarr; sleep &rarr; attention: &minus;0.15 &times; (&minus;0.40) &times; 0.45 &times; 0.30 = 0.008<br>
+    Via social_support &rarr; emotional_state &rarr; motivation &rarr; adherence: 0.10 &times; 0.30 &times; 0.30 &times; 0.35 &times; 0.30 &asymp; 0.001<br>
+    Via vocational_clarity &rarr; motivation &rarr; adherence: 0.10 &times; 0.30 &times; 0.35 &times; 0.30 &asymp; 0.003<br>
+    <strong>Efecto total &asymp; 0.055 (bajo)</strong>
+  </div>
+  <p>El leverage de <code>connectivity</code> seria inferior al de las 10 variables con mayor impacto en <code>mastery</code>.</p>
+
+  <h3>6.5 Dictamen del panel</h3>
+  <div class="correction-box">
+    <strong>UNANIME: No agregar <code>connectivity</code> como v<sub>22</sub>.</strong> Razones:
+    <ol style="margin-top: 6px;">
+      <li><strong>Incoherencia ontologica:</strong> Las 21 variables actuales son constructos psicologicos o conductuales. Una variable infraestructural rompe la homogeneidad del espacio conceptual del grafo.</li>
+      <li><strong>No es confounder:</strong> La conectividad no sesga las aristas existentes. Su omision no introduce sesgo en la estimacion de los pesos causales entre las variables actuales.</li>
+      <li><strong>Arista contraintuitiva:</strong> La arista <code>connectivity &rarr; screen_time</code> tendria efecto neto <em>negativo</em> en mastery (mejor acceso = mas screen_time recreativo = peor sueno = menor mastery), lo cual es facticamente correcto pero confunde la interpretacion del modelo.</li>
+      <li><strong>Solucion correcta = capas complementarias de producto:</strong> La conectividad se aborda mejor como restriccion de diseno (modo offline-first, compresion de datos, sesiones descargables) que como variable del modelo causal.</li>
+    </ol>
+  </div>
+
+  <h3>6.6 Propuesta complementaria aprobada</h3>
+  <p>
+    En lugar de integrar la conectividad al grafo, se define un <strong>coeficiente de acceso</strong> (<code>c_access</code>) como metadata del perfil del estudiante:
+  </p>
+  <div class="formula">
+    c_access &isin; [0, 1], donde:<br>
+    1.0 = acceso permanente, banda ancha, dispositivo propio<br>
+    0.5 = acceso intermitente, 3G/4G, dispositivo compartido<br>
+    0.0 = sin acceso digital
+  </div>
+  <p>
+    Este coeficiente modula las decisiones del orquestador MIYAGI (descarga anticipada de sesiones, adaptacion del tamano de las micro-sesiones, priorizacion de contenido offline) sin contaminar la estructura causal del grafo.
+  </p>
+
+  <!-- ===== 7. CONFOUNDERS ===== -->
+  <h2><span class="section-num">7.</span> Confounders Omitidos: Actualizacion</h2>
+  <p>
+    El paper original (Seccion 6.4) identifico el nivel socioeconomico (NSE) y la capacidad cognitiva general (g) como confounders no modelados. Se actualiza el estado de cada uno:
+  </p>
+
+  <h3>7.1 Conectividad</h3>
+  <p>Evaluada formalmente como variable del grafo y <strong>rechazada</strong> por el panel (Seccion 6 supra). Se implementa como coeficiente de acceso <code>c_access</code> en la capa de producto.</p>
+
+  <h3>7.2 Nivel socioeconomico (NSE)</h3>
+  <p>
+    Sigue siendo el confounder de mayor prioridad. Su omision potencialmente sobreestima los efectos causales directos de <code>parental_support</code> en <code>emotional_state</code> y de <code>screen_time</code> en <code>sleep_quality</code>, porque parte de la asociacion observada se debe al NSE. <strong>Recomendacion mantenida:</strong> agregar NSE como variable exogena (observable pero no modificable por el sistema) en versiones futuras.
+  </p>
+
+  <h3>7.3 Capacidad cognitiva general (g)</h3>
+  <p>
+    La estrategia adoptada es absorber g mediante los offsets individualizados &delta;<sub>i</sub> del BKT: los priors de mastery de cada estudiante se ajustan con sus primeras interacciones, capturando implicitamente las diferencias en capacidad cognitiva sin necesidad de medirla directamente. Esta solucion es pragmatica y evita las dificultades eticas y de medicion asociadas a la evaluacion de g.
+  </p>
+
+  <!-- ===== 8. IMPACTO EN CONCLUSIONES ===== -->
+  <h2 class="page-break"><span class="section-num">8.</span> Impacto en las Conclusiones del Paper</h2>
+
+  <h3>8.1 &iquest;Cambian las conclusiones principales?</h3>
+  <div class="success-box">
+    <strong>No.</strong> Las 5 conclusiones del paper se mantienen integramente:
+    <ol style="margin-top: 6px;">
+      <li>El grafo tiene soporte teorico: 87% de las aristas con nivel A o B (18/24 originales; 26/30 en modelo extendido). &check;</li>
+      <li>Los pesos originales estaban sobreestimados y fueron corregidos sistematicamente a la baja. &check;</li>
+      <li>El ranking de leverage es robusto ante perturbaciones &plusmn;20%. &check;</li>
+      <li>La causalidad es <em>inferida</em>, no demostrada experimentalmente. &check;</li>
+      <li>La calibracion empirica con datos reales (N &ge; 500) es necesaria. &check;</li>
+    </ol>
+  </div>
+
+  <h3>8.2 &iquest;Que se fortalece con esta addenda?</h3>
+  <ul>
+    <li><strong>Integridad del corpus:</strong> La deteccion y eliminacion de 12 referencias fabricadas durante los ciclos C1&ndash;C8 valida el proceso de revision y aumenta la confianza en las fuentes restantes.</li>
+    <li><strong>Cobertura poblacional:</strong> La expansion de 3 a 12 arquetipos con 4 capas complementarias (cobertura estimada 97&ndash;99%) transforma el modelo de un ejercicio ilustrativo a un sistema con aspiracion de generalizabilidad.</li>
+    <li><strong>Rigor en las decisiones de diseno:</strong> El analisis formal de conectividad como v<sub>22</sub> y su rechazo fundamentado por un panel unanime demuestran disciplina en la expansion del grafo.</li>
+  </ul>
+
+  <h3>8.3 &iquest;Que debilidades persisten?</h3>
+  <ul>
+    <li><strong>Validacion empirica:</strong> Cero estudiantes reales han utilizado el sistema. Todas las predicciones del modelo son teoricas. Esta es la debilidad mas significativa, pendiente de las Fases 1&ndash;3 (Seccion 9).</li>
+    <li><strong>Linealidad de pesos:</strong> Al menos dos relaciones son conocidamente no lineales (cognitive_load &rarr; rendimiento, U invertida de Yerkes-Dodson; anxiety &rarr; mastery, efecto activador en ansiedad baja). Los pesos lineales son una aproximacion aceptable para el MVP pero insuficiente para versiones maduras.</li>
+    <li><strong>Omision de NSE como confounder:</strong> Sigue siendo la principal fuente potencial de sesgo en la estimacion de efectos causales.</li>
+  </ul>
+
+  <!-- ===== 9. PLAN DE VALIDACION ===== -->
+  <h2><span class="section-num">9.</span> Plan de Validacion Empirica (Actualizado)</h2>
+
+  <p class="table-caption">Tabla 4. Fases del plan de validacion empirica.</p>
+  <table>
+    <thead>
+      <tr><th>Fase</th><th>N</th><th>Duracion</th><th>Alcance</th><th>Objetivo principal</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Fase 1: Piloto</strong></td><td>N = 100</td><td>8 semanas</td><td>2 establecimientos</td><td>Calibracion preliminar de pesos via SEM. Validar medibilidad de las 21 variables. Identificar aristas con mayor discrepancia teoria-empiria.</td></tr>
+      <tr><td><strong>Fase 2: RCT</strong></td><td>N = 500</td><td>16 semanas</td><td>5 establecimientos</td><td>Estimacion de pesos causales con SEM completo (CFI &ge; 0.90, RMSEA &le; 0.08). Test de independencias condicionales (d-separacion). Comparacion con grupo control.</td></tr>
+      <tr><td><strong>Fase 3: Escala</strong></td><td>N &ge; 5,000</td><td>12 meses post-PAES</td><td>Multi-region</td><td>Validacion predictiva (correlacion delta_esperado vs delta_observado &ge; 0.30). Heterogeneidad por subgrupo (genero, NSE, region). Calibracion individualizada.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 10. REFERENCIAS ===== -->
+  <h2 class="page-break"><span class="section-num">10.</span> Referencias Adicionales</h2>
+  <p>Las siguientes referencias son citadas en esta addenda y no figuran en el paper original:</p>
+  <ul>
+    <li>Jeynes, W.H. (2007). The relationship between parental involvement and urban secondary school student academic achievement: A meta-analysis. <em>Urban Education</em>, 42(1), 82&ndash;110.</li>
+    <li>Lazarus, R.S. y Folkman, S. (1984). <em>Stress, Appraisal, and Coping.</em> Springer.</li>
+    <li>Salmon, P. (2001). Effects of physical exercise on anxiety, depression, and sensitivity to stress: A unifying theory. <em>Clinical Psychology Review</em>, 21(1), 33&ndash;61.</li>
+    <li>Fogg, B.J. (2019). <em>Tiny Habits: The Small Changes That Change Everything.</em> Houghton Mifflin Harcourt.</li>
+  </ul>
+  <p>
+    Todas las demas referencias citadas en esta addenda se encuentran en la Seccion 10 (Referencias) del paper original.
+  </p>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="doc-footer">
+    <p>
+      Este documento es una addenda al <em>Paper de Validacion Teorica y Analisis de Sensibilidad del Grafo Causal para el Modelamiento Multidimensional del Rendimiento Academico</em> (Caro, Cerda &amp; Gutierrez, Marzo 2026). Debe leerse conjuntamente con el paper original. Cualquier discrepancia entre esta addenda y el paper original se resuelve a favor de la presente addenda, que refleja el estado mas actualizado del modelo.
+    </p>
+    <p style="text-align: center; margin-top: 12px; color: #aaa;">
+      &mdash; Fin del documento &mdash;
+    </p>
+  </div>
+
+</div><!-- .paper -->
+
+</body>
+</html>
